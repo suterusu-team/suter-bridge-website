@@ -1,0 +1,70 @@
+<!doctype html>
+<html dir="ltr" lang="mul">
+<head prefix="og: http://ogp.me/ns#">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://s2.pstatp.com">
+    <link rel="dns-prefetch" href="https://node.suterusu.io">
+    <link rel="dns-prefetch" href="https://ssl.captcha.qq.com"/>
+    <link rel="preconnect" href="https://s2.pstatp.com">
+    <link rel="preconnect" href="https://node.suterusu.io">
+    <link rel="canonical" href="https://suterusu.io" hreflang="x-default" />
+    <title>Suterusu</title>
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta charset="utf-8" />
+    <meta name="author" content="Oortcast Inc" />
+    <meta name="renderer" content="webkit">
+    <meta name="browsermode" content="application">
+    <meta name="twitter:site" content="@suterusu_io" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta name="theme-color" content="#36296c" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta property="og:site_name" content="Suterusu.io" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+</head>
+<body>
+<% if (process.env.UMI_ENV === 'prod'){ %>
+    <script src="https://s2.pstatp.com/cdn/expire-1-M/react/16.10.2/react.production.min.js"></script>
+<% } %>
+<div id="<%= context.config.mountElementId %>">
+</div>
+<noscript>
+    <h1>
+        Your browser has javascript disabled. Please enable it before visting Suterusu.io
+        <br/><br/>
+        您的浏览器禁用了 Javascript 脚本功能，这将导致您无法正常访问本站。请在启用后，刷新本页面。
+    </h1>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-154799048-1"></script>
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "Suterusu",
+        "url": "https://www.suterusu.io/",
+        "sameAs": [
+            "https://twitter.com/suterusu_io",
+            "https://medium.com/search?q=suterusu",
+            "https://github.com/suterusu-team"
+        ],
+        "contactPoint": [{
+            "@type": "ContactPoint",
+            "email": "contact@suterusu.io",
+            "contactType": "customer support",
+            "url": "https://node.suterusu.io/help?page=contact_us"
+        }]
+    }
+</script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-154799048-1');
+</script>
+</body>
+</html>

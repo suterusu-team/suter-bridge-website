@@ -6,3 +6,9 @@ declare module '*.svg' {
   const url: string
   export default url
 }
+declare const ETHERSCAN: string;
+declare const ETHBRIDGECONTRACTADDRESS: string;
+declare const ETHSUTERUSUCONTRACTADDRESS: string;
+declare const ETHSUTERUSUABI: any[];
+declare const ETHBRIDGEABI: any[];
+

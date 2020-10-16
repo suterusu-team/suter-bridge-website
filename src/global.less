@@ -1,0 +1,168 @@
+body {
+    background: linear-gradient(0deg, rgba(105, 85, 192, 0.43), rgba(255, 255, 255, 1)) !important;
+    overflow-y: scroll;
+}
+
+.ant-layout-header {
+    background: transparent !important;
+}
+
+.ant-layout-footer {
+    background: transparent !important;
+}
+
+.ant-layout-content {
+    background: transparent !important;
+}
+
+.suterBridge {
+    background: transparent !important;
+
+    img.logo {
+        width: 250px;
+
+        @media only screen and (max-width: 600px) {
+            width: 200px;
+        }
+    }
+
+
+    .form {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+
+        .ant-card {
+            box-shadow: 0px 0px 20px 0px rgba(105, 85, 192, 0.5);
+
+            @media only screen and (min-width: 992px) {
+                width: 33.33%;
+            }
+
+            @media only screen and (max-width: 600px) {
+                width: 95%;
+            }
+        }
+
+        .ant-card-head {
+            border: 0;
+
+            .ant-tabs-nav::before {
+                border: 0;
+            }
+        }
+
+        .ant-tabs-nav-wrap {
+            display: block !important;
+
+            .ant-tabs-nav-list {
+                display: block;
+
+                .ant-tabs-tab {
+                    width: 50%;
+                    justify-content: center;
+                    margin: 0;
+
+                    .ant-tabs-tab-btn {
+                        color: #000;
+                        font-size: 20px;
+                        font-family: PingFangSC-Thin, sans-serif;
+                    }
+                }
+
+                .ant-tabs-tab-active {
+                    .ant-tabs-tab-btn {
+                        font-weight: bold;
+                    }
+                }
+
+                .ant-tabs-ink-bar {
+                    display: none !important;
+                }
+            }
+        }
+
+        .ant-tabs-nav-operations {
+            display: none !important;
+        }
+
+        .mint {
+            .container {
+                margin-top: 20px;
+            }
+
+            .inputContainer {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+
+                .input {
+                    width: 100%;
+                    border: 0px solid transparent;
+                    outline: none;
+                    font-size: 52px;
+                    text-align: center;
+                    color: rgba(105, 85, 192, 1);
+                    font-family: PingFangSC-Thin, sans-serif;
+                }
+
+                .dollarValue {
+                    text-align: center;
+                    color: #D0D2D9;
+                }
+            }
+
+            .assetContainer {
+                display: flex;
+                justify-content: space-between;
+                border: 1px solid #D0D2D9;
+                padding: 20px 10px;
+                align-items: center;
+                border-radius: 4px;
+            }
+
+            .destinationContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border: 1px solid #D0D2D9;
+                padding: 20px 10px;
+                border-radius: 4px;
+
+                p {
+                    font-size: 12px;
+                    margin-bottom: 0px;
+                }
+
+                .destinationInput {
+                    width: 100%;
+                    border: 0px solid transparent;
+                    outline: none;
+                    font-size: 16px;
+                    color: rgba(105, 85, 192, 1);
+                    font-family: PingFangSC-Thin, sans-serif;
+                }
+            }
+
+            .btnContainer {
+                display: flex;
+                justify-content: center;
+                width: 70%;
+                margin: 30px auto;
+
+                .ant-btn-primary {
+                    color: #fff;
+                    background: rgba(105, 85, 192, 1);
+                    border-color: rgba(105, 85, 192, 1);
+                    height: 50px;
+                    font-size: 20px;
+                }
+
+                .ant-btn-primary[disabled] {
+                    background: rgba(105, 85, 192, 0.5);
+                    border-color: rgba(105, 85, 192, 0.5);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,70 @@
+.suterBridge{
+    .ant-layout-header {
+        @media only screen and (max-width: 600px) {
+            padding: 0 5px;
+        }
+
+        .connectWalletBtn {
+            text-transform: uppercase;
+            border-color: rgba(105, 85, 192, 1);
+            color: rgba(105, 85, 192, 1);
+        }
+
+        .successDot {
+            float: left;
+            width: 8px;
+            height: 8px;
+            margin-top: 6.85px;
+            margin-right: 6px;
+            border-radius: 4px;
+            background-color: #3CBC98;
+        }
+    }
+
+    .ant-layout-content {
+        .title {
+            margin: 60px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: PingFangSC-Thin, sans-serif;
+
+            h1 {
+                font-weight: 400;
+                font-size: 40px;
+                margin-bottom: 0rem;
+
+                @media only screen and (max-width: 600px) {
+                    font-size: 30px;
+                }
+            }
+        }
+
+        .metamaskContainer, .connectMetaMaskButtonContainer, .tipTextContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tipTextContainer {
+            margin: 30px 30px 0 30px;
+        }
+
+        .connectMetaMaskButtonContainer {
+            margin: 0 30px 0 30px;
+
+            .ant-btn-primary {
+                color: #fff;
+                background: rgba(105, 85, 192, 1);
+                border-color: rgba(105, 85, 192, 1);
+            }
+
+            .ant-btn-primary[disabled] {
+                background: rgba(105, 85, 192, 0.5);
+                border-color: rgba(105, 85, 192, 0.5);
+            }
+        }
+    }
+}

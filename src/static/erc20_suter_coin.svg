@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>编组 12</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#6955C0" stop-opacity="0.432227928" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="360" height="600" rx="5"></rect>
+        <filter x="-8.3%" y="-5.0%" width="116.7%" height="110.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.411764706   0 0 0 0 0.333333333   0 0 0 0 0.752941176  0 0 0 0.501939467 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Mint" transform="translate(-745.000000, -451.000000)">
+            <rect id="矩形" fill="url(#linearGradient-1)" opacity="0.5" x="0" y="88" width="1440" height="812"></rect>
+            <g id="编组-4" transform="translate(540.000000, 173.000000)">
+                <g id="矩形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+                </g>
+                <g id="编组-7" transform="translate(20.000000, 251.000000)">
+                    <g id="编组-5">
+                        <rect id="矩形复制" stroke="#838383" opacity="0.494442894" x="0.5" y="0.5" width="319" height="66.32" rx="3"></rect>
+                        <g id="编组-12" transform="translate(185.000000, 27.000000)">
+                            <g id="编组-11" fill="#6955C0">
+                                <circle id="椭圆形" cx="10" cy="10" r="10"></circle>
+                            </g>
+                            <g id="编组-8" transform="translate(5.000000, 2.000000)" fill="#FFFFFF">
+                                <path d="M8.8974686,9.47165125 L8.98555861,9.55027244 C9.29227396,9.86737791 9.29227396,10.381591 8.98555861,10.6986965 L4.57182365,15.2621709 C4.26510829,15.5792764 3.76774366,15.5792764 3.46081337,15.2621709 C3.15409802,14.9448432 3.15409802,14.4306301 3.46081337,14.1135246 L7.87476327,9.55027244 C8.15359541,9.26199474 8.58998894,9.23578767 8.8974686,9.47165125 Z M4.6345853,6.487438 C4.94130066,6.80476569 4.94130066,7.31875656 4.6345853,7.63608425 L1.84083185,10.5244773 C1.56199971,10.812755 1.12560619,10.8389621 0.818126524,10.6030985 L0.730036515,10.5244773 C0.423321162,10.2073719 0.423321162,9.69293657 0.730036515,9.3758311 L3.52357503,6.487438 C3.83050532,6.17033253 4.32786995,6.17033253 4.6345853,6.487438 Z M9.18187348,5.39705702 L9.26996348,5.47567821 C9.57667884,5.79278368 9.57667884,6.30699676 9.26996348,6.62410224 L6.47621004,9.51249533 C6.16949468,9.82960081 5.67213005,9.82960081 5.3654147,9.51249533 C5.05869934,9.19538986 5.05869934,8.68117678 5.3654147,8.36407131 L8.15916815,5.47567821 C8.43800029,5.18740051 8.87439381,5.16119344 9.18187348,5.39705702 Z M6.53916514,0.737829105 C6.84588049,1.0551568 6.84588049,1.56936988 6.53916514,1.88647535 L2.12521524,6.44972756 C1.8463831,6.73800526 1.40998957,6.76421233 1.1025099,6.52834875 L1.0144199,6.44972756 C0.707704543,6.13262209 0.707704543,5.61840901 1.0144199,5.30130353 L5.42815486,0.737829105 C5.73487021,0.420723632 6.23223485,0.420723632 6.53916514,0.737829105 Z" id="形状结合"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
