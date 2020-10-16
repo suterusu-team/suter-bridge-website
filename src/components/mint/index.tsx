@@ -116,11 +116,11 @@ class Mint extends React.Component {
     const suterAmount = parseInt(suterValue) * 1000000000000000000
     const eth = new Eth(web3.currentProvider)
     const contract = new EthContract(eth)
-    const suterContract = contract(ethSuterusuAbi)
-    const suterContractInstance = suterContract.at(ethSuterusuContractAddress)
-    let txHash = await suterContractInstance.increaseAllowance(ethBridgeContractAddress, suterAmount, { from: this.props.account })
+    const suterContract = contract(ETHSUTERUSUABI)
+    const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
+    let txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount, { from: this.props.account })
     const message = `View in etherscan`
-    const aLink = `${etherscan}/tx/${txHash}`
+    const aLink = `${ETHERSCAN}/tx/${txHash}`
     openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success')
     this.setState({ approveTxid: txHash })
     this.recordTask(txHash)
@@ -131,8 +131,8 @@ class Mint extends React.Component {
     const eth = new Eth(web3.currentProvider)
     const contract = new EthContract(eth)
 
-    const ethBridgeContract = contract(ethBridgeAbi)
-    const ethBridgeContractInstance = ethBridgeContract.at(ethBridgeContractAddress)
+    const ethBridgeContract = contract(ETHBRIDGEABI)
+    const ethBridgeContractInstance = ethBridgeContract.at(ETHBRIDGECONTRACTADDRESS)
 
     const suterAmount = parseInt(suterValue) * 1000000000000000000
 
@@ -141,19 +141,6 @@ class Mint extends React.Component {
   }
 
   async recordTask(approve_txid){
-    const { suterValue, destinationAddress } = this.state
-    const account = this.props.account 
-    const scsrfToken = $("meta[name='csrf-token']").attr("content");
-    const response = await axios.post('/tasks', {
-      account: account,
-      amount: suterValue,
-      approve_txid: approve_txid,
-      ctype: 0,
-      destination: destinationAddress
-    }, { headers: { "X-CSRF-Token": scsrfToken} } )
-    if(response.data["status"] != 0) {
-      openNotificationWithIcon('Record task error', response.data["error"], 'error')
-    }
   }
 
   render () {
