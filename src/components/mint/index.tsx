@@ -4,7 +4,7 @@ import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
 import axios from 'axios';
 import WAValidator from 'multicoin-address-validator';
-import { openNotificationWithIcon, MessageWithAlink, suterValueForInputFunc, suterAmountForInput } from '../tools';
+import { openNotificationWithIcon, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
 
@@ -71,7 +71,7 @@ class Mint extends React.Component {
     let suterAmount = e.target.value.replace(` ${suterTxt}`, '').replace(/,/gi, '');
     if (isNaN(suterAmount) || suterAmount < 0 || suterAmount > 10000000000) {
       if(suterAmount > 10000000000){
-        this.openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
+        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
       }
       suterAmount = this.state.suterValue
     }
@@ -148,7 +148,8 @@ class Mint extends React.Component {
     const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid } = this.state
     const suterValueForInput = suterValueForInputFunc(suterValue)
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt)
-    const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (suterValueForInput > 0)
+    const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (getSuterValueNumber(suterValue) > 0)
+    console.log("getSuterValueNumber=" + getSuterValueNumber(suterValue) )
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}

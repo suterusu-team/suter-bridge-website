@@ -11,7 +11,7 @@ const openNotificationWithIcon = (title: string, desc: any, type: string, durati
   }
 
 
-const getSuterValueInteger = (suterValue) => {
+const getSuterValueInteger = (suterValue: string):number => {
     if(suterValue.indexOf('.') !== -1){
       return parseInt(suterValue.split('.')[0])
     }else{
@@ -19,12 +19,20 @@ const getSuterValueInteger = (suterValue) => {
     }
   }
 
-function getSuterValueDecimal(suterValue) {
+const getSuterValueDecimal = (suterValue: string):string => {
   if(suterValue.indexOf('.') !== -1){
     return `.${suterValue.split('.')[1]}`
   }else{
     return ''
   }
+}
+
+const getSuterValueNumber = (suterValue: string): number => {
+  let suterValueProcess = suterValue.replace(/,/g, '')
+  if(suterValueProcess != ''){
+    return parseFloat(suterValueProcess)
+  }
+  return 0
 }
 
 function suterValueForInputFunc(suterValue){
@@ -42,4 +50,4 @@ const MessageWithAlink = (props) => {
   return <a href={props.aLink} target='_blank'>{ props.message }</a>
 }
 
-export { openNotificationWithIcon, MessageWithAlink, suterValueForInputFunc, suterAmountForInput }
+export { openNotificationWithIcon, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber }
