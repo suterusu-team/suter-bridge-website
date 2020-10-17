@@ -113,12 +113,12 @@ class Mint extends React.Component {
 
   async callApprove(){
     const suterValue = this.state.suterValue
-    const suterAmount = parseInt(suterValue) * 1000000000000000000
+    const suterAmount = getSuterValueNumber(suterValue) * 1000000000000000000
     const eth = new Eth(web3.currentProvider)
     const contract = new EthContract(eth)
     const suterContract = contract(ETHSUTERUSUABI)
     const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
-    let txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount, { from: this.props.account })
+    let txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount, { from: this.props.account, gas: "60000"})
     const message = `View in etherscan`
     const aLink = `${ETHERSCAN}/tx/${txHash}`
     openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success')
@@ -136,7 +136,7 @@ class Mint extends React.Component {
 
     const suterAmount = parseInt(suterValue) * 1000000000000000000
 
-    let txHash = await ethBridgeContractInstance.exchange(suterAmount, destinationAddress, { from: this.props.account })
+    let txHash = await ethBridgeContractInstance.exchange(suterAmount, destinationAddress, { from: this.props.account, gas: "100000" })
     console.log("callExchange txid=" + txHash)
   }
 
@@ -149,7 +149,6 @@ class Mint extends React.Component {
     const suterValueForInput = suterValueForInputFunc(suterValue)
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt)
     const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (getSuterValueNumber(suterValue) > 0)
-    console.log("getSuterValueNumber=" + getSuterValueNumber(suterValue) )
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
