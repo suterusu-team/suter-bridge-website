@@ -21,7 +21,10 @@ class Mint extends React.Component {
     destinationAddress: '',
     showConfirmModal: false,
     submitApprove: false,
-    approveTxid: ''
+    approveTxid: '',
+    approveStatus: 0,
+    exchangeTxid: '',
+    exchangeStatus: 0
   }
 
   constructor(props){
@@ -38,6 +41,8 @@ class Mint extends React.Component {
     this.handleConfirmOk = this.handleConfirmOk.bind(this)
     this.handleConfirmCancel = this.handleConfirmCancel.bind(this)
     this.recordTask = this.recordTask.bind(this)
+    this.approveFinished = this.approveFinished.bind(this)
+    this.exchangeFinished = this.exchangeFinished.bind(this)
   }
   componentDidMount() {
     this.fetchSuterPrice()
@@ -127,7 +132,15 @@ class Mint extends React.Component {
     this.recordTask(txHash, suterAmount)
   }
 
+  approveFinished(){
+    this.setState({ approveStatus: 1 })
+  }
+  exchangeFinished(){
+    this.setState({ exchangeStatus: 1 })
+  }
+
   async callExchange(){
+    this.approveFinished()
     const { suterValue, destinationAddress } = this.state
     const eth = new Eth(web3.currentProvider)
     const contract = new EthContract(eth)
@@ -139,6 +152,7 @@ class Mint extends React.Component {
 
     let txHash = await ethBridgeContractInstance.exchange(suterAmount, destinationAddress, { from: this.props.account, gas: "100000" })
     console.log("callExchange txid=" + txHash)
+    this.setState({ exchangeTxid: txHash })
   }
 
   recordTask(approve_txid, amount){
@@ -152,14 +166,15 @@ class Mint extends React.Component {
   }
 
   render () {
-    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, submitApprove } = this.state
+    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, submitApprove, approveStatus, exchangeTxid, exchangeStatus } = this.state
     const suterValueForInput = suterValueForInputFunc(suterValue)
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt)
     const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (getSuterValueNumber(suterValue) > 0 && !submitApprove)
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
-       { approveTxid !== '' ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} handleCancel={()=>{}} title={`Approving`} /> : ''}
+       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} /> : '' }
+       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} /> : '' }
   		  <Row>
          <Col span={24}>
             <div className="inputContainer container">

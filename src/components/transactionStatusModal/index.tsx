@@ -1,6 +1,11 @@
 import React from "react";
 import { Modal, Button } from 'antd';
 import { MessageWithAlink } from '../tools';
+import './index.less'
+import { LoadingOutlined } from '@ant-design/icons';
+const titleWraper = (title: string) => {
+   return <div><h3 className='title'>{title}</h3></div>
+}
 class TransactionStatusModal extends React.Component {
   state = {
     blockNumber: 0,
@@ -64,19 +69,19 @@ class TransactionStatusModal extends React.Component {
     let confirmBlockNum = latestBlockNum - blockNumber
     return (
       <>
-        <Modal
-          title = {title}
+        <Modal 
+          className="transactionStatusModal"
+          title = {titleWraper(title)}
           visible={visible}
+          closable={false}
           onOk={handleOk}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
-              Return
-            </Button>,
-            <Button key="submit" type="primary" onClick={handleOk} disabled={ latestBlockNum - blockNumber < 12 }>
-              Submit
-            </Button>,
+            <Button key="submit" type="primary" block onClick={handleOk} disabled={ confirmBlockNum < 12 } loading={ confirmBlockNum < 12}>
+              Next
+            </Button>
           ]}
         >
+          <div className="loadingIconContainer">{confirmBlockNum < 12 ? <LoadingOutlined /> : ''}</div>
           <p>{ MessageWithAlink(`View in etherscan`, `${ETHERSCAN}/tx/${txid}`) } </p>
           <p>{ status !== 1 ? '区块未打包' : '区块已打包' }</p>
           <p>{ `区块号: ${blockNumber}` }</p>
