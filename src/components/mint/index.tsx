@@ -20,6 +20,7 @@ class Mint extends React.Component {
     suterValueFontSize: 52,
     destinationAddress: '',
     showConfirmModal: false,
+    submitApprove: false,
     approveTxid: ''
   }
 
@@ -103,7 +104,7 @@ class Mint extends React.Component {
   }
 
   handleConfirmOk() {
-   this.setState({ showConfirmModal: false })
+   this.setState({ showConfirmModal: false, submitApprove: true })
    this.callApprove()
   }
 
@@ -151,11 +152,10 @@ class Mint extends React.Component {
   }
 
   render () {
-  	const { onClickFunc } = this.props
-    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid } = this.state
+    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, submitApprove } = this.state
     const suterValueForInput = suterValueForInputFunc(suterValue)
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt)
-    const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (getSuterValueNumber(suterValue) > 0)
+    const canNext = (WAValidator.validate(destinationAddress, 'Tron')) && (getSuterValueNumber(suterValue) > 0 && !submitApprove)
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
