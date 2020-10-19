@@ -98,6 +98,9 @@ class Mint extends React.Component {
 
   handleDestinationChange(e) {
     this.setState({ "destinationAddress": e.target.value })
+    if(e.target.value != '' && !WAValidator.validate(e.target.value, 'Tron')){
+      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid tron address`, 'warning', 2)
+    }
   }
 
   submit() {
@@ -171,7 +174,7 @@ class Mint extends React.Component {
 
     let taskQueue = (localStorage.getItem("task") || "").split(",")
     taskQueue = taskQueue.filter(item => item);
-    taskQueue.push(`myTask${this.props.account}${approve_txid}`)
+    taskQueue.push(`myTask${this.props.account}${approveTxid}`)
     localStorage.setItem("task", taskQueue)
   }
 
