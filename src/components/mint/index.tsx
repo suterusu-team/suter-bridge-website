@@ -153,15 +153,19 @@ class Mint extends React.Component {
   async callExchange(){
     this.approveFinished()
     const { suterValue, destinationAddress } = this.state
-    const eth = new Eth(web3.currentProvider)
-    const contract = new EthContract(eth)
-
-    const ethBridgeContract = contract(ETHBRIDGEABI)
-    const ethBridgeContractInstance = ethBridgeContract.at(ETHBRIDGECONTRACTADDRESS)
-
-    const suterAmount = parseInt(suterValue) * 1000000000000000000
-
-    let txHash = await ethBridgeContractInstance.exchange(suterAmount, destinationAddress, { from: this.props.account, gas: "100000" })
+    let txHash
+    try{
+      const eth = new Eth(web3.currentProvider)
+      const contract = new EthContract(eth)
+      const ethBridgeContract = contract(ETHBRIDGEABI)
+      const ethBridgeContractInstance = ethBridgeContract.at(ETHBRIDGECONTRACTADDRESS)
+      const suterAmount = parseInt(suterValue)
+      txHash = await ethBridgeContractInstance.exchange(suterAmount * 1000000000000000000, destinationAddress, { from: this.props.account, gas: "100000" })
+    }catch(error){
+      openNotificationWithIcon('Metamask deny!', "User denied transaction signature", 'warning', 10)
+      this.setState({ approveStatus: 0 })
+      return
+    }
     const message = `View in etherscan`
     const aLink = `${ETHERSCAN}/tx/${txHash}`
     openNotificationWithIcon('Exchange transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
