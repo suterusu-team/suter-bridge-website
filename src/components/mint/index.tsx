@@ -43,6 +43,8 @@ class Mint extends React.Component {
     this.newTask = this.newTask.bind(this)
     this.approveFinished = this.approveFinished.bind(this)
     this.exchangeFinished = this.exchangeFinished.bind(this)
+    this.updateExchangeTxid = this.updateExchangeTxid.bind(this)
+    this.updateExchangeStatus = this.updateExchangeStatus.bind(this)
   }
   componentDidMount() {
     this.fetchSuterPrice()
@@ -147,6 +149,7 @@ class Mint extends React.Component {
   }
   exchangeFinished(){
     this.setState({ exchangeStatus: 1 })
+    this.updateExchangeStatus()
     window.location.reload(false);
   }
 
@@ -170,19 +173,49 @@ class Mint extends React.Component {
     const aLink = `${ETHERSCAN}/tx/${txHash}`
     openNotificationWithIcon('Exchange transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
     this.setState({ exchangeTxid: txHash })
+    this.updateExchangeTxid(txHash)
   }
 
-  newTask(approveTxid, amount){
-    let task = {"account": this.props.account, "approveTxid": approveTxid, "amount": amount, "approveStatus": 0, "exchangeTxid": '', "exchangeStatus": 0 }
-    localStorage.setItem(`myTask${this.props.account}${approveTxid}`, JSON.stringify(task));
+  newTask(approveTxid: string, amount: number){
+    let myTaskKey = `myTask${this.props.account}${approveTxid}`
+    let task = {"account": this.props.account, "approveTxid": approveTxid, "amount": amount, "exchangeTxid": '', "exchangeStatus": 0 }
+    localStorage.setItem(myTaskKey, JSON.stringify(task));
 
     let taskQueue = (localStorage.getItem("task") || "").split(",")
     taskQueue = taskQueue.filter(item => item);
-    taskQueue.push(`myTask${this.props.account}${approveTxid}`)
+    taskQueue.push(myTaskKey)
     localStorage.setItem("task", taskQueue)
   }
 
+  updateExchangeTxid(exchangeTxid: string){
+    const { approveTxid } = this.state
+    let myTaskKey = `myTask${this.props.account}${approveTxid}`
+    let myTask = localStorage.getItem(myTaskKey)
+    if(!myTask){
+      console.log(`Can't find a task with key ${myTaskKey}`)
+      return
+    }
+   let myTaskObject = JSON.parse(myTask)
+    myTaskObject["exchangeTxid"] = exchangeTxid
+    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
+  }
 
+  updateExchangeStatus(){
+    const { approveTxid } = this.state
+    let myTaskKey = `myTask${this.props.account}${approveTxid}`
+    let myTask = localStorage.getItem(myTaskKey)
+    if(!myTask){
+      console.log(`Can't find a task with key ${myTaskKey}`)
+      return
+    }
+    let myTaskObject = JSON.parse(myTask)
+    myTaskObject["exchangeStatus"] = 1
+    const now = new Date()
+    // 3 hour expired
+    // myTaskObject.expiry = now.getTime() + 7200000
+    myTaskObject["expiry"] = now.getTime() + 60000,
+    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
+  }
 
   render () {
     const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, submitApprove, approveStatus, exchangeTxid, exchangeStatus } = this.state
@@ -192,8 +225,8 @@ class Mint extends React.Component {
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
-       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} /> : '' }
-       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
+       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} needConfirmBlockNum = {6} /> : '' }
+       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} needConfirmBlockNum = {6} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
   		  <Row>
          <Col span={24}>
             <div className="inputContainer container">

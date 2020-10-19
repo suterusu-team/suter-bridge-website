@@ -17,6 +17,7 @@ class SuterBridge extends React.Component {
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
   }
 	componentDidMount() {
+    // this.clearExpiredTask();
 		this.checkMetaMaskStatus();
     this.checkWeb3Status();
 	}
@@ -50,6 +51,26 @@ class SuterBridge extends React.Component {
       const message = "Your should use a web3 browser."
       openNotificationWithIcon('Invalid browser', message, 'warning')
     }
+  }
+
+  clearExpiredTask(){
+    let taskQueue = (localStorage.getItem("task") || "").split(",")
+    taskQueue = taskQueue.filter(item => item);
+    let expiredKeys = {}
+    for (const key of taskQueue) {
+      let myTask = localStorage.getItem(key)
+      if (!myTask) {
+        continue
+      }
+      const item = JSON.parse(myTask)
+      const now = new Date()
+      if (now.getTime() > item.expiry) {
+        localStorage.removeItem(key)
+        expiredKeys[key] = true
+      }
+    }
+    taskQueue = taskQueue.filter(item => { !expiredKeys[item] })
+    localStorage.setItem("task", taskQueue)
   }
 
   render () {
