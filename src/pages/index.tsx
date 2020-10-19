@@ -17,7 +17,7 @@ class SuterBridge extends React.Component {
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
   }
 	componentDidMount() {
-    // this.clearExpiredTask();
+    this.clearExpiredTask();
 		this.checkMetaMaskStatus();
     this.checkWeb3Status();
 	}
