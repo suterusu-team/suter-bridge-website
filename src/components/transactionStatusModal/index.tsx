@@ -64,7 +64,7 @@ class TransactionStatusModal extends React.Component {
     }
   }
   render() {
-  	const { title, visible, handleOk, txid } = this.props;
+  	const { title, visible, handleOk, txid, okText, nextTip } = this.props;
     const { status, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
     return (
@@ -77,7 +77,7 @@ class TransactionStatusModal extends React.Component {
           onOk={handleOk}
           footer={[
             <Button key="submit" type="primary" block onClick={handleOk} disabled={ confirmBlockNum < 12 } loading={ confirmBlockNum < 12}>
-              Next
+              { okText }
             </Button>
           ]}
         >
@@ -87,6 +87,7 @@ class TransactionStatusModal extends React.Component {
           <p>{ `区块号: ${blockNumber}` }</p>
           <p>{ `最新区块号: ${latestBlockNum}` }</p>
           <p>{ `已经确认: ${ confirmBlockNum > 0 ? confirmBlockNum : 0}个区块` }</p>
+          <p>{ nextTip }</p>
         </Modal>
       </>
     );

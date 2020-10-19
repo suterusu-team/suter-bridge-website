@@ -127,7 +127,7 @@ class Mint extends React.Component {
     let txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount * 1000000000000000000, { from: this.props.account, gas: "60000"})
     const message = `View in etherscan`
     const aLink = `${ETHERSCAN}/tx/${txHash}`
-    openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success')
+    openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
     this.setState({ approveTxid: txHash })
     this.recordTask(txHash, suterAmount)
   }
@@ -137,6 +137,7 @@ class Mint extends React.Component {
   }
   exchangeFinished(){
     this.setState({ exchangeStatus: 1 })
+    window.location.reload(false);
   }
 
   async callExchange(){
@@ -151,7 +152,9 @@ class Mint extends React.Component {
     const suterAmount = parseInt(suterValue) * 1000000000000000000
 
     let txHash = await ethBridgeContractInstance.exchange(suterAmount, destinationAddress, { from: this.props.account, gas: "100000" })
-    console.log("callExchange txid=" + txHash)
+    const message = `View in etherscan`
+    const aLink = `${ETHERSCAN}/tx/${txHash}`
+    openNotificationWithIcon('Exchange transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
     this.setState({ exchangeTxid: txHash })
   }
 
@@ -173,8 +176,8 @@ class Mint extends React.Component {
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
-       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} /> : '' }
-       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} /> : '' }
+       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} /> : '' }
+       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
   		  <Row>
          <Col span={24}>
             <div className="inputContainer container">
