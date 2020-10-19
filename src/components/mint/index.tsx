@@ -184,7 +184,7 @@ class Mint extends React.Component {
     let taskQueue = (localStorage.getItem("task") || "").split(",")
     taskQueue = taskQueue.filter(item => item);
     taskQueue.push(myTaskKey)
-    localStorage.setItem("task", taskQueue)
+    localStorage.setItem(`${this.props.account}Task`, taskQueue)
   }
 
   updateExchangeTxid(exchangeTxid: string){

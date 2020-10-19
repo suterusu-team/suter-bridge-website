@@ -19,7 +19,6 @@ class SuterBridge extends React.Component {
 	componentDidMount() {
     this.clearExpiredTask();
 		this.checkMetaMaskStatus();
-    this.checkWeb3Status();
 	}
 
   setCurrentAccount = account => {
@@ -31,6 +30,7 @@ class SuterBridge extends React.Component {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
     this.setCurrentAccount(account);
+    this.checkWeb3Status(account);
   }
 
   checkMetaMaskStatus(){
@@ -53,8 +53,8 @@ class SuterBridge extends React.Component {
     }
   }
 
-  clearExpiredTask(){
-    let taskQueue = (localStorage.getItem("task") || "").split(",")
+  clearExpiredTask(account){
+    let taskQueue = (localStorage.getItem(`${account}Task`) || "").split(",")
     taskQueue = taskQueue.filter(item => item);
     let expiredKeys = {}
     for (const key of taskQueue) {
