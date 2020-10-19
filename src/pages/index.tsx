@@ -14,7 +14,7 @@ class SuterBridge extends React.Component {
   constructor(props){
     super(props);
     this.state = { metamaskInstalled: false, account: '', connectWalletTxt: 'Connect Wallet', web3Browser: false };
-    this.startApp = this.startApp.bind(this)
+    this.setCurrentAccount = this.setCurrentAccount.bind(this)
   }
 	componentDidMount() {
 		this.checkMetaMaskStatus();
@@ -26,10 +26,10 @@ class SuterBridge extends React.Component {
     this.setState({ account: account, connectWalletTxt: connectWalletTxt })
   }
 
-  async connectMetaMask(afterCall){
+  async connectMetaMask(){
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
-    afterCall(account);
+    this.setCurrentAccount(account);
   }
 
   checkMetaMaskStatus(){
@@ -45,7 +45,6 @@ class SuterBridge extends React.Component {
     // Check if Web3 has been injected by the browser:
     if (typeof web3 !== 'undefined') {
       // You have a web3 browser! Continue below!
-      this.startApp(web3);
       this.setState({ "web3Browser": true })
     } else {
       const message = "Your should use a web3 browser."
@@ -53,11 +52,6 @@ class SuterBridge extends React.Component {
     }
   }
 
-  startApp(web3) {
-   const eth = new Eth(web3.currentProvider)
-   const contract = new EthContract(eth)
-   // initContract(contract)
-  }
   render () {
     const { metamaskInstalled, connectWalletTxt, account } = this.state
     return (
@@ -66,7 +60,7 @@ class SuterBridge extends React.Component {
           <Row>
             <Col md={20} sm={12} ><img src={ Logo } className='logo' /></Col>
             <Col md={4} sm={12}>
-              <Button className="connectWalletBtn" onClick={ () => this.connectMetaMask(this.setCurrentAccount) } disabled={!metamaskInstalled}>
+              <Button className="connectWalletBtn" onClick={ () => this.connectMetaMask() } disabled={!metamaskInstalled}>
                { account === '' ? '' : <div className='successDot'></div> }
                { connectWalletTxt }
               </Button>
@@ -74,7 +68,7 @@ class SuterBridge extends React.Component {
          </Row>
         </Header>
         <Content>
-         { account === '' ? <Home onClickFunc={ () => this.connectMetaMask(this.setCurrentAccount) } metamaskInstalled = { metamaskInstalled } /> : <Form account={account}/> }
+         { account === '' ? <Home onClickFunc={ () => this.connectMetaMask() } metamaskInstalled = { metamaskInstalled } /> : <Form account={account}/> }
         </Content>
         <Footer></Footer>
       </Layout>

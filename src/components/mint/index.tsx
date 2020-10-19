@@ -40,7 +40,7 @@ class Mint extends React.Component {
     this.submit = this.submit.bind(this)
     this.handleConfirmOk = this.handleConfirmOk.bind(this)
     this.handleConfirmCancel = this.handleConfirmCancel.bind(this)
-    this.recordTask = this.recordTask.bind(this)
+    this.newTask = this.newTask.bind(this)
     this.approveFinished = this.approveFinished.bind(this)
     this.exchangeFinished = this.exchangeFinished.bind(this)
   }
@@ -120,16 +120,23 @@ class Mint extends React.Component {
   async callApprove(){
     const suterValue = this.state.suterValue
     const suterAmount = getSuterValueNumber(suterValue)
-    const eth = new Eth(web3.currentProvider)
-    const contract = new EthContract(eth)
-    const suterContract = contract(ETHSUTERUSUABI)
-    const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
-    let txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount * 1000000000000000000, { from: this.props.account, gas: "60000"})
+    let txHash
+    try{
+      const eth = new Eth(web3.currentProvider)
+      const contract = new EthContract(eth)
+      const suterContract = contract(ETHSUTERUSUABI)
+      const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
+      txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount * 1000000000000000000, { from: this.props.account, gas: "60000"})
+    }catch(error){
+      openNotificationWithIcon('Metamask deny!', "User denied transaction signature", 'warning', 10)
+      this.setState({ submitApprove: false })
+      return
+    }
     const message = `View in etherscan`
     const aLink = `${ETHERSCAN}/tx/${txHash}`
     openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
     this.setState({ approveTxid: txHash })
-    this.recordTask(txHash, suterAmount)
+    this.newTask(txHash, suterAmount)
   }
 
   approveFinished(){
@@ -158,15 +165,17 @@ class Mint extends React.Component {
     this.setState({ exchangeTxid: txHash })
   }
 
-  recordTask(approve_txid, amount){
-    let task = {"account": this.props.account, "approveTxid": approve_txid, "amount": amount, "approveStatus": 0 }
-    localStorage.setItem(`myTask${this.props.account}${approve_txid}`, JSON.stringify(task));
+  newTask(approveTxid, amount){
+    let task = {"account": this.props.account, "approveTxid": approveTxid, "amount": amount, "approveStatus": 0, "exchangeTxid": '', "exchangeStatus": 0 }
+    localStorage.setItem(`myTask${this.props.account}${approveTxid}`, JSON.stringify(task));
 
     let taskQueue = (localStorage.getItem("task") || "").split(",")
     taskQueue = taskQueue.filter(item => item);
     taskQueue.push(`myTask${this.props.account}${approve_txid}`)
     localStorage.setItem("task", taskQueue)
   }
+
+
 
   render () {
     const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, submitApprove, approveStatus, exchangeTxid, exchangeStatus } = this.state
