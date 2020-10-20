@@ -12,17 +12,18 @@ const openNotificationWithIcon = (title: string, desc: any, type: string, durati
   }
 
 const openNotificationWithKey = (key: string, title: string, desc: any, type: string, duration: number = 0, onClickFunc = (() => {})) => {
-   const onClickFuncWraper = () => {
+   const onClickFuncWraper = (ckey) => () => {
      onClickFunc()
-     notification.close(key)
+     notification.close(ckey) 
    }
-    notification[type]({
+   console.log("key=" + key)
+   notification[type]({
       key: key,
       message: title,
       description: desc,
       duration: duration,
-      onClick: onClickFuncWraper
-    });
+      onClick: onClickFuncWraper(key)
+   });
 }
 
 const getSuterValueInteger = (suterValue: string):number => {
