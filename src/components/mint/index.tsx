@@ -24,7 +24,8 @@ class Mint extends React.Component {
     approveTxid: '',
     approveStatus: 0,
     exchangeTxid: '',
-    exchangeStatus: 0
+    exchangeStatus: 0,
+    uncompleteTasks: []
   }
 
   constructor(props){
@@ -45,9 +46,34 @@ class Mint extends React.Component {
     this.exchangeFinished = this.exchangeFinished.bind(this)
     this.updateExchangeTxid = this.updateExchangeTxid.bind(this)
     this.updateExchangeStatus = this.updateExchangeStatus.bind(this)
+    this.fetchUncompleteTasks = this.fetchUncompleteTasks.bind(this)
   }
   componentDidMount() {
+    this.fetchUncompleteTasks()
     this.fetchSuterPrice()
+  }
+
+  fetchUncompleteTasks(){
+    let mintTaskKey = `${this.props.account}Task`
+    let taskQueue = (localStorage.getItem(mintTaskKey) || "").split(",")
+    taskQueue = taskQueue.filter(item => item);
+    let uncompleteTasks = []
+    for (const key of taskQueue) {
+      let myTask = localStorage.getItem(key)
+      if (!myTask) {
+        continue
+      }
+      const item = JSON.parse(myTask)
+      if(item["exchangeStatus"] != 1){
+        uncompleteTasks.push(item)
+      }  
+    }
+    this.setState({uncompleteTasks: uncompleteTasks}, () => {
+      const { uncompleteTasks } = this.state
+      for (const task of uncompleteTasks){
+        openNotificationWithIcon('Uncomplete task', `${task["approveTxid"]}`, 'info');
+      }
+    })
   }
 
   setSuterPrice(price: number) {
@@ -126,10 +152,10 @@ class Mint extends React.Component {
     const suterValue = this.state.suterValue
     const suterAmount = getSuterValueNumber(suterValue)
     let txHash
+    const eth = new Eth(web3.currentProvider)
+    const contract = new EthContract(eth)
+    const suterContract = contract(ETHSUTERUSUABI)
     try{
-      const eth = new Eth(web3.currentProvider)
-      const contract = new EthContract(eth)
-      const suterContract = contract(ETHSUTERUSUABI)
       const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
       txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount * 1000000000000000000, { from: this.props.account, gas: "60000"})
     }catch(error){
@@ -157,10 +183,10 @@ class Mint extends React.Component {
     this.approveFinished()
     const { suterValue, destinationAddress } = this.state
     let txHash
+    const eth = new Eth(web3.currentProvider)
+    const contract = new EthContract(eth)
+    const ethBridgeContract = contract(ETHBRIDGEABI)
     try{
-      const eth = new Eth(web3.currentProvider)
-      const contract = new EthContract(eth)
-      const ethBridgeContract = contract(ETHBRIDGEABI)
       const ethBridgeContractInstance = ethBridgeContract.at(ETHBRIDGECONTRACTADDRESS)
       const suterAmount = parseInt(suterValue)
       txHash = await ethBridgeContractInstance.exchange(suterAmount * 1000000000000000000, destinationAddress, { from: this.props.account, gas: "100000" })
@@ -181,10 +207,11 @@ class Mint extends React.Component {
     let task = {"account": this.props.account, "approveTxid": approveTxid, "amount": amount, "exchangeTxid": '', "exchangeStatus": 0 }
     localStorage.setItem(myTaskKey, JSON.stringify(task));
 
-    let taskQueue = (localStorage.getItem("task") || "").split(",")
+    let mintTaskKey = `${this.props.account}Task`
+    let taskQueue = (localStorage.getItem(mintTaskKey) || "").split(",")
     taskQueue = taskQueue.filter(item => item);
     taskQueue.push(myTaskKey)
-    localStorage.setItem(`${this.props.account}Task`, taskQueue)
+    localStorage.setItem(mintTaskKey, taskQueue)
   }
 
   updateExchangeTxid(exchangeTxid: string){

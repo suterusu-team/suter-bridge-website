@@ -68,7 +68,7 @@ class SuterBridge extends React.Component {
         expiredKeys[key] = true
       }
     }
-    taskQueue = taskQueue.filter(item => { !expiredKeys[item] })
+    taskQueue = taskQueue.filter(item => !expiredKeys[item])
     localStorage.setItem(`${account}Task`, taskQueue)
   }
 
