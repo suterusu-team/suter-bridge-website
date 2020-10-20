@@ -1,10 +1,10 @@
 import React from "react"
-import { Row, Col, Button, notification } from 'antd';
+import { Row, Col, Button } from 'antd';
 import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
 import axios from 'axios';
 import WAValidator from 'multicoin-address-validator';
-import { openNotificationWithIcon, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber } from '../tools';
+import { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
 
@@ -47,10 +47,21 @@ class Mint extends React.Component {
     this.updateExchangeTxid = this.updateExchangeTxid.bind(this)
     this.updateExchangeStatus = this.updateExchangeStatus.bind(this)
     this.fetchUncompleteTasks = this.fetchUncompleteTasks.bind(this)
+    this.recoverTask = this.recoverTask.bind(this)
   }
   componentDidMount() {
     this.fetchUncompleteTasks()
     this.fetchSuterPrice()
+  }
+
+  recoverTask(task){
+    this.setState({
+      suterValue: task["amount"].toString(),
+      dollarValue: this.state.suterPrice * task["amount"],
+      destinationAddress: task["destinationAddress"],
+      approveTxid: task["approveTxid"],
+      exchangeTxid: task["exchangeTxid"]
+    })
   }
 
   fetchUncompleteTasks(){
@@ -71,7 +82,7 @@ class Mint extends React.Component {
     this.setState({uncompleteTasks: uncompleteTasks}, () => {
       const { uncompleteTasks } = this.state
       for (const task of uncompleteTasks){
-        openNotificationWithIcon('Uncomplete task', `${task["approveTxid"]}`, 'info');
+        openNotificationWithKey(task[`${task["account"]}${task["approveTxid"]}`], 'Uncomplete task', <UncompleteTaskMessage task={task} />, 'info', 0 , () => this.recoverTask(task));
       }
     })
   }
@@ -203,8 +214,9 @@ class Mint extends React.Component {
   }
 
   newTask(approveTxid: string, amount: number){
+    const { destinationAddress } = this.state
     let myTaskKey = `myTask${this.props.account}${approveTxid}`
-    let task = {"account": this.props.account, "approveTxid": approveTxid, "amount": amount, "exchangeTxid": '', "exchangeStatus": 0 }
+    let task = {"account": this.props.account, destinationAddress: destinationAddress, "approveTxid": approveTxid, "amount": amount, "exchangeTxid": '', "exchangeStatus": 0 }
     localStorage.setItem(myTaskKey, JSON.stringify(task));
 
     let mintTaskKey = `${this.props.account}Task`
