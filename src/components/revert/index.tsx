@@ -40,9 +40,46 @@ class Revert extends React.Component {
     this.exchangeFinished = this.exchangeFinished.bind(this)
     this.updateExchangeTxid = this.updateExchangeTxid.bind(this)
     this.updateExchangeStatus = this.updateExchangeStatus.bind(this)
+    this.recoverTask = this.recoverTask.bind(this)
+    this.fetchUncompleteTasks = this.fetchUncompleteTasks.bind(this)
   }
   componentDidMount() {
+    this.fetchUncompleteTasks()
     this.setSuterPrice()
+  }
+
+
+  recoverTask(task){
+    this.setState({
+      suterValue: task["amount"].toString(),
+      dollarValue: this.state.suterPrice * task["amount"],
+      destinationAddress: task["destinationAddress"],
+      approveTxid: task["approveTxid"],
+      exchangeTxid: task["exchangeTxid"]
+    })
+  }
+
+  fetchUncompleteTasks(){
+    let revertTaskKey = `${this.props.account}RevertTask`
+    let taskQueue = (localStorage.getItem(revertTaskKey) || "").split(",")
+    taskQueue = taskQueue.filter(item => item);
+    let uncompleteTasks = []
+    for (const key of taskQueue) {
+      let myTask = localStorage.getItem(key)
+      if (!myTask) {
+        continue
+      }
+      const item = JSON.parse(myTask)
+      if(item["exchangeStatus"] != 1){
+        uncompleteTasks.push(item)
+      }  
+    }
+    this.setState({uncompleteTasks: uncompleteTasks}, () => {
+      const { uncompleteTasks } = this.state
+      for (const task of uncompleteTasks){
+        openNotificationWithKey(`${task["account"]}${task["approveTxid"]}`, 'Uncomplete task', <UncompleteTaskMessage task={task} />, 'info', 0 , () => this.recoverTask(task));
+      }
+    })
   }
 
   async setSuterPrice() {

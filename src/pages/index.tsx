@@ -49,13 +49,14 @@ class SuterBridge extends React.Component {
   async connectMetaMask(){
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
-    this.setCurrentAccount(account,'Mint');
+    this.setCurrentAccount(account, 'Mint');
     this.clearExpiredTask(account);
   }
   
   async connectTronLink(){
     const defaultAccount = await window.tronWeb.defaultAddress["base58"]
     this.setCurrentAccount(defaultAccount, 'Revert');
+    this.clearRevertExpiredTask(defaultAccount)
   }
   
   async checkTronLinkStatus() {
@@ -94,7 +95,29 @@ class SuterBridge extends React.Component {
   }
 
   clearExpiredTask(account){
+    // clear eth task
     let taskQueue = (localStorage.getItem(`${account}Task`) || "").split(",")
+    taskQueue = taskQueue.filter(item => item);
+    let expiredKeys = {}
+    for (const key of taskQueue) {
+      let myTask = localStorage.getItem(key)
+      if (!myTask) {
+        continue
+      }
+      const item = JSON.parse(myTask)
+      const now = new Date()
+      if (now.getTime() > item.expiry) {
+        localStorage.removeItem(key)
+        expiredKeys[key] = true
+      }
+    }
+    taskQueue = taskQueue.filter(item => !expiredKeys[item])
+    localStorage.setItem(`${account}Task`, taskQueue)
+  }
+
+  clearRevertExpiredTask(account){
+    // clear eth task
+    let taskQueue = (localStorage.getItem(`${account}RevertTask`) || "").split(",")
     taskQueue = taskQueue.filter(item => item);
     let expiredKeys = {}
     for (const key of taskQueue) {

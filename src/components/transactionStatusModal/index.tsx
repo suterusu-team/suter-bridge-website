@@ -35,8 +35,8 @@ class TransactionStatusModal extends React.Component {
   }
 
   fetchTransactionStatus() {
-    const { blockNumber, latestBlockNum } = this.state
-    if( latestBlockNum - blockNumber >= 12){
+    const { blockNumber, latestBlockNum, needConfirmBlockNum } = this.state
+    if( latestBlockNum - blockNumber >= needConfirmBlockNum){
       clearInterval(this.interval)
       return
     }
@@ -69,8 +69,8 @@ class TransactionStatusModal extends React.Component {
   }
 
   async fetchTronLastedBlockNum(){
-    const { blockNumber, latestBlockNum } = this.state
-    if( latestBlockNum - blockNumber >= 12){
+    const { blockNumber, latestBlockNum, needConfirmBlockNum } = this.state
+    if( latestBlockNum - blockNumber >= needConfirmBlockNum){
       clearInterval(this.interval)
       return
     }
@@ -99,8 +99,8 @@ class TransactionStatusModal extends React.Component {
   	const { title, visible, handleOk, txid, okText, nextTip, needConfirmBlockNum, network } = this.props;
     const { status, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
-    let viewText = (network == 'eth' ? 'View in etherscan' : '`View in tronscan`')
-    let viewLink = (network == 'eth' ?  ETHERSCAN : TRONSCAN)
+    let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
+    let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txHash}` :  `${TRONSCAN}/#/transaction/${txid}`)
     return (
       <>
         <Modal 
@@ -115,8 +115,8 @@ class TransactionStatusModal extends React.Component {
             </Button>
           ]}
         >
-          <div className="loadingIconContainer">{confirmBlockNum < 12 ? <LoadingOutlined /> : ''}</div>
-          <p>{ MessageWithAlink(viewText, viewLink) } </p>
+          <div className="loadingIconContainer">{confirmBlockNum < needConfirmBlockNum ? <LoadingOutlined /> : ''}</div>
+          <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p>
           <p>{ status !== 1 ? '区块未打包' : '区块已打包' }</p>
           <p>{ `区块号: ${blockNumber}` }</p>
           <p>{ `最新区块号: ${latestBlockNum}` }</p>
