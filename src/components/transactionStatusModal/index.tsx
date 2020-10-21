@@ -20,8 +20,7 @@ class TransactionStatusModal extends React.Component {
   }
 
   componentDidMount() {
-    const thisFetchTransactionStatus = this.fetchTransactionStatus.bind(this);
-    this.interval = setInterval(thisFetchTransactionStatus, 3000);
+    this.interval = setInterval(this.fetchTransactionStatus, 3000);
   }
 
   componentWillUnmount() {

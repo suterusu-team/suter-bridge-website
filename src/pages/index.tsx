@@ -16,6 +16,7 @@ class SuterBridge extends React.Component {
     account: '',
     connectWalletTxt: 'Connect Wallet',
     web3Browser: false, 
+    checkTronLinkCount: 0
   }
 
   constructor(props){
@@ -31,8 +32,13 @@ class SuterBridge extends React.Component {
 	componentDidMount() {
     this.checkWeb3Status();
     this.checkMetaMaskStatus();
-    this.checkTronLinkStatus();
-	}
+    // this.checkTronLinkStatus();
+    this.interval = setInterval(this.checkTronLinkStatus, 1000);
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
 
   setCurrentAccount = account => {
     const connectWalletTxt = account.slice(0, 7) + '...' + account.slice(-5)
@@ -51,13 +57,18 @@ class SuterBridge extends React.Component {
     this.setCurrentAccount(defaultAccount);
   }
   
-  checkTronLinkStatus() {
+  async checkTronLinkStatus() {
+    this.setState({checkTronLinkCount: this.state.checkTronLinkCount + 1})
     if(typeof window.tronWeb !== 'undefined'){
       console.log('TronLink is installed!');
       this.setState({ tronLinkInstalled: true })
+      clearInterval(this.interval)
     }else{
-      const message = 'Suter Bridge must work with tronLink, please install tronLink'
-      openNotificationWithIcon('TronLink Is Not Install!', message, 'warning')
+      if(this.state.checkTronLinkCount >= 5){
+        clearInterval(this.interval)
+        const message = 'Suter Bridge must work with tronLink, please install tronLink'
+        openNotificationWithIcon('TronLink Is Not Install!', message, 'warning')
+      }
     }
   }
   checkMetaMaskStatus(){
