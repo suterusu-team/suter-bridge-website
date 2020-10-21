@@ -54,7 +54,7 @@ class SuterBridge extends React.Component {
   }
   
   async connectTronLink(){
-    const defaultAccount = window.tronWeb.defaultAddress["base58"]
+    const defaultAccount = await window.tronWeb.defaultAddress["base58"]
     this.setCurrentAccount(defaultAccount, 'Revert');
   }
   

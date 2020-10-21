@@ -1,6 +1,7 @@
 import React from "react"
 import {notification, Button } from 'antd';
 import numeral from 'numeral-es6';
+import axios from 'axios';
 
 const openNotificationWithIcon = (title: string, desc: any, type: string, duration: number = 0, onClickFunc = (() => {})) => {
     notification[type]({
@@ -75,4 +76,22 @@ const UncompleteTaskMessage = (props) => {
   </div>)
 }
 
-export { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage }
+const fetchSuterPrice = async () => {
+  let suterPrice = 0
+  try {
+    let response = await axios.get('kucoin_api/api/v1/market/orderbook/level1?symbol=SUTER-USDT')
+    if(response.status == 200){
+      let price = response.data.data.price;
+      suterPrice = parseFloat(price)
+    }else{
+      console.log(response)
+      openNotificationWithIcon('Price Api Error', 'Fetch suter price error', 'error', 4.5);
+    }
+  }catch(error){
+    console.log(error)
+    openNotificationWithIcon('Network Error', 'Fetch suter price error', 'warning', 4.5);
+  }
+  return suterPrice
+}
+
+export { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage, fetchSuterPrice}

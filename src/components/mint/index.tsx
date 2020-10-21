@@ -4,7 +4,7 @@ import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
 import axios from 'axios';
 import WAValidator from 'multicoin-address-validator';
-import { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage } from '../tools';
+import { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage, fetchSuterPrice } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
 
@@ -31,7 +31,6 @@ class Mint extends React.Component {
   constructor(props){
     super(props);
     this.handleSuterAmountChange = this.handleSuterAmountChange.bind(this);
-    this.fetchSuterPrice = this.fetchSuterPrice.bind(this);
     this.assignRef = this.assignRef.bind(this);
     this.setSuterPrice = this.setSuterPrice.bind(this);
     this.handleDestinationChange = this.handleDestinationChange.bind(this)
@@ -51,7 +50,7 @@ class Mint extends React.Component {
   }
   componentDidMount() {
     this.fetchUncompleteTasks()
-    this.fetchSuterPrice()
+    this.setSuterPrice()
   }
 
   recoverTask(task){
@@ -87,24 +86,9 @@ class Mint extends React.Component {
     })
   }
 
-  setSuterPrice(price: number) {
+  async setSuterPrice() {
+    let price = await fetchSuterPrice()
     this.setState({ suterPrice: price })
-  }
-
-  async fetchSuterPrice(){
-    try {
-      let response = await axios.get('kucoin_api/api/v1/market/orderbook/level1?symbol=SUTER-USDT')
-      if(response.status == 200){
-        let price = response.data.data.price;
-        this.setSuterPrice(parseFloat(price))
-      }else{
-        console.log(response)
-        openNotificationWithIcon('Price Api Error', 'Fetch suter price error', 'error', 4.5);
-      }
-    }catch(error){
-      console.log(error)
-      openNotificationWithIcon('Network Error', 'Fetch suter price error', 'warning', 4.5);
-    }
   }
 
   assignRef(c: HTMLElement) {
