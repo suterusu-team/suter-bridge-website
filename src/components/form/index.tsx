@@ -5,7 +5,6 @@ import Revert from '../revert';
 import { openNotificationWithIcon } from '../tools';
 import "./index.less"
 
-
 const tabList = [
   {
     key: 'Mint',

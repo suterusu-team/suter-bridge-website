@@ -5,7 +5,7 @@ import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
 import WAValidator from 'multicoin-address-validator';
 import ConfirmModal from '../confirmModal';
 import { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage, fetchSuterPrice } from '../tools';
-
+import TransactionStatusModal from '../transactionStatusModal';
 
 class Revert extends React.Component {
   state = {
@@ -17,6 +17,11 @@ class Revert extends React.Component {
     destinationAddress: '',
     showConfirmModal: false,
     submitApprove: false,
+    approveTxid: '',
+    approveStatus: 0,
+    exchangeTxid: '',
+    exchangeStatus: 0,
+    uncompleteTasks: []
   }
 
   constructor(props){
@@ -29,6 +34,12 @@ class Revert extends React.Component {
     this.handleConfirmOk = this.handleConfirmOk.bind(this)
     this.handleConfirmCancel = this.handleConfirmCancel.bind(this)
     this.callApprove = this.callApprove.bind(this)
+    this.callExchange = this.callExchange.bind(this)
+    this.newTask = this.newTask.bind(this)
+    this.approveFinished = this.approveFinished.bind(this)
+    this.exchangeFinished = this.exchangeFinished.bind(this)
+    this.updateExchangeTxid = this.updateExchangeTxid.bind(this)
+    this.updateExchangeStatus = this.updateExchangeStatus.bind(this)
   }
   componentDidMount() {
     this.setSuterPrice()
@@ -62,25 +73,102 @@ class Revert extends React.Component {
    }
 
    async callApprove(){
-    // const suterValue = this.state.suterValue
-    // const suterAmount = getSuterValueNumber(suterValue)
-    // let txHash
-    // const eth = new Eth(web3.currentProvider)
-    // const contract = new EthContract(eth)
-    // const suterContract = contract(ETHSUTERUSUABI)
-    // try{
-    //   const suterContractInstance = suterContract.at(ETHSUTERUSUCONTRACTADDRESS)
-    //   txHash = await suterContractInstance.increaseAllowance(ETHBRIDGECONTRACTADDRESS, suterAmount * 1000000000000000000, { from: this.props.account, gas: "60000"})
-    // }catch(error){
-    //   openNotificationWithIcon('Metamask deny!', "User denied transaction signature", 'warning', 10)
-    //   this.setState({ submitApprove: false })
-    //   return
-    // }
-    // const message = `View in etherscan`
-    // const aLink = `${ETHERSCAN}/tx/${txHash}`
-    // openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
-    // this.setState({ approveTxid: txHash })
-    // this.newTask(txHash, suterAmount)
+    const suterValue = this.state.suterValue
+    const suterAmount = getSuterValueNumber(suterValue)
+    let txHash
+    try{
+      const suterContract = await window.tronWeb.contract().at(TRONSUTERUSUCONTRACTADDRESS)
+      txHash = await suterContract.increaseAllowance(TRONBRIDGECONTRACTADDRESS, `${suterAmount * 1000000000000000000}`).send({
+        feeLimit: 1000000,
+        callValue: 0,
+        shouldPollResponse: false
+      })
+    }catch(error){
+      console.log("callApprove error=", error)
+      openNotificationWithIcon('TronLink deny!', "User denied transaction signature", 'warning', 10)
+      this.setState({ submitApprove: false })
+      return
+    }
+    const message = `View in tronscan`
+    const aLink = `${TRONSCAN}/#/transaction/${txHash}`
+    openNotificationWithIcon('Approve transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
+    this.setState({ approveTxid: txHash })
+    this.newTask(txHash, suterAmount)
+  }
+
+  approveFinished(){
+    this.setState({ approveStatus: 1 })
+  }
+  exchangeFinished(){
+    this.setState({ exchangeStatus: 1 })
+    this.updateExchangeStatus()
+    window.location.reload(false);
+  }
+
+  async callExchange(){
+    this.approveFinished()
+    const { suterValue, destinationAddress } = this.state
+    let txHash
+    try{
+      const tronBridgeContract = await window.tronWeb.contract().at(TRONBRIDGECONTRACTADDRESS)
+      const suterAmount = parseInt(suterValue)
+      txHash = await tronBridgeContract.exchange(`${suterAmount * 1000000000000000000}`, destinationAddress).send({
+        feeLimit: 1000000,
+        callValue: 0,
+        shouldPollResponse: false
+      })
+    }catch(error){
+      openNotificationWithIcon('TronLink deny!', "User denied transaction signature", 'warning', 10)
+      this.setState({ approveStatus: 0 })
+      return
+    }
+    const message = `View in tronscan`
+    const aLink = `${TRONSCAN}/#/transaction/${txHash}`
+    openNotificationWithIcon('Exchange transaction has success sent!', <MessageWithAlink message={message} aLink={aLink} />, 'success', 10)
+    this.setState({ exchangeTxid: txHash })
+    this.updateExchangeTxid(txHash)
+  }
+
+  newTask(approveTxid: string, amount: number){
+    const { destinationAddress } = this.state
+    let myTaskKey = `myRevertTask${this.props.account}${approveTxid}`
+    let task = {"account": this.props.account, destinationAddress: destinationAddress, "approveTxid": approveTxid, "amount": amount, "exchangeTxid": '', "exchangeStatus": 0 }
+    localStorage.setItem(myTaskKey, JSON.stringify(task));
+
+    let revertTaskKey = `${this.props.account}RevertTask`
+    let taskQueue = (localStorage.getItem(revertTaskKey) || "").split(",")
+    taskQueue = taskQueue.filter(item => item);
+    taskQueue.push(myTaskKey)
+    localStorage.setItem(revertTaskKey, taskQueue)
+  }
+
+  updateExchangeTxid(exchangeTxid: string){
+    const { approveTxid } = this.state
+    let myTaskKey = `myRevertTask${this.props.account}${approveTxid}`
+    let myTask = localStorage.getItem(myTaskKey)
+    if(!myTask){
+      console.log(`Can't find a task with key ${myTaskKey}`)
+      return
+    }
+   let myTaskObject = JSON.parse(myTask)
+    myTaskObject["exchangeTxid"] = exchangeTxid
+    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
+  }
+
+  updateExchangeStatus(){
+    const { approveTxid } = this.state
+    let myTaskKey = `myRevertTask${this.props.account}${approveTxid}`
+    let myTask = localStorage.getItem(myTaskKey)
+    if(!myTask){
+      console.log(`Can't find a task with key ${myTaskKey}`)
+      return
+    }
+    let myTaskObject = JSON.parse(myTask)
+    myTaskObject["exchangeStatus"] = 1
+    const now = new Date()
+    // 3 hour expired
+    myTaskObject.expiry = now.getTime() + 7200000
+    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
   }
 
   handleSuterAmountChange(e) {
@@ -114,13 +202,15 @@ class Revert extends React.Component {
     }
   }
   render () {
-    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal } = this.state
+    const { suterValue, suterTxt, dollarValue, suterValueFontSize, destinationAddress, showConfirmModal, approveTxid, approveStatus, exchangeTxid,  exchangeStatus} = this.state
     const suterValueForInput = suterValueForInputFunc(suterValue)
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt)
     const canNext = (WAValidator.validate(destinationAddress, 'eth')) && (getSuterValueNumber(suterValue) > 0)
     return (
       <div className="mint">
       {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
+      { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} needConfirmBlockNum = {6} /> : '' }
+      { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} needConfirmBlockNum = {6} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
         <Row>
          <Col span={24}>
             <div className="inputContainer container">
