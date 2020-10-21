@@ -2,7 +2,6 @@ import React from "react"
 import { Row, Col, Button } from 'antd';
 import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
-import axios from 'axios';
 import WAValidator from 'multicoin-address-validator';
 import { openNotificationWithIcon, openNotificationWithKey, MessageWithAlink, suterValueForInputFunc, suterAmountForInput, getSuterValueNumber, UncompleteTaskMessage, fetchSuterPrice } from '../tools';
 import ConfirmModal from '../confirmModal';
@@ -235,8 +234,7 @@ class Mint extends React.Component {
     myTaskObject["exchangeStatus"] = 1
     const now = new Date()
     // 3 hour expired
-    // myTaskObject.expiry = now.getTime() + 7200000
-    myTaskObject["expiry"] = now.getTime() + 60000,
+    myTaskObject.expiry = now.getTime() + 7200000
     localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
   }
 
