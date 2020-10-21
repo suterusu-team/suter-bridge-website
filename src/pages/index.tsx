@@ -131,7 +131,9 @@ class SuterBridge extends React.Component {
       <Layout className='suterBridge'>
         <Header>
           <Row>
-            <Col md={20} sm={12} ><img src={ Logo } className='logo' /></Col>
+            <Col md={20} sm={12} >
+              <a href="/"><img src={ Logo } className='logo' /></a>
+            </Col>
             <Col md={4} sm={12}>
               { account !== '' ? <Button className="connectWalletBtn" >
                  <div className='successDot'></div>
