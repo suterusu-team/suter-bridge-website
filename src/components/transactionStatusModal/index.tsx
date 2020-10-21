@@ -100,7 +100,7 @@ class TransactionStatusModal extends React.Component {
     const { status, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
     let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
-    let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txHash}` :  `${TRONSCAN}/#/transaction/${txid}`)
+    let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txid}` :  `${TRONSCAN}/#/transaction/${txid}`)
     return (
       <>
         <Modal 
