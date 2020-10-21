@@ -16,7 +16,8 @@ class SuterBridge extends React.Component {
     account: '',
     connectWalletTxt: 'Connect Wallet',
     web3Browser: false, 
-    checkTronLinkCount: 0
+    checkTronLinkCount: 0,
+    formType: ''
   }
 
   constructor(props){
@@ -40,21 +41,21 @@ class SuterBridge extends React.Component {
     clearInterval(this.interval)
   }
 
-  setCurrentAccount = account => {
+  setCurrentAccount = (account: string, formType:string) => {
     const connectWalletTxt = account.slice(0, 7) + '...' + account.slice(-5)
-    this.setState({ account: account, connectWalletTxt: connectWalletTxt })
+    this.setState({ account: account, connectWalletTxt: connectWalletTxt, formType: formType})
   }
 
   async connectMetaMask(){
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
-    this.setCurrentAccount(account);
+    this.setCurrentAccount(account,'Mint');
     this.clearExpiredTask(account);
   }
   
   async connectTronLink(){
     const defaultAccount = window.tronWeb.defaultAddress["base58"]
-    this.setCurrentAccount(defaultAccount);
+    this.setCurrentAccount(defaultAccount, 'Revert');
   }
   
   async checkTronLinkStatus() {
@@ -125,28 +126,28 @@ class SuterBridge extends React.Component {
   }
 
   render () {
-    const { metamaskInstalled, connectWalletTxt, account } = this.state
+    const {connectWalletTxt, account, formType } = this.state
     return (
       <Layout className='suterBridge'>
         <Header>
           <Row>
             <Col md={20} sm={12} ><img src={ Logo } className='logo' /></Col>
             <Col md={4} sm={12}>
-            <Dropdown overlay={this.dropDownMenu()}>
-              <Button className="connectWalletBtn">
-                { connectWalletTxt }<DownOutlined />
-              </Button>
-            </Dropdown>
-             
-              {/* <Button className="connectWalletBtn" onClick={ () => this.connectMetaMask() } disabled={!metamaskInstalled}>
-               { account === '' ? '' : <div className='successDot'></div> }
-               { connectWalletTxt }
-              </Button> */}
+              { account !== '' ? <Button className="connectWalletBtn" >
+                 <div className='successDot'></div>
+                 { connectWalletTxt }
+              </Button> : 
+              <Dropdown overlay={this.dropDownMenu()}>
+                <Button className="connectWalletBtn">
+                  { connectWalletTxt }<DownOutlined />
+                </Button>
+              </Dropdown>
+              }
             </Col>
          </Row>
         </Header>
         <Content>
-         { account === '' ? <Home onClickFunc={ () => this.connectMetaMask() } dropDownMenu={ this.dropDownMenu} metamaskInstalled = { metamaskInstalled } /> : <Form account={account}/> }
+         { account === '' ? <Home dropDownMenu={ this.dropDownMenu} /> : <Form account={account} formType={formType}/> }
         </Content>
         <Footer></Footer>
       </Layout>

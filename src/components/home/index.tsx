@@ -9,7 +9,7 @@ class Home extends React.Component {
     super(props);
   }
   render () {
-  	const { onClickFunc, metamaskInstalled, dropDownMenu } = this.props
+  	const { dropDownMenu } = this.props
   	return (
   		<div className="home">
   		  <Row>
@@ -36,13 +36,12 @@ class Home extends React.Component {
           </Row>
           <Row>
            <Col span={24}>
-             <div className="connectMetaMaskButtonContainer">
+             <div className="connectWalletButtonContainer">
              <Dropdown overlay={dropDownMenu()}>
                <Button type="primary" size="large">
                  CONNECT WALLET <DownOutlined />
                 </Button>
              </Dropdown>
-               {/* <Button type="primary" size="large" onClick={ onClickFunc } disabled={ !metamaskInstalled }>CONNECT METAMASK</Button> */}
              </div>
            </Col>
         </Row>

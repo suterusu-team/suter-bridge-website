@@ -25,7 +25,7 @@ class Revert extends React.Component {
     this.handleDestinationChange = this.handleDestinationChange.bind(this)
   }
   componentDidMount() {
-    this.fetchSuterPrice(this.setSuterPrice, this.openNotificationWithIcon)
+    // this.fetchSuterPrice(this.setSuterPrice, this.openNotificationWithIcon)
   }
 
   openNotificationWithIcon = (title, desc, type, duration=0) => {

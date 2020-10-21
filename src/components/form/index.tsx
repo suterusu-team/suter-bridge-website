@@ -2,6 +2,9 @@ import React from "react";
 import { Card } from 'antd';
 import Mint from '../mint';
 import Revert from '../revert';
+import { openNotificationWithIcon } from '../tools';
+import "./index.less"
+
 
 const tabList = [
   {
@@ -20,32 +23,44 @@ const contentList = {
 };
 
 class Form extends React.Component {
-	state = {
-    key: 'Mint',
-    noTitleKey: 'Mint',
-  };
-
   constructor(props){
     super(props);
   }
+  tabListWrapper = () => {
+    const { formType } = this.props
+    let newTabList = []
+    for(const item of tabList){
+       let newItem = {}
+       if(item["key"] !== formType){
+        newItem = {...item, disabled: true}
+       }else{
+         newItem = {...item }
+       }
+       newTabList.push(newItem)
+    }
+    return newTabList
+  }
 
   onTabChange = (key, type) => {
-    this.setState({ [type]: key });
+    if(key == "Mint"){
+      openNotificationWithIcon("Invalid operation", `${key} is not allowed, please connect Metamask`, 'warning', 4.5)
+    }else{
+      openNotificationWithIcon("Invalid operation", `${key} is not allowed, please connect TronLink`, 'warning', 4.5)
+    }
   };
 
   render () {
-    const { account } = this.props
+    const { account, formType } = this.props
   	return (
   		<div className='form'>
         <Card
-          title=""
           tabList={tabList}
-          activeTabKey={this.state.key}
+          activeTabKey={formType}
           onTabChange={key => {
             this.onTabChange(key, 'key');
           }}
         >
-          {contentList[this.state.key](account)}
+          {contentList[formType](account)}
         </Card>
   		</div>
   	)
