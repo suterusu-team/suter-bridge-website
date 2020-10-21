@@ -17,10 +17,17 @@ class TransactionStatusModal extends React.Component {
     super(props);
     this.fetchTransactionStatus = this.fetchTransactionStatus.bind(this)
     this.fetchLastedBlockNum = this.fetchLastedBlockNum.bind(this)
+    this.fetchTronTransactionStatus = this.fetchTronTransactionStatus.bind(this)
+    this.fetchTronLastedBlockNum = this.fetchTronLastedBlockNum.bind(this)
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.fetchTransactionStatus, 3000);
+    const { network } = this.props
+    if(network == 'eth'){
+      this.interval = setInterval(this.fetchTransactionStatus, 3000);
+    }else{
+      this.interval = setInterval(this.fetchTronTransactionStatus, 3000);
+    }
   }
 
   componentWillUnmount() {
@@ -45,8 +52,7 @@ class TransactionStatusModal extends React.Component {
         }
       })
     } catch (err) {
-      console.log("error happen")
-      console.log(err)
+      console.log("fetchTransactionStatus error happen", err)
     }
   }
 
@@ -57,15 +63,44 @@ class TransactionStatusModal extends React.Component {
          console.log(latestBlockNum)
          this.setState({ latestBlockNum: latestBlockNum })
        })
-    } catch (err) {
-     console.log("error happen")
-     console.log(err)
+    } catch (error) {
+     console.log("fetchLastedBlockNum error happen", error)
+    }
+  }
+
+  async fetchTronLastedBlockNum(){
+    const { blockNumber, latestBlockNum } = this.state
+    if( latestBlockNum - blockNumber >= 12){
+      clearInterval(this.interval)
+      return
+    }
+    try {
+      let result = await window.tronWeb.trx.getCurrentBlock()
+      this.setState({ latestBlockNum: result["block_header"]["raw_data"]["number"] })
+    } catch (error) {
+     console.log("fetchTronLastedBlockNum error happen", error)
+    }
+  }
+
+  async fetchTronTransactionStatus() {
+    const { txid } = this.props;
+    try {
+      let result = await window.tronWeb.trx.getTransactionInfo(txid);
+      if(result !== null && result["receipt"] != null){
+        let status = result["receipt"]["result"] == "success" ? 1 : 0
+        this.setState({ status: status, blockNumber: result["blockNumber"] })
+        this.fetchTronLastedBlockNum()
+      } 
+    }catch(error){
+      console.log("fetchTronTransactionStatus error happen", error)
     }
   }
   render() {
-  	const { title, visible, handleOk, txid, okText, nextTip, needConfirmBlockNum } = this.props;
+  	const { title, visible, handleOk, txid, okText, nextTip, needConfirmBlockNum, network } = this.props;
     const { status, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
+    let viewText = (network == 'eth' ? 'View in etherscan' : '`View in tronscan`')
+    let viewLink = (network == 'eth' ?  ETHERSCAN : TRONSCAN)
     return (
       <>
         <Modal 
@@ -81,7 +116,7 @@ class TransactionStatusModal extends React.Component {
           ]}
         >
           <div className="loadingIconContainer">{confirmBlockNum < 12 ? <LoadingOutlined /> : ''}</div>
-          <p>{ MessageWithAlink(`View in etherscan`, `${ETHERSCAN}/tx/${txid}`) } </p>
+          <p>{ MessageWithAlink(viewText, viewLink) } </p>
           <p>{ status !== 1 ? '区块未打包' : '区块已打包' }</p>
           <p>{ `区块号: ${blockNumber}` }</p>
           <p>{ `最新区块号: ${latestBlockNum}` }</p>

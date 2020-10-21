@@ -246,8 +246,8 @@ class Mint extends React.Component {
   	return (
   		<div className="mint">
        {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
-       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} needConfirmBlockNum = {6} /> : '' }
-       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} needConfirmBlockNum = {6} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
+       { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal network='eth' visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Approving`} okText={'Next'} nextTip={'You will exchange next'} needConfirmBlockNum = {6} /> : '' }
+       { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal network='eth' visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Exchanging`} okText={'Finished'} needConfirmBlockNum = {6} nextTip={`You will receive ${suterValueForInput} Suter token on tron network next`} /> : '' }
   		  <Row>
          <Col span={24}>
             <div className="inputContainer container">
