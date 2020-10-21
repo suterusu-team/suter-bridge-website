@@ -1,23 +1,37 @@
 import React from "react"
-import { Layout } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import { Layout, Dropdown, Menu } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+const { Header, Footer, Content } = Layout;
 import { Row, Col, Button } from 'antd';
 import { openNotificationWithIcon, MessageWithAlink } from '../components/tools'
 import 'antd/dist/antd.css'; 
 import Logo from '../static/suter_bridge_logo.png';
 import Home from '../components/home';
 import Form from '../components/form';
-import Eth from 'ethjs-query';
-import EthContract from 'ethjs-contract';
 
 class SuterBridge extends React.Component {
+  state = {
+    metamaskInstalled: false,
+    tronLinkInstalled: false,
+    account: '',
+    connectWalletTxt: 'Connect Wallet',
+    web3Browser: false, 
+  }
+
   constructor(props){
     super(props);
-    this.state = { metamaskInstalled: false, account: '', connectWalletTxt: 'Connect Wallet', web3Browser: false };
+    this.checkWeb3Status = this.checkWeb3Status.bind(this)
+    this.checkMetaMaskStatus = this.checkMetaMaskStatus.bind(this)
+    this.checkTronLinkStatus = this.checkTronLinkStatus.bind(this)
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
+    this.dropDownMenu = this.dropDownMenu.bind(this)
+    this.connectMetaMask = this.connectMetaMask.bind(this)
+    this.connectTronLink = this.connectTronLink.bind(this)
   }
 	componentDidMount() {
-		this.checkMetaMaskStatus();
+    this.checkWeb3Status();
+    this.checkMetaMaskStatus();
+    this.checkTronLinkStatus();
 	}
 
   setCurrentAccount = account => {
@@ -31,7 +45,21 @@ class SuterBridge extends React.Component {
     this.setCurrentAccount(account);
     this.clearExpiredTask(account);
   }
-
+  
+  async connectTronLink(){
+    const defaultAccount = window.tronWeb.defaultAddress["base58"]
+    this.setCurrentAccount(defaultAccount);
+  }
+  
+  checkTronLinkStatus() {
+    if(typeof window.tronWeb !== 'undefined'){
+      console.log('TronLink is installed!');
+      this.setState({ tronLinkInstalled: true })
+    }else{
+      const message = 'Suter Bridge must work with tronLink, please install tronLink'
+      openNotificationWithIcon('TronLink Is Not Install!', message, 'warning')
+    }
+  }
   checkMetaMaskStatus(){
     if (typeof window.ethereum !== 'undefined') {
       console.log('MetaMask is installed!');
@@ -41,6 +69,7 @@ class SuterBridge extends React.Component {
       openNotificationWithIcon('MetaMask Is Not Install!', message, 'warning')
     }
   }
+
   checkWeb3Status(){
     // Check if Web3 has been injected by the browser:
     if (typeof web3 !== 'undefined') {
@@ -72,6 +101,18 @@ class SuterBridge extends React.Component {
     localStorage.setItem(`${account}Task`, taskQueue)
   }
 
+  dropDownMenu = () => {
+    const { metamaskInstalled, tronLinkInstalled} = this.state
+    return(<Menu>
+      <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled}>
+        CONNECT METAMASK
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled}>
+        CONNECT TRONLINK
+      </Menu.Item>
+    </Menu>)
+  }
+
   render () {
     const { metamaskInstalled, connectWalletTxt, account } = this.state
     return (
@@ -80,15 +121,21 @@ class SuterBridge extends React.Component {
           <Row>
             <Col md={20} sm={12} ><img src={ Logo } className='logo' /></Col>
             <Col md={4} sm={12}>
-              <Button className="connectWalletBtn" onClick={ () => this.connectMetaMask() } disabled={!metamaskInstalled}>
+            <Dropdown overlay={this.dropDownMenu()}>
+              <Button className="connectWalletBtn">
+                { connectWalletTxt }<DownOutlined />
+              </Button>
+            </Dropdown>
+             
+              {/* <Button className="connectWalletBtn" onClick={ () => this.connectMetaMask() } disabled={!metamaskInstalled}>
                { account === '' ? '' : <div className='successDot'></div> }
                { connectWalletTxt }
-              </Button>
+              </Button> */}
             </Col>
          </Row>
         </Header>
         <Content>
-         { account === '' ? <Home onClickFunc={ () => this.connectMetaMask() } metamaskInstalled = { metamaskInstalled } /> : <Form account={account}/> }
+         { account === '' ? <Home onClickFunc={ () => this.connectMetaMask() } dropDownMenu={ this.dropDownMenu} metamaskInstalled = { metamaskInstalled } /> : <Form account={account}/> }
         </Content>
         <Footer></Footer>
       </Layout>

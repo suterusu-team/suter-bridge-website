@@ -1,5 +1,6 @@
 import React from "react"
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import MetaMask from '../../static/metamask.svg';
 import './index.less';
 
@@ -8,7 +9,7 @@ class Home extends React.Component {
     super(props);
   }
   render () {
-  	const { onClickFunc, metamaskInstalled } = this.props
+  	const { onClickFunc, metamaskInstalled, dropDownMenu } = this.props
   	return (
   		<div className="home">
   		  <Row>
@@ -36,7 +37,12 @@ class Home extends React.Component {
           <Row>
            <Col span={24}>
              <div className="connectMetaMaskButtonContainer">
-               <Button type="primary" size="large" onClick={ onClickFunc } disabled={ !metamaskInstalled }>CONNECT METAMASK</Button>
+             <Dropdown overlay={dropDownMenu()}>
+               <Button type="primary" size="large">
+                 CONNECT WALLET <DownOutlined />
+                </Button>
+             </Dropdown>
+               {/* <Button type="primary" size="large" onClick={ onClickFunc } disabled={ !metamaskInstalled }>CONNECT METAMASK</Button> */}
              </div>
            </Col>
         </Row>
