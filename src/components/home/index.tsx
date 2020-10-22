@@ -2,7 +2,7 @@ import React from "react"
 import { Row, Col, Button, Dropdown, Carousel } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import MetaMask from '../../static/metamask.svg';
-import TronLink from '../../static/tronLink.png';
+import TronLink from '../../static/tronlink.png';
 import './index.less';
 
 class Home extends React.Component {
