@@ -1,7 +1,8 @@
 import React from "react"
-import { Row, Col, Button, Dropdown } from 'antd';
+import { Row, Col, Button, Dropdown, Carousel } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import MetaMask from '../../static/metamask.svg';
+import TronLink from '../../static/tronLink.png';
 import './index.less';
 
 class Home extends React.Component {
@@ -23,7 +24,16 @@ class Home extends React.Component {
        <Row>
           <Col span={24}>
             <div className="metamaskContainer">
-              <img src={ MetaMask } width="250px" />
+              <div style={{"width": "250px"}}>
+                <Carousel autoplay={true} dots={false}>
+                  <div>
+                    <img src={ MetaMask } width="250px" />
+                  </div>
+                  <div>
+                    <img src={ TronLink } width="250px" />
+                  </div>
+                </Carousel>
+              </div>
             </div>
           </Col>
        </Row>

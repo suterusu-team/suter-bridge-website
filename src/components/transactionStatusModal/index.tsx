@@ -1,8 +1,11 @@
 import React from "react";
-import { Modal, Button } from 'antd';
+import { Modal, Button, Steps } from 'antd';
 import { MessageWithAlink } from '../tools';
 import './index.less'
 import { LoadingOutlined } from '@ant-design/icons';
+
+const { Step } = Steps;
+
 const titleWraper = (title: string) => {
    return <div><h3 className='title'>{title}</h3></div>
 }
@@ -11,6 +14,7 @@ class TransactionStatusModal extends React.Component {
     blockNumber: 0,
     latestBlockNum: 0,
     status: 0,
+    currentStep: 0,
   }
 
   constructor(props){
@@ -32,6 +36,16 @@ class TransactionStatusModal extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval)
+  }
+
+  stepTips(current: number){
+    return( 
+    <Steps size="small" current={current}>
+      <Step title="Approving" />
+      <Step title="Exchange" />s
+      <Step title="Exchanging" />
+      <Step title="Finished" />
+    </Steps>)
   }
 
   fetchTransactionStatus() {
@@ -97,7 +111,7 @@ class TransactionStatusModal extends React.Component {
   }
   render() {
   	const { title, visible, handleOk, txid, okText, nextTip, needConfirmBlockNum, network } = this.props;
-    const { status, blockNumber, latestBlockNum } = this.state
+    const { status, currentStep, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
     let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txid}` :  `${TRONSCAN}/#/transaction/${txid}`)
@@ -114,7 +128,7 @@ class TransactionStatusModal extends React.Component {
               { okText }
             </Button>
           ]}
-        >
+        > 
           <div className="loadingIconContainer">{confirmBlockNum < needConfirmBlockNum ? <LoadingOutlined /> : ''}</div>
           <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p>
           <p>{ status !== 1 ? '区块未打包' : '区块已打包' }</p>
