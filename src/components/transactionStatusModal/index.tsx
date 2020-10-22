@@ -1,13 +1,18 @@
 import React from "react";
-import { Modal, Button, Steps } from 'antd';
+import { Modal, Button, Steps, Tooltip } from 'antd';
 import { MessageWithAlink } from '../tools';
 import './index.less'
 import { LoadingOutlined } from '@ant-design/icons';
+import MintedIcon from  '../../static/minted.svg';
 
 const { Step } = Steps;
 
-const titleWraper = (title: string) => {
-   return <div><h3 className='title'>{title}</h3></div>
+const titleWraper = (title: string, aLink: string) => {
+   return(<>
+          <Tooltip placement="topLeft" title="View in block chain" arrowPointAtCenter>
+            <h2 className='title'><a href={aLink} target='_blank'>{title}</a></h2>
+          </Tooltip>
+       </>)
 }
 class TransactionStatusModal extends React.Component {
   state = {
@@ -21,7 +26,6 @@ class TransactionStatusModal extends React.Component {
     super(props);
     const { initStep } = this.props
     this.state.currentStep = initStep
-    console.log("this.state.currentStep=", this.state.currentStep )
     this.fetchTransactionStatus = this.fetchTransactionStatus.bind(this)
     this.fetchLastedBlockNum = this.fetchLastedBlockNum.bind(this)
     this.fetchTronTransactionStatus = this.fetchTronTransactionStatus.bind(this)
@@ -119,10 +123,10 @@ class TransactionStatusModal extends React.Component {
     }
   }
   render() {
-  	const { title, visible, handleOk, txid, okText, nextTip, needConfirmBlockNum, network } = this.props;
+  	const { title, visible, handleOk, txid, okText, needConfirmBlockNum, network } = this.props;
     const { status, currentStep, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
-    let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
+    // let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txid}` :  `${TRONSCAN}/#/transaction/${txid}`)
     return (
       <>
@@ -138,13 +142,25 @@ class TransactionStatusModal extends React.Component {
             </Button>
           ]}
         > 
-          <div className="loadingIconContainer">{confirmBlockNum < needConfirmBlockNum ? <LoadingOutlined /> : ''}</div>
-          <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p>
-          <p>{ status !== 1 ? '区块未打包' : '区块已打包' }</p>
-          <p>{ `区块号: ${blockNumber}` }</p>
-          <p>{ `最新区块号: ${latestBlockNum}` }</p>
-          <p>{ `已经确认: ${ confirmBlockNum > 0 ? confirmBlockNum : 0}个区块` }</p>
-          <p>{ nextTip }</p>
+          { titleWraper(title, viewLink) }
+          {/* <div className="loadingIconContainer">{confirmBlockNum < needConfirmBlockNum ? <LoadingOutlined /> : ''}</div> */}
+          {/* <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p> */}
+          <div className="infoItemContainer">
+            <div>{ status !== 1 ? 'Mining' : 'Mined' }</div>
+            <div>{ status === 1 ? <img src={MintedIcon} /> : <LoadingOutlined /> }</div>
+          </div>
+          <div className="infoItemContainer">
+            <div>Block Number: </div>
+            <div>{ blockNumber }</div>
+          </div>
+          <div className="infoItemContainer">
+            <div>Latest Block Number: </div>
+            <div>{ latestBlockNum }</div>
+          </div>
+          <div className="infoItemContainer">
+            <div>Confirmed Block: </div>
+            <div>{ confirmBlockNum > 0 ? confirmBlockNum : 0 }</div>
+          </div>
         </Modal>
       </>
     );
