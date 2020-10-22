@@ -1,5 +1,5 @@
 import React from "react"
-import {notification, Button } from 'antd';
+import {notification, Tooltip } from 'antd';
 import numeral from 'numeral-es6';
 import axios from 'axios';
 
@@ -17,7 +17,6 @@ const openNotificationWithKey = (key: string, title: string, desc: any, type: st
      onClickFunc()
      notification.close(ckey) 
    }
-   console.log("key=" + key)
    notification[type]({
       key: key,
       message: title,
@@ -67,13 +66,21 @@ const MessageWithAlink = (props) => {
 }
 
 const UncompleteTaskMessage = (props) => {
-  const { task } = props
-  const message = `View in etherscan`
-  return (<div>
-    <p>amount: {`${task["amount"]}`}</p>
-    <div>ApproveTransaction: <a href={`${ETHERSCAN}/tx/${task["approveTxid"]}`} target='_blank'>{ message }</a></div>
-    <div>{task["exchangeTxid"] != "" ? <div>ExchangeTransaction: <a href={`${ETHERSCAN}/tx/${task["approveTxid"]}`} target='_blank'>{ message }</a></div> : ''}</div>
-  </div>)
+  const { task, network } = props
+  const message = `View in block chain`
+  const aLinkForApprove = (network == 'eth' ? `${ETHERSCAN}/tx/${task["approveTxid"]}` :  `${TRONSCAN}/#/transaction/${task["approveTxid"]}`)
+  const aLinkForTransaction = (network == 'eth' ? `${ETHERSCAN}/tx/${task["exchangeTxid"]}` :  `${TRONSCAN}/#/transaction/${task["exchangeTxid"]}`)
+
+  return (
+    <Tooltip placement="topLeft" title="Click to continue this task" arrowPointAtCenter>
+    <div>
+      <div>Amount: {`${task["amount"]} SUTER`}</div>
+      <div>Destination: {`${task["destinationAddress"].slice(0, 7)}...${task["destinationAddress"].slice(-5)}`}</div>
+      <div>Approve: <a href={aLinkForApprove} target='_blank'>{ message }</a></div>
+      <div>{task["exchangeTxid"] != "" ? <div>Exchange: <a href={aLinkForTransaction} target='_blank'>{ message }</a></div> : ''}</div>
+    </div>
+  </Tooltip>
+  )
 }
 
 const fetchSuterPrice = async () => {

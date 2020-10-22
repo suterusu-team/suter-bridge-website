@@ -81,7 +81,7 @@ class Mint extends React.Component {
     this.setState({uncompleteTasks: uncompleteTasks}, () => {
       const { uncompleteTasks } = this.state
       for (const task of uncompleteTasks){
-        openNotificationWithKey(`${task["account"]}${task["approveTxid"]}`, 'Uncomplete task', <UncompleteTaskMessage task={task} />, 'info', 0 , () => this.recoverTask(task));
+        openNotificationWithKey(`${task["account"]}${task["approveTxid"]}`, 'Uncomplete task', <UncompleteTaskMessage task={task} network='eth' />, 'info', 0 , () => this.recoverTask(task));
       }
     })
   }
