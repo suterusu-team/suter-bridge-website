@@ -22,5 +22,11 @@ export default defineConfig({
       pathRewrite: { '^/kucoin_api': '' },
       changeOrigin: true
     }
-  }
+  },
+  theme: {
+    "primary-color": "#6955C0",
+    "link-color": "#6955C0",
+    "btn-primary-color": "#6955C0",
+    "btn-primary-bg": "#6955C0",
+  },
 });

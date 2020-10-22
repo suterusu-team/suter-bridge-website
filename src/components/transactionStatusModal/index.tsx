@@ -69,8 +69,9 @@ class TransactionStatusModal extends React.Component {
         console.log(receipt)
         if(receipt !== null){
           let status = parseInt(receipt["status"])
-          this.setState({ status: status, blockNumber: receipt["blockNumber"] })
-          this.fetchLastedBlockNum()
+          this.setState({ status: status, blockNumber: receipt["blockNumber"] }, () => {
+            this.fetchLastedBlockNum()
+          })
         }
       })
     } catch (err) {
@@ -96,27 +97,36 @@ class TransactionStatusModal extends React.Component {
   }
 
   async fetchTronLastedBlockNum(){
-    const { blockNumber, latestBlockNum, needConfirmBlockNum } = this.state
-    if( latestBlockNum - blockNumber >= needConfirmBlockNum){
-      clearInterval(this.interval)
-      return
-    }
+    const { needConfirmBlockNum } = this.props
+    const { blockNumber, currentStep } = this.state
     try {
       let result = await window.tronWeb.trx.getCurrentBlock()
-      this.setState({ latestBlockNum: result["block_header"]["raw_data"]["number"] })
+      let latestBlockNum = result["block_header"]["raw_data"]["number"] 
+      this.setState({ latestBlockNum: latestBlockNum })
+      if( latestBlockNum - blockNumber >= needConfirmBlockNum){
+        this.setState({currentStep: currentStep + 1})
+      }
     } catch (error) {
      console.log("fetchTronLastedBlockNum error happen", error)
     }
   }
 
   async fetchTronTransactionStatus() {
+    const { needConfirmBlockNum } = this.props
+    const { blockNumber, latestBlockNum } = this.state
+    if( latestBlockNum - blockNumber >= needConfirmBlockNum){
+      clearInterval(this.interval)
+      return
+    }
     const { txid } = this.props;
     try {
       let result = await window.tronWeb.trx.getTransactionInfo(txid);
       if(result !== null && result["receipt"] != null){
-        let status = result["receipt"]["result"] == "success" ? 1 : 0
-        this.setState({ status: status, blockNumber: result["blockNumber"] })
-        this.fetchTronLastedBlockNum()
+        console.log("receipt=", result["receipt"])
+        let status = (result["receipt"]["result"] == "SUCCESS" ? 1 : 0)
+        this.setState({ status: status, blockNumber: result["blockNumber"] }, () => {
+          this.fetchTronLastedBlockNum()
+        })
       } 
     }catch(error){
       console.log("fetchTronTransactionStatus error happen", error)
@@ -137,8 +147,8 @@ class TransactionStatusModal extends React.Component {
           closable={false}
           onOk={handleOk}
           footer={[
-            <Button key="submit" type="primary" block onClick={handleOk} disabled={ confirmBlockNum < needConfirmBlockNum } loading={ confirmBlockNum < needConfirmBlockNum}>
-              { okText }
+            <Button key="submit" shape="round" size={"large"} type="primary" block onClick={handleOk} disabled={ confirmBlockNum < needConfirmBlockNum } loading={ confirmBlockNum < needConfirmBlockNum}>
+              { confirmBlockNum < needConfirmBlockNum ? 'Loading' :  okText }
             </Button>
           ]}
         > 

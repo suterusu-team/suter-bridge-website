@@ -1,8 +1,10 @@
 .transactionStatusModal{
-    h2{
+    h2.title{
       text-align: center;
-      color: rgba(105, 85, 192, 1);
-    }  
+       a{
+        color: rgb(105, 85, 192);
+       }
+    }
     .loadingIconContainer{
         text-align: center;
     }
@@ -10,5 +12,12 @@
       display: flex;
       justify-content: space-between;
       padding: 10px 20px;
+    }
+    .ant-modal-footer{
+      .ant-btn-primary {
+        color: #fff;
+        background: rgba(105, 85, 192, 1);
+        border-color: rgba(105, 85, 192, 1);
+     }
     }
 }
