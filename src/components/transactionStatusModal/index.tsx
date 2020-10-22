@@ -19,6 +19,9 @@ class TransactionStatusModal extends React.Component {
 
   constructor(props){
     super(props);
+    const { initStep } = this.props
+    this.state.currentStep = initStep
+    console.log("this.state.currentStep=", this.state.currentStep )
     this.fetchTransactionStatus = this.fetchTransactionStatus.bind(this)
     this.fetchLastedBlockNum = this.fetchLastedBlockNum.bind(this)
     this.fetchTronTransactionStatus = this.fetchTronTransactionStatus.bind(this)
@@ -42,14 +45,15 @@ class TransactionStatusModal extends React.Component {
     return( 
     <Steps size="small" current={current}>
       <Step title="Approving" />
-      <Step title="Exchange" />s
+      <Step title="Approved" />
       <Step title="Exchanging" />
-      <Step title="Finished" />
+      <Step title="Exchanged" />
     </Steps>)
   }
 
   fetchTransactionStatus() {
-    const { blockNumber, latestBlockNum, needConfirmBlockNum } = this.state
+    const { blockNumber, latestBlockNum, currentStep } = this.state
+    const { needConfirmBlockNum } = this.props
     if( latestBlockNum - blockNumber >= needConfirmBlockNum){
       clearInterval(this.interval)
       return
@@ -71,11 +75,16 @@ class TransactionStatusModal extends React.Component {
   }
 
   fetchLastedBlockNum(){
+    const { needConfirmBlockNum } = this.props
+    const { blockNumber, currentStep } = this.state
     try {
       web3.eth.getBlockNumber((err, latestBlockNum) => {
          console.log(err)
          console.log(latestBlockNum)
          this.setState({ latestBlockNum: latestBlockNum })
+         if( latestBlockNum - blockNumber >= needConfirmBlockNum){
+           this.setState({currentStep: currentStep + 1})
+         }
        })
     } catch (error) {
      console.log("fetchLastedBlockNum error happen", error)
@@ -119,7 +128,7 @@ class TransactionStatusModal extends React.Component {
       <>
         <Modal 
           className="transactionStatusModal"
-          title = {titleWraper(title)}
+          title = {this.stepTips(currentStep)}
           visible={visible}
           closable={false}
           onOk={handleOk}
