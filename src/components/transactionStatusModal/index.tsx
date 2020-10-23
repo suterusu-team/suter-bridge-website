@@ -4,6 +4,7 @@ import { MessageWithAlink } from '../tools';
 import './index.less'
 import { LoadingOutlined } from '@ant-design/icons';
 import MintedIcon from  '../../static/minted.svg';
+import ErrorIcon from  '../../static/error.svg';
 
 const { Step } = Steps;
 
@@ -157,7 +158,7 @@ class TransactionStatusModal extends React.Component {
           {/* <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p> */}
           <div className="infoItemContainer">
             <div>{ status !== 1 ? 'Mining' : 'Mined' }</div>
-            <div>{ status === 1 ? <img src={MintedIcon} /> : <LoadingOutlined /> }</div>
+            <div>{ status === 1 ? <img src={MintedIcon} /> : <img src={ErrorIcon} /> }</div>
           </div>
           <div className="infoItemContainer">
             <div>Block Number: </div>
