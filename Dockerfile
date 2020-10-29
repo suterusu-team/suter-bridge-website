@@ -13,4 +13,7 @@ RUN yarn install && yarn build
 
 FROM nginx:stable
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
+
+# COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
+
+ENTRYPOINT ["docker-entrypoint.sh"]
