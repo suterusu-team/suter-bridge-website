@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "suter-bridge-website.fullname" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app.kubernetes.io/name: {{ include "suter-bridge-website.name" . }}
+    helm.sh/chart: {{ include "suter-bridge-website.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: bridge.{{ .Values.ingress.domain }}
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: {{ template "suter-bridge-website.fullname" . }}
+            servicePort: 80
+{{- end }}
