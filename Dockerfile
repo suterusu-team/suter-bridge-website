@@ -12,5 +12,6 @@ WORKDIR /app
 RUN yarn install && yarn build
 
 FROM nginx:stable
+COPY ./deploy/nginx.config  /etc/nginx/conf.d/default.config
 COPY --from=builder /app/dist /usr/share/nginx/html
 
