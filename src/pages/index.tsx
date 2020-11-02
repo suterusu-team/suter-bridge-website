@@ -140,10 +140,10 @@ class SuterBridge extends React.Component {
     const { metamaskInstalled, tronLinkInstalled} = this.state
     return(<Menu>
       <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled}>
-        CONNECT METAMASK
+        Bridge Ethereum Assets to Tron Assets
       </Menu.Item>
       <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled}>
-        CONNECT TRONLINK
+        Bridge Tron Assets to Ethereum Assets
       </Menu.Item>
     </Menu>)
   }
