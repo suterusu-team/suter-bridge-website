@@ -69,6 +69,7 @@ class SuterBridge extends React.Component {
       this.setState({ tronLinkInstalled: true })
       clearInterval(this.interval)
       this.checkTronNetworkType()
+      this.tronChainChanged()
     }else{
       if(this.state.checkTronLinkCount >= 5){
         clearInterval(this.interval)
@@ -82,6 +83,7 @@ class SuterBridge extends React.Component {
       console.log('MetaMask is installed!');
       this.setState({ metamaskInstalled: true })
       this.checkEthNetworkType()
+      this.ethChainChanged()
     }else{
       const message = 'Suter Bridge must work with metamask, please install metamask'
       openNotificationWithIcon('MetaMask Is Not Install!', message, 'warning')
@@ -99,17 +101,33 @@ class SuterBridge extends React.Component {
   //   }
   // }
 
+  ethChainChanged() {
+    window.ethereum.on('chainChanged', (chainId) => {
+      openNotificationWithIcon('ETH Chain changed', 'Page will refresh after 2 seconds', 'warning', 4.5)
+      setTimeout(() => { window.location.reload() }, 2000);
+    })
+  }
+
+  tronChainChanged() {
+    window.addEventListener('message', function (e) {
+      if (e.data.message && e.data.message.action == "setNode") {
+          openNotificationWithIcon('TRON Chain changed', 'Page will refresh after 2 seconds', 'warning', 4.5)
+          setTimeout(() => { window.location.reload() }, 2000);
+        }
+    })
+  }
+
   checkEthNetworkType(){
     this.setState({ethNetwork: window.ethereum.chainId })
    if(window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID){
-      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning') 
+      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning', 4.5) 
    }
   }
 
   checkTronNetworkType(){
      this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] })
     if(window.tronWeb && window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] != TRON_CHAIN_ID ){
-      openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning')
+      openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning', 4.5)
     }
   }
 
