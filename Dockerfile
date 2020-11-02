@@ -9,7 +9,8 @@ RUN apk add --no-cache nodejs-current  --repository="http://dl-cdn.alpinelinux.o
 RUN apk add --no-cache yarn
 COPY . /app
 WORKDIR /app
-RUN yarn install && yarn build
+ARG UMI_ENV
+RUN yarn install && UMI_ENV=$UMI_ENV yarn build
 
 FROM nginx:stable
 COPY ./deploy/nginx.conf  /etc/nginx/conf.d/default.conf
