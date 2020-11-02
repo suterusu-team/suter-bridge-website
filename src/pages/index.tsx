@@ -100,16 +100,16 @@ class SuterBridge extends React.Component {
   }
 
   checkEthNetworkType(){
+    this.setState({ethNetwork: window.ethereum.chainId })
    if(window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID){
-      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning')
-      this.setState({ethNetwork: window.ethereum.chainId })
+      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning') 
    }
   }
 
   checkTronNetworkType(){
+     this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] })
     if(window.tronWeb && window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] != TRON_CHAIN_ID ){
       openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning')
-      this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] })
     }
   }
 
@@ -156,12 +156,12 @@ class SuterBridge extends React.Component {
   }
 
   dropDownMenu = () => {
-    const { metamaskInstalled, tronLinkInstalled} = this.state
+    const { metamaskInstalled, tronLinkInstalled, ethNetwork, tronNetwork} = this.state
     return(<Menu>
-      <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled}>
+      <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled || ethNetwork != ETH_CHAIN_ID }>
         Bridge Ethereum Assets to Tron Assets
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled}>
+      <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled || tronNetwork != TRON_CHAIN_ID }>
         Bridge Tron Assets to Ethereum Assets
       </Menu.Item>
     </Menu>)
