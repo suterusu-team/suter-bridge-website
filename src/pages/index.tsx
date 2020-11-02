@@ -31,13 +31,13 @@ class SuterBridge extends React.Component {
     this.dropDownMenu = this.dropDownMenu.bind(this)
     this.connectMetaMask = this.connectMetaMask.bind(this)
     this.connectTronLink = this.connectTronLink.bind(this)
-     this.checkNetworkType = this.checkNetworkType.bind(this);
+    this.checkEthNetworkType = this.checkEthNetworkType.bind(this)
+    this.checkTronNetworkType = this.checkTronNetworkType.bind(this)
   }
 	componentDidMount() {
     this.checkWeb3Status();
     this.checkMetaMaskStatus();
     this.interval = setInterval(this.checkTronLinkStatus, 1000);
-    this.checkNetworkType();
   }
   
   componentWillUnmount() {
@@ -68,6 +68,7 @@ class SuterBridge extends React.Component {
       console.log('TronLink is installed!');
       this.setState({ tronLinkInstalled: true })
       clearInterval(this.interval)
+      this.checkTronNetworkType()
     }else{
       if(this.state.checkTronLinkCount >= 5){
         clearInterval(this.interval)
@@ -80,6 +81,7 @@ class SuterBridge extends React.Component {
     if (typeof window.ethereum !== 'undefined') {
       console.log('MetaMask is installed!');
       this.setState({ metamaskInstalled: true })
+      this.checkEthNetworkType()
     }else{
       const message = 'Suter Bridge must work with metamask, please install metamask'
       openNotificationWithIcon('MetaMask Is Not Install!', message, 'warning')
@@ -97,15 +99,17 @@ class SuterBridge extends React.Component {
     }
   }
 
-  checkNetworkType(){
-   // eth ropsten network
+  checkEthNetworkType(){
    if(window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID){
       openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning')
       this.setState({ethNetwork: window.ethereum.chainId })
    }
+  }
+
+  checkTronNetworkType(){
     if(window.tronWeb && window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] != TRON_CHAIN_ID ){
       openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning')
-      this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"] })
+      this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] })
     }
   }
 
