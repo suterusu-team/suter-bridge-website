@@ -24,7 +24,7 @@ class SuterBridge extends React.Component {
 
   constructor(props){
     super(props);
-    this.checkWeb3Status = this.checkWeb3Status.bind(this)
+    // this.checkWeb3Status = this.checkWeb3Status.bind(this)
     this.checkMetaMaskStatus = this.checkMetaMaskStatus.bind(this)
     this.checkTronLinkStatus = this.checkTronLinkStatus.bind(this)
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
@@ -35,7 +35,7 @@ class SuterBridge extends React.Component {
     this.checkTronNetworkType = this.checkTronNetworkType.bind(this)
   }
 	componentDidMount() {
-    this.checkWeb3Status();
+    // this.checkWeb3Status();
     this.checkMetaMaskStatus();
     this.interval = setInterval(this.checkTronLinkStatus, 1000);
   }
@@ -88,16 +88,16 @@ class SuterBridge extends React.Component {
     }
   }
 
-  checkWeb3Status(){
-    // Check if Web3 has been injected by the browser:
-    if (typeof web3 !== 'undefined') {
-      // You have a web3 browser! Continue below!
-      this.setState({ "web3Browser": true })
-    } else {
-      const message = "Your should use a web3 browser."
-      openNotificationWithIcon('Invalid browser', message, 'warning')
-    }
-  }
+  // checkWeb3Status(){
+  //   // Check if Web3 has been injected by the browser:
+  //   if (typeof web3 !== 'undefined') {
+  //     // You have a web3 browser! Continue below!
+  //     this.setState({ "web3Browser": true })
+  //   } else {
+  //     const message = "Your should use a web3 browser."
+  //     openNotificationWithIcon('Invalid browser', message, 'warning')
+  //   }
+  // }
 
   checkEthNetworkType(){
     this.setState({ethNetwork: window.ethereum.chainId })
