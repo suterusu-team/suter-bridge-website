@@ -1,5 +1,5 @@
 import { defineConfig } from 'umi';
-import define from './src/constants/constant.staging'
+import define from './src/constants/constant_staging'
 
 export default defineConfig({
   nodeModulesTransform: {

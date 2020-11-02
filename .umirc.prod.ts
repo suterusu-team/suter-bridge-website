@@ -1,5 +1,5 @@
 import { defineConfig } from 'umi';
-import define from './src/constants/constant.prod'
+import define from './src/constants/constant_prod'
 
 export default defineConfig({
   nodeModulesTransform: {
