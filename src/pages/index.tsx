@@ -17,7 +17,9 @@ class SuterBridge extends React.Component {
     connectWalletTxt: 'Connect Wallet',
     web3Browser: false, 
     checkTronLinkCount: 0,
-    formType: ''
+    formType: '',
+    ethNetwork: '',
+    tronNetwork: '',
   }
 
   constructor(props){
@@ -29,12 +31,13 @@ class SuterBridge extends React.Component {
     this.dropDownMenu = this.dropDownMenu.bind(this)
     this.connectMetaMask = this.connectMetaMask.bind(this)
     this.connectTronLink = this.connectTronLink.bind(this)
+     this.checkNetworkType = this.checkNetworkType.bind(this);
   }
 	componentDidMount() {
     this.checkWeb3Status();
     this.checkMetaMaskStatus();
-    // this.checkTronLinkStatus();
     this.interval = setInterval(this.checkTronLinkStatus, 1000);
+    this.checkNetworkType();
   }
   
   componentWillUnmount() {
@@ -91,6 +94,18 @@ class SuterBridge extends React.Component {
     } else {
       const message = "Your should use a web3 browser."
       openNotificationWithIcon('Invalid browser', message, 'warning')
+    }
+  }
+
+  checkNetworkType(){
+   // eth ropsten network
+   if(window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID){
+      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning')
+      this.setState({ethNetwork: window.ethereum.chainId })
+   }
+    if(window.tronWeb && window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] != TRON_CHAIN_ID ){
+      openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning')
+      this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"] })
     }
   }
 
