@@ -262,7 +262,7 @@ class Revert extends React.Component {
             <div className="assetContainer container">
               <div>Asset</div>
               <div>
-               <img src={TRC20SuterCoin} />
+               <img src={TRC20SuterCoin} />&nbsp;
                <span style={{"fontWeight": "bold"}}>TRC20</span>
                <span>SUTER</span>
               </div>

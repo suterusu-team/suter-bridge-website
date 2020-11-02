@@ -262,7 +262,7 @@ class Mint extends React.Component {
             <div className="assetContainer container">
               <div>Asset</div>
               <div>
-               <img src={ERC20SuterCoin} />
+               <img src={ERC20SuterCoin} />&nbsp;
                <span style={{"fontWeight": "bold"}}>ERC20</span>
                <span>SUTER</span>
               </div>
