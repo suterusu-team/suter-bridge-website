@@ -41,6 +41,10 @@ class Form extends React.Component {
   }
 
   onTabChange = (key, type) => {
+    const { formType } = this.props
+    if(key == formType){
+      return
+    }
     if(key == "Mint"){
       openNotificationWithIcon("Invalid operation", `${key} is not allowed, please connect Metamask`, 'warning', 4.5)
     }else{

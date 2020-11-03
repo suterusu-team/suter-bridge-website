@@ -100,7 +100,7 @@ class Mint extends React.Component {
     let suterAmount = e.target.value.replace(` ${suterTxt}`, '').replace(/,/gi, '');
     if (isNaN(suterAmount) || suterAmount < 0 || suterAmount > 10000000000) {
       if(suterAmount > 10000000000){
-        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
+        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10,000,000,000", 'warning', 4.5)
       }
       suterAmount = this.state.suterValue
     }
@@ -114,6 +114,7 @@ class Mint extends React.Component {
     let dollarValue = this.state.suterPrice * suterAmount
     this.setState({ suterValue: suterAmount, dollarValue: dollarValue, suterValueFontSize: suterValueFontSize}, () => {
       let pos = this.inputRef.value.length - this.state.suterTxt.length - 1
+      console.log("this.inputRef.selectionStart=",  this.inputRef.selectionStart)
       this.inputRef.selectionStart = pos
       this.inputRef.selectionEnd = pos
     });
@@ -122,7 +123,7 @@ class Mint extends React.Component {
   handleDestinationChange(e) {
     this.setState({ "destinationAddress": e.target.value })
     if(e.target.value != '' && !WAValidator.validate(e.target.value, 'Tron')){
-      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid tron address`, 'warning', 2)
+      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid tron address`, 'warning', 1)
     }
   }
 
@@ -262,8 +263,8 @@ class Mint extends React.Component {
             <div className="assetContainer container">
               <div>Asset</div>
               <div>
-               <img src={ERC20SuterCoin} />
-               <span style={{"fontWeight": "bold"}}>ERC20</span>
+               <img src={ERC20SuterCoin} />&nbsp;
+               <span style={{"fontWeight": "bold"}}>ERC20</span>&nbsp;
                <span>SUTER</span>
               </div>
             </div>
@@ -272,7 +273,7 @@ class Mint extends React.Component {
         <Row>
          <Col span={24}>
             <div className="destinationContainer container">
-              <p>Destination</p>
+              <div>Destination</div>
               <input className="destinationInput" placeholder="Enter TRC20 SUTER Address" type="text" onChange={ this.handleDestinationChange }/>
             </div>
          </Col>
@@ -282,9 +283,9 @@ class Mint extends React.Component {
             <div className="assetContainer container">
               <div>You will receive</div>
               <div>{suterValueForInput}</div>
-              <div>
-               <img src={TRC20SuterCoin} />
-               <span style={{"fontWeight": "bold"}}>TRC20</span>
+              <div style={{display: 'flex'}}>
+               <img src={TRC20SuterCoin} />&nbsp;
+               <span style={{"fontWeight": "bold"}}>TRC20</span>&nbsp;
                <span>SUTER</span>
               </div>
             </div>

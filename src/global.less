@@ -96,12 +96,20 @@ body {
                 justify-content: center;
                 flex-direction: column;
 
+                input::-ms-input-placeholder{
+                 text-align: center;
+                }
+                input::-webkit-input-placeholder{
+                  text-align: center;
+                }
+
                 .input {
                     width: 100%;
                     border: 0px solid transparent;
                     outline: none;
                     font-size: 52px;
                     text-align: center;
+                    padding: 0 10px;
                     color: rgba(105, 85, 192, 1);
                     font-family: PingFangSC-Thin, sans-serif;
                 }
@@ -129,11 +137,13 @@ body {
                 padding: 20px 10px;
                 border-radius: 4px;
 
-                p {
-                    font-size: 12px;
-                    margin-bottom: 0px;
+                input::-ms-input-placeholder{
+                 text-align: center;
                 }
-
+                input::-webkit-input-placeholder{
+                  text-align: center;
+                }
+               
                 .destinationInput {
                     width: 100%;
                     border: 0px solid transparent;

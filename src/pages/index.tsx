@@ -17,23 +17,26 @@ class SuterBridge extends React.Component {
     connectWalletTxt: 'Connect Wallet',
     web3Browser: false, 
     checkTronLinkCount: 0,
-    formType: ''
+    formType: '',
+    ethNetwork: '',
+    tronNetwork: '',
   }
 
   constructor(props){
     super(props);
-    this.checkWeb3Status = this.checkWeb3Status.bind(this)
+    // this.checkWeb3Status = this.checkWeb3Status.bind(this)
     this.checkMetaMaskStatus = this.checkMetaMaskStatus.bind(this)
     this.checkTronLinkStatus = this.checkTronLinkStatus.bind(this)
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
     this.dropDownMenu = this.dropDownMenu.bind(this)
     this.connectMetaMask = this.connectMetaMask.bind(this)
     this.connectTronLink = this.connectTronLink.bind(this)
+    this.checkEthNetworkType = this.checkEthNetworkType.bind(this)
+    this.checkTronNetworkType = this.checkTronNetworkType.bind(this)
   }
 	componentDidMount() {
-    this.checkWeb3Status();
+    // this.checkWeb3Status();
     this.checkMetaMaskStatus();
-    // this.checkTronLinkStatus();
     this.interval = setInterval(this.checkTronLinkStatus, 1000);
   }
   
@@ -65,6 +68,8 @@ class SuterBridge extends React.Component {
       console.log('TronLink is installed!');
       this.setState({ tronLinkInstalled: true })
       clearInterval(this.interval)
+      this.checkTronNetworkType()
+      this.tronChainChanged()
     }else{
       if(this.state.checkTronLinkCount >= 5){
         clearInterval(this.interval)
@@ -77,20 +82,52 @@ class SuterBridge extends React.Component {
     if (typeof window.ethereum !== 'undefined') {
       console.log('MetaMask is installed!');
       this.setState({ metamaskInstalled: true })
+      this.checkEthNetworkType()
+      this.ethChainChanged()
     }else{
       const message = 'Suter Bridge must work with metamask, please install metamask'
       openNotificationWithIcon('MetaMask Is Not Install!', message, 'warning')
     }
   }
 
-  checkWeb3Status(){
-    // Check if Web3 has been injected by the browser:
-    if (typeof web3 !== 'undefined') {
-      // You have a web3 browser! Continue below!
-      this.setState({ "web3Browser": true })
-    } else {
-      const message = "Your should use a web3 browser."
-      openNotificationWithIcon('Invalid browser', message, 'warning')
+  // checkWeb3Status(){
+  //   // Check if Web3 has been injected by the browser:
+  //   if (typeof web3 !== 'undefined') {
+  //     // You have a web3 browser! Continue below!
+  //     this.setState({ "web3Browser": true })
+  //   } else {
+  //     const message = "Your should use a web3 browser."
+  //     openNotificationWithIcon('Invalid browser', message, 'warning')
+  //   }
+  // }
+
+  ethChainChanged() {
+    window.ethereum.on('chainChanged', (chainId) => {
+      openNotificationWithIcon('ETH Chain changed', 'Page will refresh after 2 seconds', 'warning', 4.5)
+      setTimeout(() => { window.location.reload() }, 2000);
+    })
+  }
+
+  tronChainChanged() {
+    window.addEventListener('message', function (e) {
+      if (e.data.message && e.data.message.action == "setNode") {
+          openNotificationWithIcon('TRON Chain changed', 'Page will refresh after 2 seconds', 'warning', 4.5)
+          setTimeout(() => { window.location.reload() }, 2000);
+        }
+    })
+  }
+
+  checkEthNetworkType(){
+    this.setState({ethNetwork: window.ethereum.chainId })
+   if(window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID){
+      openNotificationWithIcon('ETH network error!', 'Please change metamask to ropsten network', 'warning', 4.5) 
+   }
+  }
+
+  checkTronNetworkType(){
+     this.setState({tronNetwork: window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] })
+    if(window.tronWeb && window.tronWeb.currentProvider()["fullNode"]["host"].split('.')[1] != TRON_CHAIN_ID ){
+      openNotificationWithIcon('TRON network error!', 'Please change tronLink to shasta network', 'warning', 4.5)
     }
   }
 
@@ -137,13 +174,13 @@ class SuterBridge extends React.Component {
   }
 
   dropDownMenu = () => {
-    const { metamaskInstalled, tronLinkInstalled} = this.state
+    const { metamaskInstalled, tronLinkInstalled, ethNetwork, tronNetwork} = this.state
     return(<Menu>
-      <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled}>
-        CONNECT METAMASK
+      <Menu.Item key="1" onClick={() => this.connectMetaMask() } disabled={!metamaskInstalled || ethNetwork != ETH_CHAIN_ID }>
+        Bridge Ethereum Assets to Tron Assets
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled}>
-        CONNECT TRONLINK
+      <Menu.Item key="2" onClick={() => this.connectTronLink() } disabled={!tronLinkInstalled || tronNetwork != TRON_CHAIN_ID }>
+        Bridge Tron Assets to Ethereum Assets
       </Menu.Item>
     </Menu>)
   }

@@ -3,7 +3,7 @@ import {notification, Tooltip } from 'antd';
 import numeral from 'numeral-es6';
 import axios from 'axios';
 
-const openNotificationWithIcon = (title: string, desc: any, type: string, duration: number = 0, onClickFunc = (() => {})) => {
+const openNotificationWithIcon = (title: string, desc: any, type: string, duration: number = 0, onClickFunc = () => {}) => {
     notification[type]({
       message: title,
       description: desc,
