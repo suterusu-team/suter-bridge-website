@@ -114,6 +114,7 @@ class Mint extends React.Component {
     let dollarValue = this.state.suterPrice * suterAmount
     this.setState({ suterValue: suterAmount, dollarValue: dollarValue, suterValueFontSize: suterValueFontSize}, () => {
       let pos = this.inputRef.value.length - this.state.suterTxt.length - 1
+      console.log("this.inputRef.selectionStart=",  this.inputRef.selectionStart)
       this.inputRef.selectionStart = pos
       this.inputRef.selectionEnd = pos
     });
@@ -122,7 +123,7 @@ class Mint extends React.Component {
   handleDestinationChange(e) {
     this.setState({ "destinationAddress": e.target.value })
     if(e.target.value != '' && !WAValidator.validate(e.target.value, 'Tron')){
-      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid tron address`, 'warning', 2)
+      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid tron address`, 'warning', 1)
     }
   }
 

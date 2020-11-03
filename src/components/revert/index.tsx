@@ -236,7 +236,7 @@ class Revert extends React.Component {
   handleDestinationChange(e) {
     this.setState({ "destinationAddress": e.target.value })
     if(e.target.value != '' && !WAValidator.validate(e.target.value, 'eth')){
-      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid eth address`, 'warning', 2)
+      openNotificationWithIcon("Invalid input", `'${e.target.value}' is not a valid eth address`, 'warning', 1)
     }
   }
   render () {
