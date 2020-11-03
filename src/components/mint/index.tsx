@@ -100,7 +100,7 @@ class Mint extends React.Component {
     let suterAmount = e.target.value.replace(` ${suterTxt}`, '').replace(/,/gi, '');
     if (isNaN(suterAmount) || suterAmount < 0 || suterAmount > 10000000000) {
       if(suterAmount > 10000000000){
-        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
+        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10,000,000,000", 'warning', 4.5)
       }
       suterAmount = this.state.suterValue
     }
