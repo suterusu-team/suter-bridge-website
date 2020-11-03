@@ -272,7 +272,7 @@ class Mint extends React.Component {
         <Row>
          <Col span={24}>
             <div className="destinationContainer container">
-              <p>Destination</p>
+              <div>Destination</div>
               <input className="destinationInput" placeholder="Enter TRC20 SUTER Address" type="text" onChange={ this.handleDestinationChange }/>
             </div>
          </Col>

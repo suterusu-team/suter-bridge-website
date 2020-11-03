@@ -214,7 +214,7 @@ class Revert extends React.Component {
     let suterAmount = e.target.value.replace(` ${suterTxt}`, '').replace(/,/gi, '');
     if (isNaN(suterAmount) || suterAmount < 0 || suterAmount > 10000000000) {
       if(suterAmount > 10000000000){
-        this.openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
+        openNotificationWithIcon("Invalid Suter Amount", "Suter token total supply is 10000000000", 'warning')
       }
       suterAmount = this.state.suterValue
     }
@@ -272,7 +272,7 @@ class Revert extends React.Component {
         <Row>
          <Col span={24}>
             <div className="destinationContainer container">
-              <p>Destination</p>
+              <div>Destination</div>
               <input className="destinationInput" placeholder="Enter ERC20 SUTER Address" type="text" onChange={ this.handleDestinationChange }/>
             </div>
          </Col>
