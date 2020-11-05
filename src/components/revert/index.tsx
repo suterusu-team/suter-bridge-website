@@ -247,8 +247,8 @@ class Revert extends React.Component {
     return (
       <div className="mint">
       {  showConfirmModal ? <ConfirmModal visible={showConfirmModal} handleOk={this.handleConfirmOk} handleCancel={this.handleConfirmCancel} title={`Confirm to approve to bridge contract ?`} content={ `Approve ${suterAmountValue} to bridge contract` } /> : ''}
-      { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal network='tron' initStep = {0} visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Mining`} okText={'Next'}  needConfirmBlockNum = {6} /> : '' }
-      { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal network='tron' initStep = {2} visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} title={`Mining`} okText={'Finished'} needConfirmBlockNum = {6} /> : '' }
+      { (approveTxid !== '' && approveStatus === 0) ? <TransactionStatusModal network='tron' initStep = {0} visible={true} txid={approveTxid} handleOk={this.callExchange} title={`Mining`} handleCancel={()=>{ this.exchangeFinished() }} okText={'Next'}  needConfirmBlockNum = {6} /> : '' }
+      { (exchangeTxid !== '' && exchangeStatus === 0) ? <TransactionStatusModal network='tron' initStep = {2} visible={true} txid={exchangeTxid} handleOk={()=>{ this.exchangeFinished() }} handleCancel={()=>{ this.exchangeFinished() }} title={`Mining`} okText={'Finished'} needConfirmBlockNum = {6} /> : '' }
         <Row>
          <Col span={24}>
             <div className="inputContainer container">

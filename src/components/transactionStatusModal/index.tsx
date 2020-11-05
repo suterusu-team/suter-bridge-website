@@ -70,7 +70,7 @@ class TransactionStatusModal extends React.Component {
         console.log(receipt)
         if(receipt !== null){
           let status = parseInt(receipt["status"])
-          this.setState({ status: status, blockNumber: receipt["blockNumber"] }, () => {
+          this.setState({ status: (status == 1 ? status : 2), blockNumber: receipt["blockNumber"] }, () => {
             this.fetchLastedBlockNum()
           })
         }
@@ -124,7 +124,7 @@ class TransactionStatusModal extends React.Component {
       let result = await window.tronWeb.trx.getTransactionInfo(txid);
       if(result !== null && result["receipt"] != null){
         console.log("receipt=", result["receipt"])
-        let status = (result["receipt"]["result"] == "SUCCESS" ? 1 : 0)
+        let status = (result["receipt"]["result"] == "SUCCESS" ? 1 : 2)
         this.setState({ status: status, blockNumber: result["blockNumber"] }, () => {
           this.fetchTronLastedBlockNum()
         })
@@ -134,11 +134,13 @@ class TransactionStatusModal extends React.Component {
     }
   }
   render() {
-  	const { title, visible, handleOk, txid, okText, needConfirmBlockNum, network } = this.props;
+  	const { title, visible, handleOk, handleCancel, txid, okText, needConfirmBlockNum, network } = this.props;
     const { status, currentStep, blockNumber, latestBlockNum } = this.state
     let confirmBlockNum = latestBlockNum - blockNumber
+    console.log("latestBlockNum=", latestBlockNum, "blockNumber=", blockNumber)
     // let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink = (network == 'eth' ? `${ETHERSCAN}/tx/${txid}` :  `${TRONSCAN}/#/transaction/${txid}`)
+    let disableOrLoading = status == 0 || ((status == 1) && (confirmBlockNum < needConfirmBlockNum))
     return (
       <>
         <Modal 
@@ -148,8 +150,8 @@ class TransactionStatusModal extends React.Component {
           closable={false}
           onOk={handleOk}
           footer={[
-            <Button key="submit" shape="round" size={"large"} type="primary" block onClick={handleOk} disabled={ confirmBlockNum < needConfirmBlockNum } loading={ confirmBlockNum < needConfirmBlockNum}>
-              { confirmBlockNum < needConfirmBlockNum ? 'Loading' :  okText }
+            <Button key="submit" shape="round" size={"large"} type="primary" block onClick={ status == 1 ? handleOk : handleCancel } disabled={ disableOrLoading } loading={ disableOrLoading }>
+              { confirmBlockNum < needConfirmBlockNum ? 'Loading' :  (status == 1 ? okText : 'Cancel') }
             </Button>
           ]}
         > 
@@ -157,8 +159,8 @@ class TransactionStatusModal extends React.Component {
           {/* <div className="loadingIconContainer">{confirmBlockNum < needConfirmBlockNum ? <LoadingOutlined /> : ''}</div> */}
           {/* <p>{ <MessageWithAlink message={viewText} aLink={viewLink} /> } </p> */}
           <div className="infoItemContainer">
-            <div>{ status !== 1 ? 'Mining' : 'Mined' }</div>
-            <div>{ status === 1 ? <img src={MintedIcon} /> : <img src={ErrorIcon} /> }</div>
+            <div>{ status == 1 ? 'Mined' : (status == 0 ? 'Mining' : 'Fail') }</div>
+            <div>{ status === 1 ? <img src={MintedIcon} /> : (status == 0 ? <LoadingOutlined /> : <img src={ErrorIcon} />) }</div>
           </div>
           <div className="infoItemContainer">
             <div>Block Number: </div>
