@@ -168,7 +168,6 @@ class TransactionStatusModal extends React.Component {
     } = this.props;
     const { status, currentStep, blockNumber, latestBlockNum } = this.state;
     let confirmBlockNum = latestBlockNum - blockNumber;
-    console.log('latestBlockNum=', latestBlockNum, 'blockNumber=', blockNumber);
     // let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink =
       network == 'eth'

@@ -202,6 +202,7 @@ class Mint extends React.Component {
         { from: this.props.account, gas: '60000' },
       );
     } catch (error) {
+      console.log('callApprove error=', error);
       openNotificationWithIcon(
         'Metamask deny!',
         'User denied transaction signature',
@@ -253,6 +254,7 @@ class Mint extends React.Component {
         { from: this.props.account, gas: '100000' },
       );
     } catch (error) {
+      console.log('callExchange error=', error);
       openNotificationWithIcon(
         'Metamask deny!',
         'User denied transaction signature',
@@ -341,7 +343,8 @@ class Mint extends React.Component {
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
     const canNext =
       WAValidator.validate(destinationAddress, 'Tron') &&
-      getSuterValueNumber(suterValue) > 0 && !submitApprove;
+      getSuterValueNumber(suterValue) > 0 &&
+      !submitApprove;
     return (
       <div className="mint">
         {showConfirmModal ? (

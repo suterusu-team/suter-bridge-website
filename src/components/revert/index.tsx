@@ -133,7 +133,7 @@ class Revert extends React.Component {
       const suterContract = await window.tronWeb
         .contract()
         .at(TRONSUTERUSUCONTRACTADDRESS);
-      const suterAmountInBlockChain = new BigNumber(
+      const suterAmountInBlockChain = window.tronWeb.toBigNumber(
         suterAmount * 1000000000000000000,
       );
       txHash = await suterContract
@@ -195,6 +195,7 @@ class Revert extends React.Component {
           shouldPollResponse: false,
         });
     } catch (error) {
+      console.log('callExchange error', error);
       openNotificationWithIcon(
         'TronLink deny!',
         'User denied transaction signature',
