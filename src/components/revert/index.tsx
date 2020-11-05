@@ -184,7 +184,7 @@ class Revert extends React.Component {
         .contract()
         .at(TRONBRIDGECONTRACTADDRESS);
       const suterAmount = parseInt(suterValue);
-      const suterAmountInBlockChain = new BigNumber(
+      const suterAmountInBlockChain = window.tronWeb.toBigNumber(
         suterAmount * 1000000000000000000,
       );
       txHash = await tronBridgeContract
@@ -335,7 +335,8 @@ class Revert extends React.Component {
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
     const canNext =
       WAValidator.validate(destinationAddress, 'eth') &&
-      getSuterValueNumber(suterValue) > 0 && !submitApprove;
+      getSuterValueNumber(suterValue) > 0 &&
+      !submitApprove;
     return (
       <div className="mint">
         {showConfirmModal ? (
