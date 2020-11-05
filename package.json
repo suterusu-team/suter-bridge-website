@@ -24,6 +24,7 @@
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.2.23",
     "axios": "^0.20.0",
+    "bignumber.js": "^9.0.1",
     "ethjs-contract": "^0.2.3",
     "ethjs-query": "^0.3.8",
     "lint-staged": "^10.0.7",
