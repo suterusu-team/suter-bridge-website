@@ -15,7 +15,6 @@ import {
   fetchSuterPrice,
 } from '../tools';
 import TransactionStatusModal from '../transactionStatusModal';
-import BigNumber from 'bignumber.js';
 
 class Revert extends React.Component {
   state = {
@@ -133,11 +132,11 @@ class Revert extends React.Component {
       const suterContract = await window.tronWeb
         .contract()
         .at(TRONSUTERUSUCONTRACTADDRESS);
-      const suterAmountInBlockChain = window.tronWeb.toBigNumber(
-        suterAmount * 1000000000000000000,
-      );
       txHash = await suterContract
-        .increaseAllowance(TRONBRIDGECONTRACTADDRESS, suterAmountInBlockChain)
+        .increaseAllowance(
+          TRONBRIDGECONTRACTADDRESS,
+          window.web3.toWei(suterAmount),
+        )
         .send({
           feeLimit: 1000000,
           callValue: 0,
@@ -184,11 +183,8 @@ class Revert extends React.Component {
         .contract()
         .at(TRONBRIDGECONTRACTADDRESS);
       const suterAmount = parseInt(suterValue);
-      const suterAmountInBlockChain = window.tronWeb.toBigNumber(
-        suterAmount * 1000000000000000000,
-      );
       txHash = await tronBridgeContract
-        .exchange(suterAmountInBlockChain, destinationAddress)
+        .exchange(window.web3.toWei(suterAmount), destinationAddress)
         .send({
           feeLimit: 1000000,
           callValue: 0,
