@@ -245,6 +245,11 @@ class SuterBridge extends React.Component {
 
   render() {
     const { connectWalletTxt, account, formType } = this.state;
+    console.log(formType);
+    const scanLink =
+      formType == 'Mint'
+        ? `${ETHERSCAN}/address/${account}`
+        : `${TRONSCAN}/#/address/${account}`;
     return (
       <Layout className="suterBridge">
         <Header>
@@ -256,10 +261,12 @@ class SuterBridge extends React.Component {
             </Col>
             <Col md={4} sm={12}>
               {account !== '' ? (
-                <Button className="connectWalletBtn">
-                  <div className="successDot"></div>
-                  {connectWalletTxt}
-                </Button>
+                <a href={scanLink} target="_blank">
+                  <Button className="connectWalletBtn">
+                    <div className="successDot"></div>
+                    {connectWalletTxt}
+                  </Button>
+                </a>
               ) : (
                 <Dropdown overlay={this.dropDownMenu()}>
                   <Button className="connectWalletBtn">
