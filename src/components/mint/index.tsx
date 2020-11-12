@@ -15,7 +15,6 @@ import {
 } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
-import BigNumber from 'bignumber.js';
 
 const Eth = require('ethjs-query');
 const EthContract = require('ethjs-contract');
@@ -193,12 +192,9 @@ class Mint extends React.Component {
       const suterContractInstance = suterContract.at(
         ETHSUTERUSUCONTRACTADDRESS,
       );
-      const suterAmountInBlockChain = new BigNumber(
-        suterAmount * 1000000000000000000,
-      );
       txHash = await suterContractInstance.increaseAllowance(
         ETHBRIDGECONTRACTADDRESS,
-        suterAmountInBlockChain,
+        window.web3.toWei(suterAmount),
         { from: this.props.account, gas: '60000' },
       );
     } catch (error) {
@@ -245,11 +241,8 @@ class Mint extends React.Component {
         ETHBRIDGECONTRACTADDRESS,
       );
       const suterAmount = parseInt(suterValue);
-      const suterAmountInBlockChain = new BigNumber(
-        suterAmount * 1000000000000000000,
-      );
       txHash = await ethBridgeContractInstance.exchange(
-        suterAmountInBlockChain,
+        window.web3.toWei(suterAmount),
         destinationAddress,
         { from: this.props.account, gas: '100000' },
       );
