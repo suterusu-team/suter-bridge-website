@@ -1,9 +1,11 @@
 import React from 'react';
 import { Row, Col, Button, notification } from 'antd';
 import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
-import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
+import BEP20SuterCoin from '../../static/bep20_suter.svg';
 import WAValidator from 'multicoin-address-validator';
 import ConfirmModal from '../confirmModal';
+import Web3 from 'web3';
+var Contract = require('web3-eth-contract');
 import {
   openNotificationWithIcon,
   openNotificationWithKey,
@@ -128,24 +130,22 @@ class Revert extends React.Component {
     const suterValue = this.state.suterValue;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
+    let transaction;
+    const suterContract = new Contract(
+      BSCSUTERUSUABI,
+      BSCSUTERUSUCONTRACTADDRESS,
+    );
+    suterContract.setProvider(window.ethereum);
     try {
-      const suterContract = await window.tronWeb
-        .contract()
-        .at(TRONSUTERUSUCONTRACTADDRESS);
-      txHash = await suterContract
-        .increaseAllowance(
-          TRONBRIDGECONTRACTADDRESS,
-          window.web3.toWei(suterAmount),
-        )
-        .send({
-          feeLimit: 1000000,
-          callValue: 0,
-          shouldPollResponse: false,
-        });
+      var lastestWeb3 = new Web3(window.ethereum);
+      let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+      transaction = await suterContract.methods
+        .increaseAllowance(BSCBRIDGECONTRACTADDRESS, amount)
+        .send({ from: this.props.account, gas: '60000' });
     } catch (error) {
       console.log('callApprove error=', error);
       openNotificationWithIcon(
-        'TronLink deny!',
+        'Metamask deny!',
         'User denied transaction signature',
         'warning',
         10,
@@ -153,8 +153,9 @@ class Revert extends React.Component {
       this.setState({ submitApprove: false });
       return;
     }
-    const message = `View in tronscan`;
-    const aLink = `${TRONSCAN}/#/transaction/${txHash}`;
+    txHash = transaction['transactionHash'];
+    const message = `View in bscscan`;
+    const aLink = `${BSCSCAN}/tx/${txHash}`;
     openNotificationWithIcon(
       'Approve transaction has success sent!',
       <MessageWithAlink message={message} aLink={aLink} />,
@@ -177,23 +178,24 @@ class Revert extends React.Component {
   async callExchange() {
     this.approveFinished();
     const { suterValue, destinationAddress } = this.state;
+    const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
+    let transaction;
+    const bscBridgeContract = new Contract(
+      BSCBRIDGEABI,
+      BSCBRIDGECONTRACTADDRESS,
+    );
+    bscBridgeContract.setProvider(window.ethereum);
     try {
-      const tronBridgeContract = await window.tronWeb
-        .contract()
-        .at(TRONBRIDGECONTRACTADDRESS);
-      const suterAmount = parseInt(suterValue);
-      txHash = await tronBridgeContract
-        .exchange(window.web3.toWei(suterAmount), destinationAddress)
-        .send({
-          feeLimit: 1000000,
-          callValue: 0,
-          shouldPollResponse: false,
-        });
+      var lastestWeb3 = new Web3(window.ethereum);
+      let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+      transaction = await bscBridgeContract.methods
+        .exchange(amount, destinationAddress)
+        .send({ from: this.props.account, gas: '100000' });
     } catch (error) {
-      console.log('callExchange error', error);
+      console.log('callExchange error=', error);
       openNotificationWithIcon(
-        'TronLink deny!',
+        'Metamask deny!',
         'User denied transaction signature',
         'warning',
         10,
@@ -201,8 +203,9 @@ class Revert extends React.Component {
       this.setState({ approveStatus: 0 });
       return;
     }
-    const message = `View in tronscan`;
-    const aLink = `${TRONSCAN}/#/transaction/${txHash}`;
+    txHash = transaction['transactionHash'];
+    const message = `View in bscscan`;
+    const aLink = `${ETHERSCAN}/tx/${txHash}`;
     openNotificationWithIcon(
       'Exchange transaction has success sent!',
       <MessageWithAlink message={message} aLink={aLink} />,
@@ -349,7 +352,7 @@ class Revert extends React.Component {
         )}
         {approveTxid !== '' && approveStatus === 0 ? (
           <TransactionStatusModal
-            network="tron"
+            network="eth"
             initStep={0}
             visible={true}
             txid={approveTxid}
@@ -366,7 +369,7 @@ class Revert extends React.Component {
         )}
         {exchangeTxid !== '' && exchangeStatus === 0 ? (
           <TransactionStatusModal
-            network="tron"
+            network="eth"
             initStep={2}
             visible={true}
             txid={exchangeTxid}
@@ -405,9 +408,9 @@ class Revert extends React.Component {
             <div className="assetContainer container">
               <div>Asset</div>
               <div>
-                <img src={TRC20SuterCoin} />
+                <img src={BEP20SuterCoin} />
                 &nbsp;
-                <span style={{ fontWeight: 'bold' }}>TRC20</span>&nbsp;
+                <span style={{ fontWeight: 'bold' }}>BEP20</span>&nbsp;
                 <span>SUTER</span>
               </div>
             </div>

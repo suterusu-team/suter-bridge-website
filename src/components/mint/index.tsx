@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from 'antd';
 import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
-import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
+import BEP20SuterCoin from '../../static/bep20_suter.svg';
 import WAValidator from 'multicoin-address-validator';
 import Web3 from 'web3';
 var Contract = require('web3-eth-contract');
@@ -17,8 +17,6 @@ import {
 } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
-
-const EthContract = require('ethjs-contract');
 
 class Mint extends React.Component {
   state = {
@@ -426,7 +424,7 @@ class Mint extends React.Component {
               <div>Destination</div>
               <input
                 className="destinationInput"
-                placeholder="Enter BSC SUTER Address"
+                placeholder="Enter BEP20 SUTER Address"
                 type="text"
                 onChange={this.handleDestinationChange}
               />
@@ -439,7 +437,7 @@ class Mint extends React.Component {
               <div>You will receive</div>
               <div>{suterValueForInput}</div>
               <div style={{ display: 'flex' }}>
-                <img src={TRC20SuterCoin} />
+                <img src={BEP20SuterCoin} />
                 &nbsp;
                 <span style={{ fontWeight: 'bold' }}>BSC</span>&nbsp;
                 <span>SUTER</span>
