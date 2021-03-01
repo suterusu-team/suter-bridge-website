@@ -18,7 +18,6 @@ import {
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
 
-const Eth = require('ethjs-query');
 const EthContract = require('ethjs-contract');
 
 class Mint extends React.Component {
@@ -187,6 +186,7 @@ class Mint extends React.Component {
     const suterValue = this.state.suterValue;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
+    let transaction;
     const suterContract = new Contract(
       ETHSUTERUSUABI,
       ETHSUTERUSUCONTRACTADDRESS,
@@ -195,7 +195,7 @@ class Mint extends React.Component {
     try {
       var lastestWeb3 = new Web3(window.ethereum);
       let amount = lastestWeb3.utils.toWei(suterAmount.toString());
-      txHash = await suterContract.methods
+      transaction = await suterContract.methods
         .increaseAllowance(ETHBRIDGECONTRACTADDRESS, amount)
         .send({ from: this.props.account, gas: '60000' });
     } catch (error) {
@@ -209,6 +209,7 @@ class Mint extends React.Component {
       this.setState({ submitApprove: false });
       return;
     }
+    txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
     const aLink = `${ETHERSCAN}/tx/${txHash}`;
     openNotificationWithIcon(

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Steps, Tooltip } from 'antd';
 import { MessageWithAlink } from '../tools';
+import Web3 from 'web3';
 import './index.less';
 import { LoadingOutlined } from '@ant-design/icons';
 import MintedIcon from '../../static/minted.svg';
@@ -39,18 +40,12 @@ class TransactionStatusModal extends React.Component {
     this.state.currentStep = initStep;
     this.fetchTransactionStatus = this.fetchTransactionStatus.bind(this);
     this.fetchLastedBlockNum = this.fetchLastedBlockNum.bind(this);
-    this.fetchTronTransactionStatus = this.fetchTronTransactionStatus.bind(
-      this,
-    );
-    this.fetchTronLastedBlockNum = this.fetchTronLastedBlockNum.bind(this);
   }
 
   componentDidMount() {
     const { network } = this.props;
     if (network == 'eth') {
       this.interval = setInterval(this.fetchTransactionStatus, 3000);
-    } else {
-      this.interval = setInterval(this.fetchTronTransactionStatus, 3000);
     }
   }
 
@@ -78,14 +73,15 @@ class TransactionStatusModal extends React.Component {
     }
     const { txid } = this.props;
     try {
-      web3.eth.getTransactionReceipt(txid, (err, receipt) => {
+      var lastestWeb3 = new Web3(window.ethereum);
+      lastestWeb3.eth.getTransactionReceipt(txid, (err, receipt) => {
         console.log(err);
         console.log(receipt);
         if (receipt !== null) {
-          let status = parseInt(receipt['status']);
+          let status = receipt['status'];
           this.setState(
             {
-              status: status == 1 ? status : 2,
+              status: status ? 1 : 2,
               blockNumber: receipt['blockNumber'],
             },
             () => {
@@ -103,7 +99,8 @@ class TransactionStatusModal extends React.Component {
     const { needConfirmBlockNum } = this.props;
     const { blockNumber, currentStep } = this.state;
     try {
-      web3.eth.getBlockNumber((err, latestBlockNum) => {
+      var lastestWeb3 = new Web3(window.ethereum);
+      lastestWeb3.eth.getBlockNumber((err, latestBlockNum) => {
         console.log(err);
         console.log(latestBlockNum);
         this.setState({ latestBlockNum: latestBlockNum });
@@ -116,45 +113,6 @@ class TransactionStatusModal extends React.Component {
     }
   }
 
-  async fetchTronLastedBlockNum() {
-    const { needConfirmBlockNum } = this.props;
-    const { blockNumber, currentStep } = this.state;
-    try {
-      let result = await window.tronWeb.trx.getCurrentBlock();
-      let latestBlockNum = result['block_header']['raw_data']['number'];
-      this.setState({ latestBlockNum: latestBlockNum });
-      if (latestBlockNum - blockNumber >= needConfirmBlockNum) {
-        this.setState({ currentStep: currentStep + 1 });
-      }
-    } catch (error) {
-      console.log('fetchTronLastedBlockNum error happen', error);
-    }
-  }
-
-  async fetchTronTransactionStatus() {
-    const { needConfirmBlockNum } = this.props;
-    const { blockNumber, latestBlockNum } = this.state;
-    if (latestBlockNum - blockNumber >= needConfirmBlockNum) {
-      clearInterval(this.interval);
-      return;
-    }
-    const { txid } = this.props;
-    try {
-      let result = await window.tronWeb.trx.getTransactionInfo(txid);
-      if (result !== null && result['receipt'] != null) {
-        console.log('receipt=', result['receipt']);
-        let status = result['receipt']['result'] == 'SUCCESS' ? 1 : 2;
-        this.setState(
-          { status: status, blockNumber: result['blockNumber'] },
-          () => {
-            this.fetchTronLastedBlockNum();
-          },
-        );
-      }
-    } catch (error) {
-      console.log('fetchTronTransactionStatus error happen', error);
-    }
-  }
   render() {
     const {
       title,
@@ -170,9 +128,7 @@ class TransactionStatusModal extends React.Component {
     let confirmBlockNum = latestBlockNum - blockNumber;
     // let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink =
-      network == 'eth'
-        ? `${ETHERSCAN}/tx/${txid}`
-        : `${TRONSCAN}/#/transaction/${txid}`;
+      network == 'eth' ? `${ETHERSCAN}/tx/${txid}` : `${BSCERSCAN}/tx/${txid}`;
     let disableOrLoading =
       status == 0 || (status == 1 && confirmBlockNum < needConfirmBlockNum);
     return (
