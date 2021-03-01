@@ -236,6 +236,7 @@ class Mint extends React.Component {
     const { suterValue, destinationAddress } = this.state;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
+    let transaction;
     const ethBridgeContract = new Contract(
       ETHBRIDGEABI,
       ETHBRIDGECONTRACTADDRESS,
@@ -244,7 +245,7 @@ class Mint extends React.Component {
     try {
       var lastestWeb3 = new Web3(window.ethereum);
       let amount = lastestWeb3.utils.toWei(suterAmount.toString());
-      txHash = await ethBridgeContract.methods
+      transaction = await ethBridgeContract.methods
         .exchange(amount, destinationAddress)
         .send({ from: this.props.account, gas: '100000' });
     } catch (error) {
@@ -258,6 +259,7 @@ class Mint extends React.Component {
       this.setState({ approveStatus: 0 });
       return;
     }
+    txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
     const aLink = `${ETHERSCAN}/tx/${txHash}`;
     openNotificationWithIcon(

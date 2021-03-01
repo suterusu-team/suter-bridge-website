@@ -78,6 +78,7 @@ class TransactionStatusModal extends React.Component {
         console.log(err);
         console.log(receipt);
         if (receipt !== null) {
+          debugger;
           let status = receipt['status'];
           this.setState(
             {
