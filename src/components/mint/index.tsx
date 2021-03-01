@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row, Col, Button } from 'antd';
 import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
-import TRC20SuterCoin from '../../static/trc20_suter_coin.svg';
+import BEP20SuterCoin from '../../static/bep20_suter.svg';
 import WAValidator from 'multicoin-address-validator';
+import Web3 from 'web3';
+var Contract = require('web3-eth-contract');
 import {
   openNotificationWithIcon,
   openNotificationWithKey,
@@ -15,9 +17,6 @@ import {
 } from '../tools';
 import ConfirmModal from '../confirmModal';
 import TransactionStatusModal from '../transactionStatusModal';
-
-const Eth = require('ethjs-query');
-const EthContract = require('ethjs-contract');
 
 class Mint extends React.Component {
   state = {
@@ -154,7 +153,7 @@ class Mint extends React.Component {
 
   handleDestinationChange(e) {
     this.setState({ destinationAddress: e.target.value });
-    if (e.target.value != '' && !WAValidator.validate(e.target.value, 'Tron')) {
+    if (e.target.value != '' && !WAValidator.validate(e.target.value, 'eth')) {
       openNotificationWithIcon(
         'Invalid input',
         `'${e.target.value}' is not a valid tron address`,
@@ -185,18 +184,18 @@ class Mint extends React.Component {
     const suterValue = this.state.suterValue;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
-    const eth = new Eth(web3.currentProvider);
-    const contract = new EthContract(eth);
-    const suterContract = contract(ETHSUTERUSUABI);
+    let transaction;
+    const suterContract = new Contract(
+      ETHSUTERUSUABI,
+      ETHSUTERUSUCONTRACTADDRESS,
+    );
+    suterContract.setProvider(window.ethereum);
     try {
-      const suterContractInstance = suterContract.at(
-        ETHSUTERUSUCONTRACTADDRESS,
-      );
-      txHash = await suterContractInstance.increaseAllowance(
-        ETHBRIDGECONTRACTADDRESS,
-        window.web3.toWei(suterAmount),
-        { from: this.props.account, gas: '60000' },
-      );
+      var lastestWeb3 = new Web3(window.ethereum);
+      let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+      transaction = await suterContract.methods
+        .increaseAllowance(ETHBRIDGECONTRACTADDRESS, amount)
+        .send({ from: this.props.account, gas: '60000' });
     } catch (error) {
       console.log('callApprove error=', error);
       openNotificationWithIcon(
@@ -208,6 +207,7 @@ class Mint extends React.Component {
       this.setState({ submitApprove: false });
       return;
     }
+    txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
     const aLink = `${ETHERSCAN}/tx/${txHash}`;
     openNotificationWithIcon(
@@ -232,20 +232,20 @@ class Mint extends React.Component {
   async callExchange() {
     this.approveFinished();
     const { suterValue, destinationAddress } = this.state;
+    const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
-    const eth = new Eth(web3.currentProvider);
-    const contract = new EthContract(eth);
-    const ethBridgeContract = contract(ETHBRIDGEABI);
+    let transaction;
+    const ethBridgeContract = new Contract(
+      ETHBRIDGEABI,
+      ETHBRIDGECONTRACTADDRESS,
+    );
+    ethBridgeContract.setProvider(window.ethereum);
     try {
-      const ethBridgeContractInstance = ethBridgeContract.at(
-        ETHBRIDGECONTRACTADDRESS,
-      );
-      const suterAmount = parseInt(suterValue);
-      txHash = await ethBridgeContractInstance.exchange(
-        window.web3.toWei(suterAmount),
-        destinationAddress,
-        { from: this.props.account, gas: '100000' },
-      );
+      var lastestWeb3 = new Web3(window.ethereum);
+      let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+      transaction = await ethBridgeContract.methods
+        .exchange(amount, destinationAddress)
+        .send({ from: this.props.account, gas: '100000' });
     } catch (error) {
       console.log('callExchange error=', error);
       openNotificationWithIcon(
@@ -257,6 +257,7 @@ class Mint extends React.Component {
       this.setState({ approveStatus: 0 });
       return;
     }
+    txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
     const aLink = `${ETHERSCAN}/tx/${txHash}`;
     openNotificationWithIcon(
@@ -335,7 +336,7 @@ class Mint extends React.Component {
     const suterValueForInput = suterValueForInputFunc(suterValue);
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
     const canNext =
-      WAValidator.validate(destinationAddress, 'Tron') &&
+      WAValidator.validate(destinationAddress, 'eth') &&
       getSuterValueNumber(suterValue) > 0 &&
       !submitApprove;
     return (
@@ -423,7 +424,7 @@ class Mint extends React.Component {
               <div>Destination</div>
               <input
                 className="destinationInput"
-                placeholder="Enter TRC20 SUTER Address"
+                placeholder="Enter BEP20 SUTER Address"
                 type="text"
                 onChange={this.handleDestinationChange}
               />
@@ -436,9 +437,9 @@ class Mint extends React.Component {
               <div>You will receive</div>
               <div>{suterValueForInput}</div>
               <div style={{ display: 'flex' }}>
-                <img src={TRC20SuterCoin} />
+                <img src={BEP20SuterCoin} />
                 &nbsp;
-                <span style={{ fontWeight: 'bold' }}>TRC20</span>&nbsp;
+                <span style={{ fontWeight: 'bold' }}>BSC</span>&nbsp;
                 <span>SUTER</span>
               </div>
             </div>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="170px" height="170px" viewBox="0 0 170 170" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>编组</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="75" cy="75" r="75"></circle>
+        <filter x="-10.0%" y="-10.0%" width="120.0%" height="120.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.952941176   0 0 0 0 0.729411765   0 0 0 0 0.184313725  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bridge首页" transform="translate(-889.000000, -438.000000)">
+            <g id="编组" transform="translate(899.000000, 448.000000)">
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <circle stroke="#F3BA2F" stroke-width="2" stroke-linejoin="square" fill="#FFFFFF" fill-rule="evenodd" cx="75" cy="75" r="74"></circle>
+                </g>
+                <g transform="translate(18.000000, 19.000000)" fill="#F3BA2F">
+                    <polygon id="Fill-1" points="56.5187933 -8.928e-05 21.7942301 34.7262595 34.5675197 47.4995491 56.5187933 25.5482755 78.4834589 47.5111555 91.2567485 34.7387587"></polygon>
+                    <polygon id="Fill-2" points="0 56.5179005 12.7732896 69.2902973 25.5465792 56.5170077 12.7732896 43.7446109"></polygon>
+                    <polygon id="Fill-3" points="56.5187933 87.4903824 34.5675197 65.5391088 21.7745885 78.2945424 21.7933373 78.3123984 56.5187933 113.037854 91.2567485 78.3016848 91.2621053 78.2936496 78.4825661 65.5283952"></polygon>
+                    <polygon id="Fill-4" points="87.4936858 56.5235251 100.266083 69.2959219 113.040265 56.5235251 100.266083 43.7502355"></polygon>
+                    <polygon id="Fill-5" points="69.4756426 56.5122758 69.4809994 56.5122758 56.519329 43.5506054 46.9404778 53.1294566 46.939585 53.1294566 45.8396554 54.230279 43.569265 56.5006694 43.551409 56.5185254 43.569265 56.5372742 56.519329 69.4873382 69.4809994 56.5256678 69.487249 56.5185254"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -13,6 +13,7 @@ ARG UMI_ENV
 RUN yarn install && UMI_ENV=$UMI_ENV yarn build
 
 FROM nginx:stable
-COPY ./deploy/nginx.conf  /etc/nginx/conf.d/default.conf
+ARG UMI_ENV
+COPY "./deploy/nginx_$UMI_ENV.conf"  /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
