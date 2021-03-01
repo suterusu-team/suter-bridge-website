@@ -5,9 +5,10 @@ const { Header, Footer, Content } = Layout;
 import { Row, Col, Button } from 'antd';
 import {
   openNotificationWithIcon,
-  ethChainNameMap,
-  tronChainNameMap,
+  EthChainNameMap,
+  BscChainNameMap,
 } from '../components/tools';
+import detectEthereumProvider from '@metamask/detect-provider';
 import 'antd/dist/antd.css';
 import Logo from '../static/suter_bridge_logo.png';
 import Home from '../components/home';
@@ -18,10 +19,8 @@ class SuterBridge extends React.Component {
     metamaskInstalled: false,
     account: '',
     connectWalletTxt: 'Connect Wallet',
-    web3Browser: false,
     formType: '',
-    ethNetwork: '',
-    bscNetwork: '',
+    chainId: '',
   };
 
   constructor(props) {
@@ -31,7 +30,6 @@ class SuterBridge extends React.Component {
     this.dropDownMenu = this.dropDownMenu.bind(this);
     this.connectMetaMask = this.connectMetaMask.bind(this);
     this.checkEthNetworkType = this.checkEthNetworkType.bind(this);
-    this.accountChanged = this.accountChanged.bind(this);
   }
   componentDidMount() {
     setTimeout(this.checkMetaMaskStatus, 1000);
@@ -61,7 +59,7 @@ class SuterBridge extends React.Component {
       console.log('MetaMask is installed!');
       this.setState({ metamaskInstalled: true });
       this.checkEthNetworkType();
-      this.ethChainChanged();
+      this.chainChanged();
       this.accountChanged();
     } else {
       const message = intl.get('NeedMetaMaskTips');
@@ -87,10 +85,10 @@ class SuterBridge extends React.Component {
     });
   }
 
-  ethChainChanged() {
+  chainChanged() {
     window.ethereum.on('chainChanged', chainId => {
       openNotificationWithIcon(
-        'ETH Chain changed',
+        'Chain changed',
         'Page will refresh after 2 seconds',
         'warning',
         4.5,
@@ -102,15 +100,7 @@ class SuterBridge extends React.Component {
   }
 
   checkEthNetworkType() {
-    this.setState({ ethNetwork: window.ethereum.chainId });
-    if (window.ethereum && window.ethereum.chainId != ETH_CHAIN_ID) {
-      openNotificationWithIcon(
-        'ETH network error!',
-        `Please change metamask to ${ethChainNameMap[ETH_CHAIN_ID]} network`,
-        'warning',
-        4.5,
-      );
-    }
+    this.setState({ chainId: window.ethereum.chainId });
   }
 
   clearExpiredTask(account) {
@@ -158,18 +148,22 @@ class SuterBridge extends React.Component {
   }
 
   dropDownMenu = () => {
-    const { metamaskInstalled, ethNetwork } = this.state;
+    const { metamaskInstalled, chainId } = this.state;
     return (
       <Menu>
         <Menu.Item
           key="1"
           onClick={() => this.connectMetaMask()}
-          disabled={!metamaskInstalled || ethNetwork != ETH_CHAIN_ID}
+          disabled={!metamaskInstalled || chainId != ETH_CHAIN_ID}
         >
-          Bridge Ethereum Assets to Tron Assets
+          Bridge Ethereum Assets to BSC Assets
         </Menu.Item>
-        <Menu.Item key="2" onClick={() => this.connectMetaMask()()}>
-          Bridge Tron Assets to Ethereum Assets
+        <Menu.Item
+          key="2"
+          onClick={() => this.connectMetaMask()}
+          disabled={!metamaskInstalled || chainId != BSC_CHAIN_ID}
+        >
+          Bridge BSC Assets to Ethereum Assets
         </Menu.Item>
       </Menu>
     );
