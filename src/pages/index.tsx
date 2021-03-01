@@ -49,7 +49,12 @@ class SuterBridge extends React.Component {
   async connectMetaMask() {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
-    this.setCurrentAccount(account, 'Mint');
+    let { chainId } = this.state;
+    if (chainId === ETH_CHAIN_ID) {
+      this.setCurrentAccount(account, 'Mint');
+    } else {
+      this.setCurrentAccount(account, 'Revert');
+    }
     this.clearExpiredTask(account);
   }
 
@@ -101,6 +106,20 @@ class SuterBridge extends React.Component {
 
   checkEthNetworkType() {
     this.setState({ chainId: window.ethereum.chainId });
+    if (
+      window.ethereum &&
+      (window.ethereum.chainId == ETH_CHAIN_ID ||
+        window.ethereum.chainId == BSC_CHAIN_ID)
+    ) {
+      // this.connectMetaMask();
+    } else {
+      openNotificationWithIcon(
+        'Network error',
+        `Please change Metamask network to ${EthChainNameMap[ETH_CHAIN_ID]} or ${BscChainNameMap[BSC_CHAIN_ID]}`,
+        'warning',
+        4.5,
+      );
+    }
   }
 
   clearExpiredTask(account) {
@@ -174,7 +193,7 @@ class SuterBridge extends React.Component {
     const scanLink =
       formType == 'Mint'
         ? `${ETHERSCAN}/address/${account}`
-        : `${BSCSCAN}/#/address/${account}`;
+        : `${BSCSCAN}/address/${account}`;
     return (
       <Layout className="suterBridge">
         <Header>
