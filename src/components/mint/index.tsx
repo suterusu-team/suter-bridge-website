@@ -4,6 +4,7 @@ import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import BEP20SuterCoin from '../../static/bep20_suter.svg';
 import WAValidator from 'multicoin-address-validator';
 import Web3 from 'web3';
+import SpinModal from '../spinModal';
 var Contract = require('web3-eth-contract');
 import {
   openNotificationWithIcon,
@@ -33,6 +34,7 @@ class Mint extends React.Component {
     exchangeTxid: '',
     exchangeStatus: 0,
     uncompleteTasks: [],
+    proccesing: false,
   };
 
   constructor(props) {
@@ -199,6 +201,7 @@ class Mint extends React.Component {
   }
 
   async callApprove() {
+    this.setState({ proccesing: true });
     const suterValue = this.state.suterValue;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
@@ -222,7 +225,7 @@ class Mint extends React.Component {
         'warning',
         10,
       );
-      this.setState({ submitApprove: false });
+      this.setState({ submitApprove: false, proccesing: false });
       return;
     }
     txHash = transaction['transactionHash'];
@@ -234,6 +237,7 @@ class Mint extends React.Component {
       'success',
       10,
     );
+    this.setState({ proccesing: false });
     this.setState({ approveTxid: txHash });
     this.newTask(txHash, suterAmount);
   }
@@ -351,6 +355,7 @@ class Mint extends React.Component {
       approveStatus,
       exchangeTxid,
       exchangeStatus,
+      proccesing,
     } = this.state;
     const suterValueForInput = suterValueForInputFunc(suterValue);
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
@@ -360,6 +365,7 @@ class Mint extends React.Component {
       !submitApprove;
     return (
       <div className="mint">
+        {proccesing ? <SpinModal /> : ''}
         {showConfirmModal ? (
           <ConfirmModal
             visible={showConfirmModal}
@@ -444,6 +450,7 @@ class Mint extends React.Component {
               <input
                 className="destinationInput"
                 placeholder="Enter BEP20 SUTER Address"
+                value={destinationAddress}
                 type="text"
                 onChange={this.handleDestinationChange}
               />
