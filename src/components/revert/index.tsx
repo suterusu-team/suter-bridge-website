@@ -198,6 +198,7 @@ class Revert extends React.Component {
   }
 
   async callExchange() {
+    this.setState({ proccesing: true });
     this.approveFinished();
     this.setState({ submitApprove: true });
     const { suterValue, destinationAddress } = this.state;
@@ -223,7 +224,11 @@ class Revert extends React.Component {
         'warning',
         10,
       );
-      this.setState({ approveStatus: 0, submitApprove: false });
+      this.setState({
+        approveStatus: 0,
+        submitApprove: false,
+        proccesing: false,
+      });
       return;
     }
     txHash = transaction['transactionHash'];
@@ -235,7 +240,7 @@ class Revert extends React.Component {
       'success',
       10,
     );
-    this.setState({ exchangeTxid: txHash });
+    this.setState({ exchangeTxid: txHash, proccesing: false });
     this.updateExchangeTxid(txHash);
   }
 
