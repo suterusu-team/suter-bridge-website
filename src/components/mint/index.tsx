@@ -34,7 +34,6 @@ class Mint extends React.Component {
     exchangeTxid: '',
     exchangeStatus: 0,
     uncompleteTasks: [],
-    proccesing: false,
   };
 
   constructor(props) {
@@ -70,6 +69,7 @@ class Mint extends React.Component {
       approveTxid: task['approveTxid'],
       exchangeTxid: task['exchangeTxid'],
       submitApprove: true,
+      proccesing: false,
     });
   }
 

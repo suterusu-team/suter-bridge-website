@@ -69,6 +69,7 @@ class Revert extends React.Component {
       approveTxid: task['approveTxid'],
       exchangeTxid: task['exchangeTxid'],
       submitApprove: true,
+      proccesing: false,
     });
   }
 
