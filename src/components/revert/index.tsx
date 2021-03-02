@@ -352,7 +352,7 @@ class Revert extends React.Component {
         )}
         {approveTxid !== '' && approveStatus === 0 ? (
           <TransactionStatusModal
-            network="eth"
+            network="bsc"
             initStep={0}
             visible={true}
             txid={approveTxid}
@@ -369,7 +369,7 @@ class Revert extends React.Component {
         )}
         {exchangeTxid !== '' && exchangeStatus === 0 ? (
           <TransactionStatusModal
-            network="eth"
+            network="bsc"
             initStep={2}
             visible={true}
             txid={exchangeTxid}
