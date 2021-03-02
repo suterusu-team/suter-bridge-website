@@ -163,8 +163,26 @@ class Mint extends React.Component {
     }
   }
 
-  submit() {
-    this.confirmToApprove();
+  async submit() {
+    const suterValue = this.state.suterValue;
+    const suterAmount = getSuterValueNumber(suterValue);
+    var lastestWeb3 = new Web3(window.ethereum);
+    let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+    // check if allowance is enough
+    const suterContract = new Contract(
+      ETHSUTERUSUABI,
+      ETHSUTERUSUCONTRACTADDRESS,
+    );
+    suterContract.setProvider(window.ethereum);
+    let allowance = await suterContract.methods
+      .allowance(this.props.account, ETHBRIDGECONTRACTADDRESS)
+      .call();
+
+    if (allowance - amount >= 0) {
+      this.callExchange();
+    } else {
+      this.confirmToApprove();
+    }
   }
 
   confirmToApprove() {
@@ -231,6 +249,7 @@ class Mint extends React.Component {
 
   async callExchange() {
     this.approveFinished();
+    this.setState({ submitApprove: true });
     const { suterValue, destinationAddress } = this.state;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
@@ -254,7 +273,7 @@ class Mint extends React.Component {
         'warning',
         10,
       );
-      this.setState({ approveStatus: 0 });
+      this.setState({ approveStatus: 0, submitApprove: false });
       return;
     }
     txHash = transaction['transactionHash'];

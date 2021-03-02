@@ -109,8 +109,26 @@ class Revert extends React.Component {
     this.inputRef = c;
   }
 
-  submit() {
-    this.confirmToApprove();
+  async submit() {
+    const suterValue = this.state.suterValue;
+    const suterAmount = getSuterValueNumber(suterValue);
+    var lastestWeb3 = new Web3(window.ethereum);
+    let amount = lastestWeb3.utils.toWei(suterAmount.toString());
+    // check if allowance is enough
+    const suterContract = new Contract(
+      BSCSUTERUSUABI,
+      BSCSUTERUSUCONTRACTADDRESS,
+    );
+    suterContract.setProvider(window.ethereum);
+    let allowance = await suterContract.methods
+      .allowance(this.props.account, BSCBRIDGECONTRACTADDRESS)
+      .call();
+
+    if (allowance - amount >= 0) {
+      this.callExchange();
+    } else {
+      this.confirmToApprove();
+    }
   }
 
   confirmToApprove() {
@@ -177,6 +195,7 @@ class Revert extends React.Component {
 
   async callExchange() {
     this.approveFinished();
+    this.setState({ submitApprove: true });
     const { suterValue, destinationAddress } = this.state;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
@@ -200,7 +219,7 @@ class Revert extends React.Component {
         'warning',
         10,
       );
-      this.setState({ approveStatus: 0 });
+      this.setState({ approveStatus: 0, submitApprove: false });
       return;
     }
     txHash = transaction['transactionHash'];
