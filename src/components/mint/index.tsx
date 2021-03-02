@@ -34,7 +34,6 @@ class Mint extends React.Component {
     exchangeTxid: '',
     exchangeStatus: 0,
     uncompleteTasks: [],
-    proccesing: false,
   };
 
   constructor(props) {
@@ -70,6 +69,7 @@ class Mint extends React.Component {
       approveTxid: task['approveTxid'],
       exchangeTxid: task['exchangeTxid'],
       submitApprove: true,
+      proccesing: false,
     });
   }
 
@@ -252,6 +252,7 @@ class Mint extends React.Component {
   }
 
   async callExchange() {
+    this.setState({ proccesing: true });
     this.approveFinished();
     this.setState({ submitApprove: true });
     const { suterValue, destinationAddress } = this.state;
@@ -277,7 +278,11 @@ class Mint extends React.Component {
         'warning',
         10,
       );
-      this.setState({ approveStatus: 0, submitApprove: false });
+      this.setState({
+        approveStatus: 0,
+        submitApprove: false,
+        proccesing: false,
+      });
       return;
     }
     txHash = transaction['transactionHash'];
@@ -289,7 +294,7 @@ class Mint extends React.Component {
       'success',
       10,
     );
-    this.setState({ exchangeTxid: txHash });
+    this.setState({ exchangeTxid: txHash, proccesing: false });
     this.updateExchangeTxid(txHash);
   }
 
