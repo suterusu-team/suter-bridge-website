@@ -47,7 +47,10 @@ class Home extends React.Component {
         <Row>
           <Col span={24}>
             <div className="connectWalletButtonContainer">
-              <Dropdown overlay={dropDownMenu()}>
+              <Dropdown
+                overlay={dropDownMenu()}
+                onClick={e => e.preventDefault()}
+              >
                 <Button type="primary" size="large">
                   CONNECT WALLET <DownOutlined />
                 </Button>

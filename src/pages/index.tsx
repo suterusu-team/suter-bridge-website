@@ -198,12 +198,12 @@ class SuterBridge extends React.Component {
       <Layout className="suterBridge">
         <Header>
           <Row>
-            <Col md={20} sm={12}>
+            <Col lg={12} xl={12} md={12} sm={12} xs={12}>
               <a href="/">
                 <img src={Logo} className="logo" />
               </a>
             </Col>
-            <Col md={4} sm={12}>
+            <Col lg={12} xl={12} md={12} sm={12} xs={12}>
               {account !== '' ? (
                 <a href={scanLink} target="_blank">
                   <Button className="connectWalletBtn">
@@ -212,7 +212,12 @@ class SuterBridge extends React.Component {
                   </Button>
                 </a>
               ) : (
-                <Dropdown overlay={this.dropDownMenu()}>
+                <Dropdown
+                  overlay={this.dropDownMenu()}
+                  onClick={e => e.preventDefault()}
+                  arrow
+                  placement="bottomCenter"
+                >
                   <Button className="connectWalletBtn">
                     {connectWalletTxt}
                     <DownOutlined />

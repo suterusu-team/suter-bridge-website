@@ -9,6 +9,16 @@ body {
 
 .ant-layout-header {
   background: transparent !important;
+  .ant-row {
+    .ant-col {
+      &:nth-of-type(2) {
+        text-align: right;
+        @media screen and (max-width: 1024px) {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .ant-layout-footer {
