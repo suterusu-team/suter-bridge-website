@@ -79,8 +79,8 @@ class SuterBridge extends React.Component {
   accountChanged() {
     window.ethereum.on('accountsChanged', function(accounts) {
       openNotificationWithIcon(
-        intl.get('MetamaskAccountChanged'),
-        intl.get('PageWillRefresh'),
+        'Metamask account changed',
+        'Page will refresh',
         'warning',
         4.5,
       );
