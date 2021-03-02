@@ -4,6 +4,7 @@ import ERC20SuterCoin from '../../static/erc20_suter_coin.svg';
 import BEP20SuterCoin from '../../static/bep20_suter.svg';
 import WAValidator from 'multicoin-address-validator';
 import ConfirmModal from '../confirmModal';
+import SpinModal from '../spinModal';
 import Web3 from 'web3';
 var Contract = require('web3-eth-contract');
 import {
@@ -33,6 +34,7 @@ class Revert extends React.Component {
     exchangeTxid: '',
     exchangeStatus: 0,
     uncompleteTasks: [],
+    proccesing: false,
   };
 
   constructor(props) {
@@ -145,6 +147,7 @@ class Revert extends React.Component {
   }
 
   async callApprove() {
+    this.setState({ proccesing: true });
     const suterValue = this.state.suterValue;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
@@ -168,7 +171,7 @@ class Revert extends React.Component {
         'warning',
         10,
       );
-      this.setState({ submitApprove: false });
+      this.setState({ submitApprove: false, proccesing: false });
       return;
     }
     txHash = transaction['transactionHash'];
@@ -180,6 +183,7 @@ class Revert extends React.Component {
       'success',
       10,
     );
+    this.setState({ proccesing: false });
     this.setState({ approveTxid: txHash });
     this.newTask(txHash, suterAmount);
   }
@@ -349,6 +353,7 @@ class Revert extends React.Component {
       approveStatus,
       exchangeTxid,
       exchangeStatus,
+      proccesing,
     } = this.state;
     const suterValueForInput = suterValueForInputFunc(suterValue);
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
@@ -358,6 +363,7 @@ class Revert extends React.Component {
       !submitApprove;
     return (
       <div className="mint">
+        {proccesing ? <SpinModal /> : ''}
         {showConfirmModal ? (
           <ConfirmModal
             visible={showConfirmModal}
