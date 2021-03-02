@@ -43,10 +43,7 @@ class TransactionStatusModal extends React.Component {
   }
 
   componentDidMount() {
-    const { network } = this.props;
-    if (network == 'eth') {
-      this.interval = setInterval(this.fetchTransactionStatus, 3000);
-    }
+    this.interval = setInterval(this.fetchTransactionStatus, 3000);
   }
 
   componentWillUnmount() {
@@ -129,7 +126,7 @@ class TransactionStatusModal extends React.Component {
     let confirmBlockNum = latestBlockNum - blockNumber;
     // let viewText = (network == 'eth' ? 'View in etherscan' : 'View in tronscan')
     let viewLink =
-      network == 'eth' ? `${ETHERSCAN}/tx/${txid}` : `${BSCERSCAN}/tx/${txid}`;
+      network == 'eth' ? `${ETHERSCAN}/tx/${txid}` : `${BSCSCAN}/tx/${txid}`;
     let disableOrLoading =
       status == 0 || (status == 1 && confirmBlockNum < needConfirmBlockNum);
     return (
