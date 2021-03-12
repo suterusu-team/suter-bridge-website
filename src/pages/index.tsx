@@ -9,10 +9,16 @@ import {
   BscChainNameMap,
 } from '../components/tools';
 import detectEthereumProvider from '@metamask/detect-provider';
+import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
-import Logo from '../static/suter_bridge_logo.png';
+import Logo from '../static/suter_bridge_logo.svg';
 import Home from '../components/home';
 import Form from '../components/form';
+
+const locales = {
+  'en-US': require('../locales/en_US'),
+  'zh-CN': require('../locales/zh_CN'),
+};
 
 class SuterBridge extends React.Component {
   state = {
@@ -33,7 +39,32 @@ class SuterBridge extends React.Component {
   }
   componentDidMount() {
     setTimeout(this.checkMetaMaskStatus, 1000);
+    this.loadLocales();
   }
+
+  loadLocales = (lang = 'en-US') => {
+    // init method will load CLDR locale data according to currentLocale
+    // react-intl-universal is singleton, so you should init it only once in your app
+    var userLang = navigator.language || navigator.userLanguage;
+    if (userLang) {
+      if (userLang === 'zh') {
+        lang = 'zh-CN';
+      }
+    }
+    let cacheLang = localStorage.getItem('lang');
+    if (cacheLang) {
+      lang = cacheLang;
+    }
+    intl
+      .init({
+        currentLocale: lang, // TODO: determine locale here
+        locales,
+      })
+      .then(() => {
+        // After loading CLDR locale data, start to render
+        this.setState({ initDone: true });
+      });
+  };
 
   componentWillUnmount() {}
 
@@ -55,7 +86,6 @@ class SuterBridge extends React.Component {
     } else {
       this.setCurrentAccount(account, 'Revert');
     }
-    this.clearExpiredTask(account);
   }
 
   async checkMetaMaskStatus() {
@@ -122,50 +152,6 @@ class SuterBridge extends React.Component {
     }
   }
 
-  clearExpiredTask(account) {
-    // clear eth task
-    let taskQueue = (localStorage.getItem(`${account}Task`) || '').split(',');
-    taskQueue = taskQueue.filter(item => item);
-    let expiredKeys = {};
-    for (const key of taskQueue) {
-      let myTask = localStorage.getItem(key);
-      if (!myTask) {
-        continue;
-      }
-      const item = JSON.parse(myTask);
-      const now = new Date();
-      if (now.getTime() > item.expiry) {
-        localStorage.removeItem(key);
-        expiredKeys[key] = true;
-      }
-    }
-    taskQueue = taskQueue.filter(item => !expiredKeys[item]);
-    localStorage.setItem(`${account}Task`, taskQueue);
-  }
-
-  clearRevertExpiredTask(account) {
-    // clear eth task
-    let taskQueue = (localStorage.getItem(`${account}RevertTask`) || '').split(
-      ',',
-    );
-    taskQueue = taskQueue.filter(item => item);
-    let expiredKeys = {};
-    for (const key of taskQueue) {
-      let myTask = localStorage.getItem(key);
-      if (!myTask) {
-        continue;
-      }
-      const item = JSON.parse(myTask);
-      const now = new Date();
-      if (now.getTime() > item.expiry) {
-        localStorage.removeItem(key);
-        expiredKeys[key] = true;
-      }
-    }
-    taskQueue = taskQueue.filter(item => !expiredKeys[item]);
-    localStorage.setItem(`${account}Task`, taskQueue);
-  }
-
   dropDownMenu = () => {
     const { metamaskInstalled, chainId } = this.state;
     return (
@@ -188,8 +174,14 @@ class SuterBridge extends React.Component {
     );
   };
 
+  langChangeTo = lang => {
+    localStorage.setItem('lang', lang);
+    this.loadLocales(lang);
+  };
+
   render() {
     const { connectWalletTxt, account, formType } = this.state;
+    let lang = intl.options.currentLocale;
     const scanLink =
       formType == 'Mint'
         ? `${ETHERSCAN}/address/${account}`
@@ -204,26 +196,32 @@ class SuterBridge extends React.Component {
               </a>
             </Col>
             <Col lg={12} xl={12} md={12} sm={12} xs={12}>
-              {account !== '' ? (
-                <a href={scanLink} target="_blank">
-                  <Button className="connectWalletBtn">
-                    <div className="successDot"></div>
-                    {connectWalletTxt}
-                  </Button>
-                </a>
-              ) : (
-                <Dropdown
-                  overlay={this.dropDownMenu()}
-                  onClick={e => e.preventDefault()}
-                  arrow
-                  placement="bottomCenter"
-                >
-                  <Button className="connectWalletBtn">
-                    {connectWalletTxt}
-                    <DownOutlined />
-                  </Button>
-                </Dropdown>
-              )}
+              <div className="header-btn">
+                {account !== '' ? (
+                  <a href={scanLink} target="_blank">
+                    <Button className="connectWalletBtn" shape="round">
+                      <div className="successDot"></div>
+                      {connectWalletTxt}
+                    </Button>
+                  </a>
+                ) : (
+                  ''
+                )}
+                <div className="top-btn">
+                  <i
+                    onClick={() => this.langChangeTo('en-US')}
+                    className={`${lang === 'en-US' ? 'active' : ''}`}
+                  >
+                    EN
+                  </i>
+                  <i
+                    className={`${lang === 'zh-CN' ? 'active' : ''}`}
+                    onClick={() => this.langChangeTo('zh-CN')}
+                  >
+                    中
+                  </i>
+                </div>
+              </div>
             </Col>
           </Row>
         </Header>

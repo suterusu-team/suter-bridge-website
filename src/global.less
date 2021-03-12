@@ -1,9 +1,6 @@
+@import './variables.less';
 body {
-  background: linear-gradient(
-    0deg,
-    rgba(105, 85, 192, 0.43),
-    rgba(255, 255, 255, 1)
-  ) !important;
+  background: @bodyBg;
   overflow-y: scroll;
 }
 
@@ -15,6 +12,41 @@ body {
         text-align: right;
         @media screen and (max-width: 1024px) {
           display: none;
+        }
+      }
+    }
+  }
+  .header-btn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    .top-btn {
+      height: 32px;
+      width: 70px;
+      margin-left: 20px;
+      border: 1px solid @suterColor;
+      border-radius: 17.5px;
+      border-radius: 17.5px;
+      display: flex;
+      justify-content: space-between;
+      i {
+        position: relative;
+        top: -1px;
+        display: block;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 45%;
+        color: @suterColor;
+        font-style: normal;
+        font-size: 14px;
+        cursor: pointer;
+        &.active {
+          background: @suterColor;
+          color: #0b000e;
         }
       }
     }
