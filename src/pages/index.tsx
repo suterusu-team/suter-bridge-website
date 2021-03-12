@@ -227,7 +227,7 @@ class SuterBridge extends React.Component {
         </Header>
         <Content>
           {account === '' ? (
-            <Home chainId={chainId} />
+            <Home chainId={chainId} connectMetaMask={this.connectMetaMask} />
           ) : (
             <Form account={account} formType={formType} />
           )}
