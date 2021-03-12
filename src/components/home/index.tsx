@@ -11,7 +11,7 @@ class Home extends React.Component {
     super(props);
   }
   render() {
-    const { dropDownMenu } = this.props;
+    const { chainId } = this.props;
     return (
       <div className="home">
         <Row>
@@ -24,7 +24,9 @@ class Home extends React.Component {
         </Row>
         <Row className="WhichOperationContainer">
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-            <div className="card">
+            <div
+              className={chainId === ETH_CHAIN_ID ? 'card' : 'card disabled'}
+            >
               <div className="iconContainer">
                 <img src={Ethereum} alt="ethereum" />
                 <img src={Arrow} alt="arrow" />
@@ -34,7 +36,9 @@ class Home extends React.Component {
             </div>
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-            <div className="card">
+            <div
+              className={chainId === BSC_CHAIN_ID ? 'card' : 'card disabled'}
+            >
               <div className="iconContainer">
                 <img src={BSC} alt="bsc" />
                 <img src={Arrow} alt="arrow" />

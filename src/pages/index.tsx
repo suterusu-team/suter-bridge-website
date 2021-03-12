@@ -180,7 +180,7 @@ class SuterBridge extends React.Component {
   };
 
   render() {
-    const { connectWalletTxt, account, formType } = this.state;
+    const { connectWalletTxt, account, formType, chainId } = this.state;
     let lang = intl.options.currentLocale;
     const scanLink =
       formType == 'Mint'
@@ -227,7 +227,7 @@ class SuterBridge extends React.Component {
         </Header>
         <Content>
           {account === '' ? (
-            <Home dropDownMenu={this.dropDownMenu} />
+            <Home chainId={chainId} />
           ) : (
             <Form account={account} formType={formType} />
           )}
