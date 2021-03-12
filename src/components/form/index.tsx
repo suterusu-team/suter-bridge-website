@@ -2,6 +2,9 @@ import React from 'react';
 import { Card } from 'antd';
 import Mint from '../mint';
 import Revert from '../revert';
+import Ethereum from '../../static/Ethereum-icon.svg';
+import BSC from '../../static/BSC-icon.svg';
+import Arrow from '../../static/arrow-icon.svg';
 import {
   openNotificationWithIcon,
   EthChainNameMap,
@@ -74,6 +77,27 @@ class Form extends React.Component {
     const { account, formType } = this.props;
     return (
       <div className="form">
+        <div className="topCard">
+          <div className="exchangeBalance">
+            <p>Current Exchangable Balance:</p>
+            <h1>987765578888</h1>
+          </div>
+          <div>
+            {formType === 'mint' ? (
+              <div className="iconContainer">
+                <img src={Ethereum} alt="bsc" />
+                <img src={Arrow} alt="arrow" />
+                <img src={BSC} alt="ethereum" />
+              </div>
+            ) : (
+              <div className="iconContainer">
+                <img src={BSC} alt="bsc" />
+                <img src={Arrow} alt="arrow" />
+                <img src={Ethereum} alt="ethereum" />
+              </div>
+            )}
+          </div>
+        </div>
         <Card
           tabList={tabList}
           activeTabKey={formType}

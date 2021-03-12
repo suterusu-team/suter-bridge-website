@@ -1,9 +1,37 @@
-.suterBridge{
-    .form{
-        .ant-tabs-nav-list{
-            div.ant-tabs-tab:not(.ant-tabs-tab-active){
-                cursor: not-allowed;
-            }
+.suterBridge {
+  .form {
+    .topCard {
+      // width: 360px;
+      // height: 88px;
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      background-image: linear-gradient(to right, #35284f, #867d6b);
+      .iconContainer {
+        img {
+          margin-right: 10px;
         }
+      }
+      .exchangeBalance {
+        padding-top: 15px;
+        p {
+          color: #b9aaff;
+          margin-bottom: 0;
+          font-size: 14px;
+        }
+        h1 {
+          color: #fff;
+          font-size: 20px;
+        }
+      }
     }
+
+    .ant-tabs-nav-list {
+      div.ant-tabs-tab:not(.ant-tabs-tab-active) {
+        cursor: not-allowed;
+      }
+    }
+  }
 }
