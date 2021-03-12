@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Col, Button, Dropdown, Carousel } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import MetaMask from '../../static/metamask.svg';
-import BSC from '../../static/bsc-bridge.svg';
+import Ethereum from '../../static/Ethereum-icon.svg';
+import BSC from '../../static/BSC-icon.svg';
+import Arrow from '../../static/arrow-icon.svg';
 import './index.less';
 
 class Home extends React.Component {
@@ -21,40 +22,25 @@ class Home extends React.Component {
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col span={24}>
-            <div className="metamaskContainer">
-              <div style={{ width: '250px' }}>
-                <Carousel autoplay={true} dots={false}>
-                  <div>
-                    <img src={MetaMask} width="250px" />
-                  </div>
-                  <div>
-                    <img src={BSC} width="250px" />
-                  </div>
-                </Carousel>
+        <Row className="WhichOperationContainer">
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <div className="card">
+              <div className="iconContainer">
+                <img src={Ethereum} alt="ethereum" />
+                <img src={Arrow} alt="arrow" />
+                <img src={BSC} alt="bsc" />
               </div>
+              <h1>Bridge Ethereum Assets to BSC Assets</h1>
             </div>
           </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <div className="tipTextContainer">
-              <p>To mint or revert assets, connect your wallet.</p>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <div className="connectWalletButtonContainer">
-              <Dropdown
-                overlay={dropDownMenu()}
-                onClick={e => e.preventDefault()}
-              >
-                <Button type="primary" size="large">
-                  CONNECT WALLET <DownOutlined />
-                </Button>
-              </Dropdown>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <div className="card">
+              <div className="iconContainer">
+                <img src={BSC} alt="bsc" />
+                <img src={Arrow} alt="arrow" />
+                <img src={Ethereum} alt="ethereum" />
+              </div>
+              <h1>Bridge BSC Assets to Ethereum Assets</h1>
             </div>
           </Col>
         </Row>
