@@ -6,6 +6,11 @@
       background: @cardBg;
       border: 2px solid @cardBorderColor;
       border-radius: 20px;
+      .ant-card-body {
+        @media only screen and (max-width: 600px) {
+          padding: 10px;
+        }
+      }
     }
     .topCard {
       @media only screen and (min-width: 992px) {

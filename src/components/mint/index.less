@@ -22,6 +22,10 @@
         .inputDesc {
           color: @suterColor;
         }
+        .balance {
+          color: #8e8e8e;
+          margin-top: 10px;
+        }
         input {
           height: 50px;
           border-radius: 10px;
@@ -52,59 +56,48 @@
       }
 
       .assetContainer {
-        display: flex;
-        justify-content: space-between;
-        border: 1px solid #d0d2d9;
-        padding: 20px 10px;
+        color: #fff;
         align-items: center;
         border-radius: 4px;
-      }
-
-      .destinationContainer {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        border: 1px solid #d0d2d9;
-        padding: 20px 10px;
-        border-radius: 4px;
-
-        input::-ms-input-placeholder,
-        input::-webkit-input-placeholder {
-          text-align: left;
+        .title {
+          color: @suterColor;
+          margin-bottom: 10px;
         }
-
-        ::placeholder {
-          color: #aaa;
-        }
-
-        .destinationInput {
-          margin-top: 5px;
-          width: 100%;
-          border: 0px solid transparent;
-          outline: none;
-          font-size: 16px;
-          color: rgba(105, 85, 192, 1);
-          font-family: PingFangSC-Thin, sans-serif;
+        .assets {
+          display: flex;
+          justify-content: space-between;
+          font-size: 18px;
+          align-items: center;
+          .assetsDesc {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            align-items: center;
+          }
         }
       }
 
       .btnContainer {
         display: flex;
         justify-content: center;
-        width: 70%;
         margin: 30px auto;
 
-        .ant-btn-primary {
-          color: #fff;
-          background: rgba(105, 85, 192, 1);
-          border-color: rgba(105, 85, 192, 1);
+        button {
+          color: @suterColor;
+          border-color: @suterColor;
           height: 50px;
           font-size: 20px;
+          background: transparent;
+          &:hover {
+            background: @suterColor;
+            color: #000;
+          }
         }
-
-        .ant-btn-primary[disabled] {
-          background: rgba(105, 85, 192, 0.5);
-          border-color: rgba(105, 85, 192, 0.5);
+        button[disabled] {
+          &:hover {
+            background: transparent;
+            color: #fff;
+          }
         }
       }
     }

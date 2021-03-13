@@ -388,26 +388,14 @@ class Mint extends React.Component {
                 <img src={ERC20SuterCoin} />
                 <span>ERC20 SUTER</span>
               </div>
+              <p className="balance">Your SUTER Balance: 133,242.02</p>
             </div>
           </Col>
         </Row>
         <Row>
           <Col span={24}>
-            <div className="assetContainer container">
-              <div>Asset</div>
-              <div>
-                <img src={ERC20SuterCoin} />
-                &nbsp;
-                <span style={{ fontWeight: 'bold' }}>ERC20</span>&nbsp;
-                <span>SUTER</span>
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <div className="destinationContainer container">
-              <div>Destination</div>
+            <div className="inputContainer container">
+              <p className="inputDesc">Recipient Address</p>
               <input
                 className="destinationInput"
                 placeholder="Enter BEP20 SUTER Address"
@@ -421,13 +409,15 @@ class Mint extends React.Component {
         <Row>
           <Col span={24}>
             <div className="assetContainer container">
-              <div>You will receive</div>
-              <div>{suterValueForInput}</div>
-              <div style={{ display: 'flex' }}>
-                <img src={BEP20SuterCoin} />
-                &nbsp;
-                <span style={{ fontWeight: 'bold' }}>BSC</span>&nbsp;
-                <span>SUTER</span>
+              <div className="title">You will receive</div>
+              <div className="assets">
+                <div>{suterValueForInput}</div>
+                <div className="assetsDesc">
+                  <img src={BEP20SuterCoin} />
+                  &nbsp;
+                  <span style={{ fontWeight: 'bold' }}>BEP20</span>&nbsp;
+                  <span>SUTER</span>
+                </div>
               </div>
             </div>
           </Col>
@@ -436,12 +426,12 @@ class Mint extends React.Component {
           <Col span={24}>
             <div className="btnContainer container">
               <Button
-                type="primary"
+                shape="round"
                 block
                 disabled={!canNext}
                 onClick={this.submit}
               >
-                NEXT
+                Confirm
               </Button>
             </div>
           </Col>
