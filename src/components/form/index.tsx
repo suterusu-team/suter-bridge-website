@@ -85,28 +85,20 @@ class Form extends React.Component {
           <div>
             {formType === 'mint' ? (
               <div className="iconContainer">
-                <img src={Ethereum} alt="bsc" />
+                <img src={Ethereum} alt="bsc" className="coin" />
                 <img src={Arrow} alt="arrow" />
-                <img src={BSC} alt="ethereum" />
+                <img src={BSC} alt="ethereum" className="coin" />
               </div>
             ) : (
               <div className="iconContainer">
-                <img src={BSC} alt="bsc" />
+                <img src={BSC} alt="bsc" className="coin" />
                 <img src={Arrow} alt="arrow" />
-                <img src={Ethereum} alt="ethereum" />
+                <img src={Ethereum} alt="ethereum" className="coin" />
               </div>
             )}
           </div>
         </div>
-        <Card
-          tabList={tabList}
-          activeTabKey={formType}
-          onTabChange={key => {
-            this.onTabChange(key, 'key');
-          }}
-        >
-          {contentList[formType](account)}
-        </Card>
+        <Card>{contentList[formType](account)}</Card>
       </div>
     );
   }

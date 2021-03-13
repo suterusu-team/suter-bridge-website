@@ -16,8 +16,7 @@ import {
   UncompleteTaskMessage,
   fetchSuterPrice,
 } from '../tools';
-import ConfirmModal from '../confirmModal';
-import TransactionStatusModal from '../transactionStatusModal';
+import './index.less';
 
 class Mint extends React.Component {
   state = {
@@ -371,56 +370,11 @@ class Mint extends React.Component {
     return (
       <div className="mint">
         {proccesing ? <SpinModal /> : ''}
-        {showConfirmModal ? (
-          <ConfirmModal
-            visible={showConfirmModal}
-            handleOk={this.handleConfirmOk}
-            handleCancel={this.handleConfirmCancel}
-            title={`Confirm to approve to bridge contract ?`}
-            content={`Approve ${suterAmountValue} to bridge contract`}
-          />
-        ) : (
-          ''
-        )}
-        {approveTxid !== '' && approveStatus === 0 ? (
-          <TransactionStatusModal
-            network="eth"
-            initStep={0}
-            visible={true}
-            txid={approveTxid}
-            handleOk={this.callExchange}
-            handleCancel={() => {
-              this.exchangeFinished();
-            }}
-            title={`Mining`}
-            okText={'Next'}
-            needConfirmBlockNum={6}
-          />
-        ) : (
-          ''
-        )}
-        {exchangeTxid !== '' && exchangeStatus === 0 ? (
-          <TransactionStatusModal
-            network="eth"
-            initStep={2}
-            visible={true}
-            txid={exchangeTxid}
-            handleOk={() => {
-              this.exchangeFinished();
-            }}
-            handleCancel={() => {
-              this.exchangeFinished();
-            }}
-            title={`Mining`}
-            okText={'Finished'}
-            needConfirmBlockNum={6}
-          />
-        ) : (
-          ''
-        )}
+        <h1 className="title">Mint</h1>
         <Row>
           <Col span={24}>
             <div className="inputContainer container">
+              <p className="inputDesc">Amount</p>
               <input
                 inputMode="numeric"
                 className="input"
@@ -429,9 +383,11 @@ class Mint extends React.Component {
                 placeholder="0.00 SUTER"
                 type="text"
                 onChange={this.handleSuterAmountChange}
-                style={{ fontSize: `${suterValueFontSize}px` }}
               />
-              <p className="dollarValue">=${dollarValue}</p>
+              <div className="inputAppend">
+                <img src={ERC20SuterCoin} />
+                <span>ERC20 SUTER</span>
+              </div>
             </div>
           </Col>
         </Row>

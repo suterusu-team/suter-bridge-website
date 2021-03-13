@@ -1,17 +1,36 @@
+@import '../../variables.less';
+
 .suterBridge {
   .form {
+    .ant-card {
+      background: @cardBg;
+      border: 2px solid @cardBorderColor;
+      border-radius: 20px;
+    }
     .topCard {
-      // width: 360px;
-      // height: 88px;
+      @media only screen and (min-width: 992px) {
+        width: 33.33%;
+      }
+      @media only screen and (max-width: 600px) {
+        width: 95%;
+        padding: 10px;
+      }
+      border: 2px solid @suterColor;
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       background-image: linear-gradient(to right, #35284f, #867d6b);
       .iconContainer {
         img {
           margin-right: 10px;
+        }
+        @media only screen and (max-width: 600px) {
+          img.coin {
+            width: 40px;
+          }
         }
       }
       .exchangeBalance {

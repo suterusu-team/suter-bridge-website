@@ -1,0 +1,112 @@
+@import '../../variables.less';
+
+.suterBridge {
+  .form {
+    .mint {
+      h1.title {
+        color: #fff;
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        margin-top: 20px;
+      }
+
+      .inputContainer {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        .inputDesc {
+          color: @suterColor;
+        }
+        input {
+          height: 50px;
+          border-radius: 10px;
+          border: 1px solid #979797;
+          background-color: rgba(216, 216, 216, 0.1) !important;
+          color: #fff;
+          font-size: 18px;
+          padding-left: 10px;
+          outline: none;
+          &:focus {
+            border: 1px solid @suterColor;
+          }
+        }
+        .inputAppend {
+          display: flex;
+          justify-content: center;
+          position: absolute;
+          right: 10px;
+          top: 45px;
+          align-items: center;
+          span {
+            color: #fff;
+            font-size: 14px;
+            margin-left: 5px;
+            display: block;
+          }
+        }
+      }
+
+      .assetContainer {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #d0d2d9;
+        padding: 20px 10px;
+        align-items: center;
+        border-radius: 4px;
+      }
+
+      .destinationContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid #d0d2d9;
+        padding: 20px 10px;
+        border-radius: 4px;
+
+        input::-ms-input-placeholder,
+        input::-webkit-input-placeholder {
+          text-align: left;
+        }
+
+        ::placeholder {
+          color: #aaa;
+        }
+
+        .destinationInput {
+          margin-top: 5px;
+          width: 100%;
+          border: 0px solid transparent;
+          outline: none;
+          font-size: 16px;
+          color: rgba(105, 85, 192, 1);
+          font-family: PingFangSC-Thin, sans-serif;
+        }
+      }
+
+      .btnContainer {
+        display: flex;
+        justify-content: center;
+        width: 70%;
+        margin: 30px auto;
+
+        .ant-btn-primary {
+          color: #fff;
+          background: rgba(105, 85, 192, 1);
+          border-color: rgba(105, 85, 192, 1);
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .ant-btn-primary[disabled] {
+          background: rgba(105, 85, 192, 0.5);
+          border-color: rgba(105, 85, 192, 0.5);
+        }
+      }
+    }
+  }
+}
