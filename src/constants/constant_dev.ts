@@ -1,1781 +1,2038 @@
 export default {
   ENV: 'dev',
-  ETH_CHAIN_ID: '0x3',
-  ETHERSCAN: 'https://ropsten.etherscan.io',
-  ETHBRIDGECONTRACTADDRESS: '0x03f85f25e16fF2c6F39A46e096052381D92CeE19',
-  ETHSUTERUSUCONTRACTADDRESS: '0xAd749f513b280E2778a4E5f5C4Fa9976766d4213',
-  ETHSUTERUSUABI: [
-    {
-      inputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'constructor',
-    },
-    {
-      anonymous: false,
-      inputs: [
+  BridgeInfo: {
+    Mint: {
+      CHAIN_ID: '0x3',
+      SCAN: 'https://ropsten.etherscan.io',
+      JSONRPC_URL:
+        'https://ropsten.infura.io/v3/d80602309b7c48e78b80a372a3f6c825',
+      CONTRACT_ADDRESS: '0xEF98c0086bD9511E2901cd5307621AC587e306b0',
+      ABI: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'withdrawtoken',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
-      ],
-      name: 'AdminRoleAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'exchangeFeeRate',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'AdminRoleRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: true,
-          internalType: 'address',
+          constant: true,
+          inputs: [],
+          name: 'gov',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: '_paused',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+            {
+              name: 'BEP20Address',
+              type: 'string',
+            },
+          ],
+          name: 'exchange',
+          outputs: [],
+          payable: true,
+          stateMutability: 'payable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: '_gov',
+              type: 'address',
+            },
+          ],
+          name: 'setgov',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'unpause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'suter',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'tokenwallet',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'paused',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'pause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: '_Gasfee',
+              type: 'uint256',
+            },
+            {
+              name: '_exchangeFeeRate',
+              type: 'uint256',
+            },
+          ],
+          name: 'setFeeandrate',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
           name: 'owner',
-          type: 'address',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'isOwner',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'Approval',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'BlacklistAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'BlacklistRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'previousOwner',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'to',
+              type: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'transfer',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'OwnershipTransferred',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'Paused',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'PauserAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'PauserRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'from',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'Gasfee',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
+          constant: false,
+          inputs: [],
+          name: 'withdrawETH',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
+          constant: false,
+          inputs: [
+            {
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'transferOwnership',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
-      ],
-      name: 'Transfer',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: false,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          inputs: [
+            {
+              name: '_gov',
+              type: 'address',
+            },
+            {
+              name: '_tokenwallet',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'constructor',
         },
-      ],
-      name: 'Unpaused',
-      type: 'event',
-    },
-    {
-      constant: true,
-      inputs: [
         {
-          internalType: 'address',
-          name: '',
-          type: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'user',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'amount',
+              type: 'uint256',
+            },
+            {
+              indexed: false,
+              name: 'ERC20Address',
+              type: 'string',
+            },
+          ],
+          name: 'Exchange',
+          type: 'event',
         },
-      ],
-      name: 'AdminRole',
-      outputs: [
         {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'user',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'Withdraw',
+          type: 'event',
         },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Paused',
+          type: 'event',
         },
-      ],
-      name: 'addAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Unpaused',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'previousOwner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'OwnershipTransferred',
+          type: 'event',
         },
       ],
-      name: 'addBlacklist',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
+      TOEKN_CONTRACT_ADDRESS: '0xAd749f513b280E2778a4E5f5C4Fa9976766d4213',
+      TOEKN_ABI: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          inputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'constructor',
         },
-      ],
-      name: 'addPauser',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
         {
-          internalType: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRoleAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRoleRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'owner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'Approval',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'BlacklistAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'BlacklistRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'previousOwner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'OwnershipTransferred',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Paused',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'PauserAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'PauserRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'from',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'to',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'Transfer',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Unpaused',
+          type: 'event',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              internalType: 'address',
+              name: '',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRole',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addBlacklist',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addPauser',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'owner',
+              type: 'address',
+            },
+            {
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+          ],
+          name: 'allowance',
+          outputs: [
+            {
+              internalType: 'uint256',
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'approve',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'balanceOf',
+          outputs: [
+            {
+              internalType: 'uint256',
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'decimals',
+          outputs: [
+            {
+              internalType: 'uint8',
+              name: '',
+              type: 'uint8',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'subtractedValue',
+              type: 'uint256',
+            },
+          ],
+          name: 'decreaseAllowance',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'addedValue',
+              type: 'uint256',
+            },
+          ],
+          name: 'increaseAllowance',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'isBlacklist',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'isOwner',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'isPauser',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'name',
+          outputs: [
+            {
+              internalType: 'string',
+              name: '',
+              type: 'string',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
           name: 'owner',
-          type: 'address',
+          outputs: [
+            {
+              internalType: 'address',
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: false,
+          inputs: [],
+          name: 'pause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
-      ],
-      name: 'allowance',
-      outputs: [
         {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
+          constant: true,
+          inputs: [],
+          name: 'paused',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'removeAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'removeBlacklist',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'renounceAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'renouncePauser',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'symbol',
+          outputs: [
+            {
+              internalType: 'string',
+              name: '',
+              type: 'string',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'totalSupply',
+          outputs: [
+            {
+              internalType: 'uint256',
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'to',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'transfer',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'from',
+              type: 'address',
+            },
+            {
+              internalType: 'address',
+              name: 'to',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'transferFrom',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'transferOwnership',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'unpause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
     },
-    {
-      constant: false,
-      inputs: [
+    Revert: {
+      CHAIN_ID: '0x61',
+      SCAN: 'https://testnet.bscscan.com',
+      JSONRPC_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      CONTRACT_ADDRESS: '0xB17fEDa3253e0ba42f93dF0489A193929badBFAE',
+      ABI: [
         {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+            {
+              name: 'ERC20Address',
+              type: 'string',
+            },
+          ],
+          name: 'exchange',
+          outputs: [],
+          payable: true,
+          stateMutability: 'payable',
+          type: 'function',
         },
         {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'approve',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'balanceOf',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'decimals',
-      outputs: [
-        {
-          internalType: 'uint8',
-          name: '',
-          type: 'uint8',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: false,
+          inputs: [],
+          name: 'pause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          internalType: 'uint256',
-          name: 'subtractedValue',
-          type: 'uint256',
-        },
-      ],
-      name: 'decreaseAllowance',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: '_Gasfee',
+              type: 'uint256',
+            },
+            {
+              name: '_exchangeFeeRate',
+              type: 'uint256',
+            },
+          ],
+          name: 'setFeeandrate',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          internalType: 'uint256',
-          name: 'addedValue',
-          type: 'uint256',
-        },
-      ],
-      name: 'increaseAllowance',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'isBlacklist',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'isOwner',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'isPauser',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'name',
-      outputs: [
-        {
-          internalType: 'string',
-          name: '',
-          type: 'string',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'owner',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'pause',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'paused',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'removeAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'removeBlacklist',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'renounceAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'renouncePauser',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'symbol',
-      outputs: [
-        {
-          internalType: 'string',
-          name: '',
-          type: 'string',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'totalSupply',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: '_gov',
+              type: 'address',
+            },
+          ],
+          name: 'setgov',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'transfer',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'from',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'to',
+              type: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'transfer',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'transferOwnership',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'transferFrom',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'transferOwnership',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'unpause',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-  ],
-  ETHBRIDGEABI: [
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: '_gov',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'constructor',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'user',
-          type: 'address',
+          constant: false,
+          inputs: [],
+          name: 'unpause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
+          constant: false,
+          inputs: [],
+          name: 'withdrawETH',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'string',
-          name: 'trc20',
-          type: 'string',
-        },
-      ],
-      name: 'Exchange',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'previousOwner',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'withdrawtoken',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'OwnershipTransferred',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'user',
-          type: 'address',
+          inputs: [
+            {
+              name: '_gov',
+              type: 'address',
+            },
+            {
+              name: '_tokenwallet',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'constructor',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-      ],
-      name: 'Withdraw',
-      type: 'event',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-        {
-          internalType: 'string',
-          name: 'trc20',
-          type: 'string',
-        },
-      ],
-      name: 'exchange',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'gov',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'isOwner',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'owner',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: '_gov',
-          type: 'address',
-        },
-      ],
-      name: 'setgov',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'suter',
-      outputs: [
-        {
-          internalType: 'contract IERC20',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'user',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'amount',
+              type: 'uint256',
+            },
+            {
+              indexed: false,
+              name: 'ERC20Address',
+              type: 'string',
+            },
+          ],
+          name: 'Exchange',
+          type: 'event',
         },
         {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'user',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'Withdraw',
+          type: 'event',
         },
-      ],
-      name: 'transfer',
-      outputs: [
         {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Paused',
+          type: 'event',
         },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Unpaused',
+          type: 'event',
         },
-      ],
-      name: 'transferOwnership',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'previousOwner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'OwnershipTransferred',
+          type: 'event',
         },
-      ],
-      name: 'withdraw',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-  ],
-  BSC_CHAIN_ID: '0x61',
-  BSCSCAN: 'https://testnet.bscscan.com',
-  BSCBRIDGECONTRACTADDRESS: '0xBaa4b37a792cd2ff9621E3CB8468010d444de2dE',
-  BSCSUTERUSUCONTRACTADDRESS: '0x31A12B827b4FD44ea0d81ddaCa57f691EEe40362',
-  BSCSUTERUSUABI: [
-    {
-      inputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'constructor',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: '_paused',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'AdminRoleAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'exchangeFeeRate',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'AdminRoleRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: true,
-          internalType: 'address',
+          constant: true,
+          inputs: [],
+          name: 'Gasfee',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'gov',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'isOwner',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
           name: 'owner',
-          type: 'address',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'paused',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'Approval',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'BlacklistAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'BlacklistRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'previousOwner',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'suter',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'tokenwallet',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
       ],
-      name: 'OwnershipTransferred',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
+      TOEKN_CONTRACT_ADDRESS: '0x463E3dBdF69fAeF2853A81d4a48846C47d8c44fe',
+      TOEKN_ABI: [
         {
-          indexed: false,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'Paused',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'PauserAdded',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'PauserRemoved',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'from',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'name',
+          outputs: [
+            {
+              name: '',
+              type: 'string',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'approve',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
+          constant: true,
+          inputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRole',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'Transfer',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
         {
-          indexed: false,
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'removeAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
-      ],
-      name: 'Unpaused',
-      type: 'event',
-    },
-    {
-      constant: true,
-      inputs: [
         {
-          internalType: 'address',
-          name: '',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'totalSupply',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'AdminRole',
-      outputs: [
         {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
+          constant: false,
+          inputs: [
+            {
+              name: 'from',
+              type: 'address',
+            },
+            {
+              name: 'to',
+              type: 'address',
+            },
+            {
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'transferFrom',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'decimals',
+          outputs: [
+            {
+              name: '',
+              type: 'uint8',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'addAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'isBlacklist',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'addBlacklist',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
         {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'cap',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'addPauser',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
         {
-          internalType: 'address',
+          constant: false,
+          inputs: [
+            {
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              name: 'addedValue',
+              type: 'uint256',
+            },
+          ],
+          name: 'increaseAllowance',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'unpause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'mint',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'burn',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'isPauser',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: 'paused',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'renouncePauser',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'balanceOf',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+            },
+          ],
+          name: 'burnFrom',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addPauser',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'pause',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: 'renounceAdmin',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [],
           name: 'owner',
-          type: 'address',
+          outputs: [
+            {
+              name: '',
+              type: 'address',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
         {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
+          constant: true,
+          inputs: [],
+          name: 'isOwner',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
         },
-      ],
-      name: 'allowance',
-      outputs: [
         {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
+          constant: true,
+          inputs: [],
+          name: 'symbol',
+          outputs: [
+            {
+              name: '',
+              type: 'string',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'addBlacklist',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              name: 'subtractedValue',
+              type: 'uint256',
+            },
+          ],
+          name: 'decreaseAllowance',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'to',
+              type: 'address',
+            },
+            {
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'transfer',
+          outputs: [
+            {
+              name: '',
+              type: 'bool',
+            },
+          ],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              name: 'owner',
+              type: 'address',
+            },
+            {
+              name: 'spender',
+              type: 'address',
+            },
+          ],
+          name: 'allowance',
+          outputs: [
+            {
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          payable: false,
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'removeBlacklist',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'transferOwnership',
+          outputs: [],
+          payable: false,
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Paused',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'Unpaused',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'PauserAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'PauserRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'from',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              name: 'to',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'Transfer',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'owner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              indexed: false,
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'Approval',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'BlacklistAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'BlacklistRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRoleAdded',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'account',
+              type: 'address',
+            },
+          ],
+          name: 'AdminRoleRemoved',
+          type: 'event',
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              name: 'previousOwner',
+              type: 'address',
+            },
+            {
+              indexed: true,
+              name: 'newOwner',
+              type: 'address',
+            },
+          ],
+          name: 'OwnershipTransferred',
+          type: 'event',
         },
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
     },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'approve',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'balanceOf',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'decimals',
-      outputs: [
-        {
-          internalType: 'uint8',
-          name: '',
-          type: 'uint8',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'subtractedValue',
-          type: 'uint256',
-        },
-      ],
-      name: 'decreaseAllowance',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'spender',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'addedValue',
-          type: 'uint256',
-        },
-      ],
-      name: 'increaseAllowance',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'isBlacklist',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'isOwner',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'isPauser',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'name',
-      outputs: [
-        {
-          internalType: 'string',
-          name: '',
-          type: 'string',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'owner',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'pause',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'paused',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'removeAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'account',
-          type: 'address',
-        },
-      ],
-      name: 'removeBlacklist',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'renounceAdmin',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'renouncePauser',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'symbol',
-      outputs: [
-        {
-          internalType: 'string',
-          name: '',
-          type: 'string',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'totalSupply',
-      outputs: [
-        {
-          internalType: 'uint256',
-          name: '',
-          type: 'uint256',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'transfer',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'from',
-          type: 'address',
-        },
-        {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'value',
-          type: 'uint256',
-        },
-      ],
-      name: 'transferFrom',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'transferOwnership',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [],
-      name: 'unpause',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-  ],
-  BSCBRIDGEABI: [
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: '_gov',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'constructor',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'user',
-          type: 'address',
-        },
-        {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-        {
-          indexed: false,
-          internalType: 'string',
-          name: 'trc20',
-          type: 'string',
-        },
-      ],
-      name: 'Exchange',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'previousOwner',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'OwnershipTransferred',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'user',
-          type: 'address',
-        },
-        {
-          indexed: false,
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-      ],
-      name: 'Withdraw',
-      type: 'event',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-        {
-          internalType: 'string',
-          name: 'trc20',
-          type: 'string',
-        },
-      ],
-      name: 'exchange',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'gov',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'isOwner',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'owner',
-      outputs: [
-        {
-          internalType: 'address',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: '_gov',
-          type: 'address',
-        },
-      ],
-      name: 'setgov',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'suter',
-      outputs: [
-        {
-          internalType: 'contract IERC20',
-          name: '',
-          type: 'address',
-        },
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'to',
-          type: 'address',
-        },
-        {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-      ],
-      name: 'transfer',
-      outputs: [
-        {
-          internalType: 'bool',
-          name: '',
-          type: 'bool',
-        },
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'address',
-          name: 'newOwner',
-          type: 'address',
-        },
-      ],
-      name: 'transferOwnership',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'amount',
-          type: 'uint256',
-        },
-      ],
-      name: 'withdraw',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-  ],
+  },
 };

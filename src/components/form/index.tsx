@@ -1,88 +1,143 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import Mint from '../mint';
 import Revert from '../revert';
-import {
-  openNotificationWithIcon,
-  EthChainNameMap,
-  BscChainNameMap,
-} from '../../components/tools';
+import Ethereum from '../../static/Ethereum-icon.svg';
+import BSC from '../../static/BSC-icon.svg';
+import Arrow from '../../static/arrow-icon.svg';
+import Web3 from 'web3';
+var Contract = require('web3-eth-contract');
+
 import './index.less';
-
-const tabList = [
-  {
-    key: 'Mint',
-    tab: 'Mint',
-  },
-  {
-    key: 'Revert',
-    tab: 'Revert',
-  },
-];
-
-const contentList = {
-  Mint: function(account) {
-    return <Mint account={account} />;
-  },
-  Revert: function(account) {
-    return <Revert account={account} />;
-  },
-};
-
 class Form extends React.Component {
+  state = {
+    exchangeBalance: 0,
+    accountSuterBalance: 0,
+    updateKey: '',
+  };
   constructor(props) {
     super(props);
+    this.whichFormType = this.whichFormType.bind(this);
+    this.getAccountSuterBalance = this.getAccountSuterBalance.bind(this);
+    this.getExchangeBalance = this.getExchangeBalance.bind(this);
+    this.updateKeyFunc = this.updateKeyFunc.bind(this);
   }
-  tabListWrapper = () => {
-    const { formType } = this.props;
-    let newTabList = [];
-    for (const item of tabList) {
-      let newItem = {};
-      if (item['key'] !== formType) {
-        newItem = { ...item, disabled: true };
-      } else {
-        newItem = { ...item };
-      }
-      newTabList.push(newItem);
-    }
-    return newTabList;
-  };
 
-  onTabChange = (key, type) => {
+  async componentDidMount() {
+    await this.getExchangeBalance();
+    await this.getAccountSuterBalance();
+  }
+
+  async updateData() {
+    await this.getExchangeBalance();
+    await this.getAccountSuterBalance();
+  }
+
+  async updateKeyFunc() {
+    await this.updateData();
+    let key = Math.random()
+      .toString(36)
+      .substr(2, 5);
+    this.setState({ updateKey: key });
+  }
+
+  async getExchangeBalance() {
     const { formType } = this.props;
-    if (key == formType) {
-      return;
-    }
-    if (key == 'Mint') {
-      openNotificationWithIcon(
-        'Invalid operation',
-        `${key} is not allowed, please connect Metamask to ${EthChainNameMap[ETH_CHAIN_ID]}`,
-        'warning',
-        4.5,
-      );
-    } else {
-      openNotificationWithIcon(
-        'Invalid operation',
-        `${key} is not allowed, please connect Metamask to ${BscChainNameMap[BSC_CHAIN_ID]}`,
-        'warning',
-        4.5,
-      );
-    }
-  };
+    let exchangeBridgeInfo =
+      formType === 'Mint' ? BridgeInfo['Revert'] : BridgeInfo['Mint'];
+    const suterTokenContract = new Contract(
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
+    let balance = await suterTokenContract.methods
+      .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
+      .call();
+    this.setState({ exchangeBalance: balance / 10 ** 18 });
+  }
+
+  async getAccountSuterBalance() {
+    const { formType, account } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
+    const suterTokenContract = new Contract(
+      bridgeInfo.TOEKN_ABI,
+      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(window.ethereum);
+    let balance = await suterTokenContract.methods.balanceOf(account).call();
+    this.setState({ accountSuterBalance: balance / 10 ** 18 });
+  }
+
+  whichFormType() {
+    const { account, formType, intl } = this.props;
+    let { exchangeBalance, accountSuterBalance, updateKey } = this.state;
+    return (
+      <>
+        {formType === 'Mint' ? (
+          <Mint
+            intl={intl}
+            key={updateKey}
+            formType={formType}
+            account={account}
+            exchangeBalance={exchangeBalance}
+            suterBalance={accountSuterBalance}
+            updateKeyFunc={this.updateKeyFunc}
+          />
+        ) : (
+          <Revert
+            intl={intl}
+            key={updateKey}
+            formType={formType}
+            account={account}
+            exchangeBalance={exchangeBalance}
+            suterBalance={accountSuterBalance}
+            updateKeyFunc={this.updateKeyFunc}
+          />
+        )}
+      </>
+    );
+  }
 
   render() {
-    const { account, formType } = this.props;
+    const { formType, intl } = this.props;
+    let { exchangeBalance } = this.state;
     return (
       <div className="form">
-        <Card
-          tabList={tabList}
-          activeTabKey={formType}
-          onTabChange={key => {
-            this.onTabChange(key, 'key');
-          }}
-        >
-          {contentList[formType](account)}
-        </Card>
+        <div className="topCard">
+          <div className="exchangeBalance">
+            <div className="titleContainer">
+              <p>{intl.get('CurrentExchangableBalance')}</p>
+              <Tooltip
+                placement="topLeft"
+                title={intl.get('CurrentExchangableBalanceTips')}
+                trigger={['hover', 'click']}
+              >
+                &nbsp;
+                <QuestionCircleOutlined className="i" style={{ zIndex: 100 }} />
+              </Tooltip>
+            </div>
+            <h1>{exchangeBalance}</h1>
+          </div>
+          <div>
+            {formType === 'mint' ? (
+              <div className="iconContainer">
+                <img src={Ethereum} alt="bsc" className="coin" />
+                <img src={Arrow} alt="arrow" />
+                <img src={BSC} alt="ethereum" className="coin" />
+              </div>
+            ) : (
+              <div className="iconContainer">
+                <img src={BSC} alt="bsc" className="coin" />
+                <img src={Arrow} alt="arrow" />
+                <img src={Ethereum} alt="ethereum" className="coin" />
+              </div>
+            )}
+          </div>
+        </div>
+        <Card>{this.whichFormType()}</Card>
       </div>
     );
   }
