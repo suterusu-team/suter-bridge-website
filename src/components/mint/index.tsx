@@ -13,7 +13,7 @@ class Mint extends React.Component {
   state = {
     suterAmount: '',
     destinationAddress: '',
-    proccesing: true,
+    proccesing: false,
     suterBalance: 0,
     btnTxt: 'Confirm',
   };
@@ -46,6 +46,7 @@ class Mint extends React.Component {
     let { destinationAddress } = this.state;
     let suterAmount = e.target.value;
     if (!this.checkNumber(suterAmount)) {
+      this.setState({ suterAmount: 0 });
       return;
     }
     this.setState({ suterAmount: parseFloat(suterAmount) });
