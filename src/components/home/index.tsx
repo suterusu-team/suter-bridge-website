@@ -45,12 +45,17 @@ class Home extends React.Component {
         <Row className="WhichOperationContainer">
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <div
-              className={chainId === ETH_CHAIN_ID ? 'card' : 'card disabled'}
+              className={
+                chainId === BridgeInfo.Mint.CHAIN_ID ? 'card' : 'card disabled'
+              }
               onClick={
-                chainId === ETH_CHAIN_ID
+                chainId === BridgeInfo.Mint.CHAIN_ID
                   ? connectMetaMask
                   : () => {
-                      this.wrongChainIdNotification(ETH_CHAIN_ID, 'eth');
+                      this.wrongChainIdNotification(
+                        BridgeInfo.Mint.CHAIN_ID,
+                        'eth',
+                      );
                     }
               }
             >
@@ -64,12 +69,19 @@ class Home extends React.Component {
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
             <div
-              className={chainId === BSC_CHAIN_ID ? 'card' : 'card disabled'}
+              className={
+                chainId === BridgeInfo.Revert.CHAIN_ID
+                  ? 'card'
+                  : 'card disabled'
+              }
               onClick={
-                chainId === BSC_CHAIN_ID
+                chainId === BridgeInfo.Revert.CHAIN_ID
                   ? connectMetaMask
                   : () => {
-                      this.wrongChainIdNotification(BSC_CHAIN_ID, 'bsc');
+                      this.wrongChainIdNotification(
+                        BridgeInfo.Revert.CHAIN_ID,
+                        'bsc',
+                      );
                     }
               }
             >

@@ -33,12 +33,11 @@ class SuterBridge extends React.Component {
     super(props);
     this.checkMetaMaskStatus = this.checkMetaMaskStatus.bind(this);
     this.setCurrentAccount = this.setCurrentAccount.bind(this);
-    this.dropDownMenu = this.dropDownMenu.bind(this);
     this.connectMetaMask = this.connectMetaMask.bind(this);
     this.checkEthNetworkType = this.checkEthNetworkType.bind(this);
   }
   componentDidMount() {
-    setTimeout(this.checkMetaMaskStatus, 1000);
+    setTimeout(this.checkMetaMaskStatus, 1500);
     this.loadLocales();
   }
 
@@ -81,7 +80,7 @@ class SuterBridge extends React.Component {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts[0];
     let { chainId } = this.state;
-    if (chainId === ETH_CHAIN_ID) {
+    if (chainId === BridgeInfo.Mint.CHAIN_ID) {
       this.setCurrentAccount(account, 'Mint');
     } else {
       this.setCurrentAccount(account, 'Revert');
@@ -138,41 +137,21 @@ class SuterBridge extends React.Component {
     this.setState({ chainId: window.ethereum.chainId });
     if (
       window.ethereum &&
-      (window.ethereum.chainId == ETH_CHAIN_ID ||
-        window.ethereum.chainId == BSC_CHAIN_ID)
+      (window.ethereum.chainId == BridgeInfo.Mint.CHAIN_ID ||
+        window.ethereum.chainId == BridgeInfo.Revert.CHAIN_ID)
     ) {
       // this.connectMetaMask();
     } else {
       openNotificationWithIcon(
         'Network error',
-        `Please change Metamask network to ${EthChainNameMap[ETH_CHAIN_ID]} or ${BscChainNameMap[BSC_CHAIN_ID]}`,
+        `Please change Metamask network to ${
+          EthChainNameMap[BridgeInfo.Mint.CHAIN_ID]
+        } or ${BscChainNameMap[BridgeInfo.Revert.CHAIN_ID]}`,
         'warning',
         4.5,
       );
     }
   }
-
-  dropDownMenu = () => {
-    const { metamaskInstalled, chainId } = this.state;
-    return (
-      <Menu>
-        <Menu.Item
-          key="1"
-          onClick={() => this.connectMetaMask()}
-          disabled={!metamaskInstalled || chainId != ETH_CHAIN_ID}
-        >
-          Bridge Ethereum Assets to BSC Assets
-        </Menu.Item>
-        <Menu.Item
-          key="2"
-          onClick={() => this.connectMetaMask()}
-          disabled={!metamaskInstalled || chainId != BSC_CHAIN_ID}
-        >
-          Bridge BSC Assets to Ethereum Assets
-        </Menu.Item>
-      </Menu>
-    );
-  };
 
   langChangeTo = lang => {
     localStorage.setItem('lang', lang);
@@ -184,8 +163,8 @@ class SuterBridge extends React.Component {
     let lang = intl.options.currentLocale;
     const scanLink =
       formType == 'Mint'
-        ? `${ETHERSCAN}/address/${account}`
-        : `${BSCSCAN}/address/${account}`;
+        ? `${BridgeInfo.Mint.SCAN}/address/${account}`
+        : `${BridgeInfo.Revert.SCAN}/address/${account}`;
     return (
       <Layout className="suterBridge">
         <Header>

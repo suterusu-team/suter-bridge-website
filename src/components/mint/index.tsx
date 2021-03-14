@@ -8,12 +8,10 @@ import SpinModal from '../spinModal';
 var Contract = require('web3-eth-contract');
 import {
   openNotificationWithIcon,
-  openNotificationWithKey,
   MessageWithAlink,
   suterValueForInputFunc,
   suterAmountForInput,
   getSuterValueNumber,
-  UncompleteTaskMessage,
   fetchSuterPrice,
 } from '../tools';
 import './index.less';
@@ -22,85 +20,20 @@ class Mint extends React.Component {
   state = {
     suterValue: '',
     suterTxt: 'SUTER',
-    dollarValue: 0,
-    suterPrice: 0,
     suterValueFontSize: 52,
     destinationAddress: '',
-    showConfirmModal: false,
-    submitApprove: false,
-    approveTxid: '',
-    approveStatus: 0,
-    exchangeTxid: '',
-    exchangeStatus: 0,
-    uncompleteTasks: [],
+    proccesing: false,
   };
 
   constructor(props) {
     super(props);
     this.handleSuterAmountChange = this.handleSuterAmountChange.bind(this);
     this.assignRef = this.assignRef.bind(this);
-    this.setSuterPrice = this.setSuterPrice.bind(this);
     this.handleDestinationChange = this.handleDestinationChange.bind(this);
-    this.confirmToApprove = this.confirmToApprove.bind(this);
     this.callApprove = this.callApprove.bind(this);
     this.callExchange = this.callExchange.bind(this);
-    this.submit = this.submit.bind(this);
-    this.handleConfirmOk = this.handleConfirmOk.bind(this);
-    this.handleConfirmCancel = this.handleConfirmCancel.bind(this);
-    this.newTask = this.newTask.bind(this);
-    this.approveFinished = this.approveFinished.bind(this);
-    this.exchangeFinished = this.exchangeFinished.bind(this);
-    this.updateExchangeTxid = this.updateExchangeTxid.bind(this);
-    this.updateExchangeStatus = this.updateExchangeStatus.bind(this);
-    this.fetchUncompleteTasks = this.fetchUncompleteTasks.bind(this);
-    this.recoverTask = this.recoverTask.bind(this);
   }
-  componentDidMount() {
-    this.fetchUncompleteTasks();
-    this.setSuterPrice();
-  }
-
-  recoverTask(task) {
-    this.setState({
-      suterValue: task['amount'].toString(),
-      dollarValue: this.state.suterPrice * task['amount'],
-      destinationAddress: task['destinationAddress'],
-      approveTxid: task['approveTxid'],
-      exchangeTxid: task['exchangeTxid'],
-      submitApprove: true,
-      proccesing: false,
-    });
-  }
-
-  fetchUncompleteTasks() {
-    let mintTaskKey = `${this.props.account}Task`;
-    let taskQueue = (localStorage.getItem(mintTaskKey) || '').split(',');
-    taskQueue = taskQueue.filter(item => item);
-    let uncompleteTasks = [];
-    for (const key of taskQueue) {
-      let myTask = localStorage.getItem(key);
-      if (!myTask) {
-        continue;
-      }
-      const item = JSON.parse(myTask);
-      if (item['exchangeStatus'] != 1) {
-        uncompleteTasks.push(item);
-      }
-    }
-    this.setState({ uncompleteTasks: uncompleteTasks }, () => {
-      const { uncompleteTasks } = this.state;
-      for (const task of uncompleteTasks) {
-        openNotificationWithKey(
-          `${task['account']}${task['approveTxid']}`,
-          'Uncomplete task',
-          <UncompleteTaskMessage task={task} network="eth" />,
-          'info',
-          0,
-          () => this.recoverTask(task),
-        );
-      }
-    });
-  }
+  componentDidMount() {}
 
   async setSuterPrice() {
     let price = await fetchSuterPrice();
@@ -186,19 +119,6 @@ class Mint extends React.Component {
     }
   }
 
-  confirmToApprove() {
-    this.setState({ showConfirmModal: true });
-  }
-
-  handleConfirmOk() {
-    this.setState({ showConfirmModal: false, submitApprove: true });
-    this.callApprove();
-  }
-
-  handleConfirmCancel() {
-    this.setState({ showConfirmModal: false });
-  }
-
   async callApprove() {
     this.setState({ proccesing: true });
     const suterValue = this.state.suterValue;
@@ -238,22 +158,10 @@ class Mint extends React.Component {
     );
     this.setState({ proccesing: false });
     this.setState({ approveTxid: txHash });
-    this.newTask(txHash, suterAmount);
-  }
-
-  approveFinished() {
-    this.setState({ approveStatus: 1 });
-  }
-  exchangeFinished() {
-    this.setState({ exchangeStatus: 1 });
-    this.updateExchangeStatus();
-    window.location.reload(false);
   }
 
   async callExchange() {
     this.setState({ proccesing: true });
-    this.approveFinished();
-    this.setState({ submitApprove: true });
     const { suterValue, destinationAddress } = this.state;
     const suterAmount = getSuterValueNumber(suterValue);
     let txHash;
@@ -296,77 +204,13 @@ class Mint extends React.Component {
     this.setState({ exchangeTxid: txHash, proccesing: false });
     this.updateExchangeTxid(txHash);
   }
-
-  newTask(approveTxid: string, amount: number) {
-    const { destinationAddress } = this.state;
-    let myTaskKey = `myTask${this.props.account}${approveTxid}`;
-    let task = {
-      account: this.props.account,
-      destinationAddress: destinationAddress,
-      approveTxid: approveTxid,
-      amount: amount,
-      exchangeTxid: '',
-      exchangeStatus: 0,
-    };
-    localStorage.setItem(myTaskKey, JSON.stringify(task));
-
-    let mintTaskKey = `${this.props.account}Task`;
-    let taskQueue = (localStorage.getItem(mintTaskKey) || '').split(',');
-    taskQueue = taskQueue.filter(item => item);
-    taskQueue.push(myTaskKey);
-    localStorage.setItem(mintTaskKey, taskQueue);
-  }
-
-  updateExchangeTxid(exchangeTxid: string) {
-    const { approveTxid } = this.state;
-    let myTaskKey = `myTask${this.props.account}${approveTxid}`;
-    let myTask = localStorage.getItem(myTaskKey);
-    if (!myTask) {
-      console.log(`Can't find a task with key ${myTaskKey}`);
-      return;
-    }
-    let myTaskObject = JSON.parse(myTask);
-    myTaskObject['exchangeTxid'] = exchangeTxid;
-    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
-  }
-
-  updateExchangeStatus() {
-    const { approveTxid } = this.state;
-    let myTaskKey = `myTask${this.props.account}${approveTxid}`;
-    let myTask = localStorage.getItem(myTaskKey);
-    if (!myTask) {
-      console.log(`Can't find a task with key ${myTaskKey}`);
-      return;
-    }
-    let myTaskObject = JSON.parse(myTask);
-    myTaskObject['exchangeStatus'] = 1;
-    const now = new Date();
-    // 3 hour expired
-    myTaskObject.expiry = now.getTime() + 7200000;
-    localStorage.setItem(myTaskKey, JSON.stringify(myTaskObject));
-  }
-
   render() {
-    const {
-      suterValue,
-      suterTxt,
-      dollarValue,
-      suterValueFontSize,
-      destinationAddress,
-      showConfirmModal,
-      approveTxid,
-      submitApprove,
-      approveStatus,
-      exchangeTxid,
-      exchangeStatus,
-      proccesing,
-    } = this.state;
+    const { suterValue, suterTxt, destinationAddress, proccesing } = this.state;
     const suterValueForInput = suterValueForInputFunc(suterValue);
     const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
     const canNext =
       WAValidator.validate(destinationAddress, 'eth') &&
-      getSuterValueNumber(suterValue) > 0 &&
-      !submitApprove;
+      getSuterValueNumber(suterValue) > 0;
     return (
       <div className="mint">
         {proccesing ? <SpinModal /> : ''}
