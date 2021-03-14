@@ -11,7 +11,7 @@ import './index.less';
 
 class Mint extends React.Component {
   state = {
-    suterAmount: '',
+    suterAmount: 0,
     destinationAddress: '',
     proccesing: false,
     suterBalance: 0,

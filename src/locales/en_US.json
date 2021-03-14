@@ -7,11 +7,13 @@
   "CurrentExchangableBalanceTips": "Current Exchangable Balance is the balance that is  currently in Suter Bridge Smart Contract. When there is not enough balance on Suter Bridge, the admin of Suter Bridge will update the balance.",
   "Mint": "Mint",
   "EnterYourBEP20Address": "Enter Your BEP20 Address",
+  "EnterYourERC20Address": "Enter Your ERC20 Address",
   "RecipientAddress": "Recipient Address",
   "Youwillreceive": "You will receive",
   "Confirm": "Confirm",
   "Amount": "Amount",
   "YourSUTERBalance": "Your SUTER Balance",
   "InsuffientBalance": "Insuffient Balance",
-  "InvalidDestinationAddress": "Invalid Destination Address"
+  "InvalidDestinationAddress": "Invalid Destination Address",
+  "Revert": "Revert"
 }

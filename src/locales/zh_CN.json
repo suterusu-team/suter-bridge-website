@@ -7,11 +7,13 @@
   "CurrentExchangableBalanceTips": "当前可兑换的余额是当前Suter Bridge中的余额，当余额不足时，管理人会更新余额。",
   "Mint": "铸造",
   "EnterYourBEP20Address": "输入你的BEP20地址",
+  "EnterYourERC20Address": "输入你的ERC20地址",
   "RecipientAddress": "收款账号",
   "Youwillreceive": "你将会收到",
   "Confirm": "确认",
   "Amount": "数量",
   "YourSUTERBalance": "您的SUTER余额",
   "InsuffientBalance": "余额不足",
-  "InvalidDestinationAddress": "无效收款地址"
+  "InvalidDestinationAddress": "无效收款地址",
+  "Revert": "归还"
 }
