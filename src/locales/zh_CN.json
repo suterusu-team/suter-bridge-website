@@ -15,5 +15,8 @@
   "YourSUTERBalance": "您的SUTER余额",
   "InsuffientBalance": "余额不足",
   "InvalidDestinationAddress": "无效收款地址",
-  "Revert": "归还"
+  "Revert": "归还",
+  "Processing": "处理中",
+  "YourRequest": "您的请求",
+  "SpinTips": "不要刷新您的页面，可能需要花费2到3分钟完成您的请求。"
 }

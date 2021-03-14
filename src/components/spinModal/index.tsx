@@ -4,6 +4,7 @@ import './index.less';
 
 class SpinModal extends React.Component {
   render() {
+    let { intl } = this.props;
     return (
       <>
         <Modal
@@ -15,12 +16,9 @@ class SpinModal extends React.Component {
           centered
         >
           <div className="spinContainer">
-            <h1 style={{ marginBottom: 0 }}>Processing</h1>
-            <h1>Your Request</h1>
-            <p>
-              Don't refresh your page and it might take up to 2 to 3 minutes to
-              complete your request.
-            </p>
+            <h1 style={{ marginBottom: 0 }}>{intl.get('Processing')}</h1>
+            <h1>{intl.get('YourRequest')}</h1>
+            <p>{intl.get('SpinTips')}</p>
             <Spin size="large" />
           </div>
         </Modal>

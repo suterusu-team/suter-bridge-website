@@ -119,7 +119,7 @@ class Form extends React.Component {
                 <QuestionCircleOutlined className="i" style={{ zIndex: 100 }} />
               </Tooltip>
             </div>
-            <h1>{exchangeBalance}</h1>
+            <h1>{exchangeBalance.toLocaleString()}</h1>
           </div>
           <div>
             {formType === 'mint' ? (
