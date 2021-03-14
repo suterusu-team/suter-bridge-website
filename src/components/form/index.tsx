@@ -5,23 +5,17 @@ import Revert from '../revert';
 import Ethereum from '../../static/Ethereum-icon.svg';
 import BSC from '../../static/BSC-icon.svg';
 import Arrow from '../../static/arrow-icon.svg';
+
+import Web3 from 'web3';
+import SpinModal from '../spinModal';
+var Contract = require('web3-eth-contract');
+
 import {
   openNotificationWithIcon,
   EthChainNameMap,
   BscChainNameMap,
 } from '../../components/tools';
 import './index.less';
-
-const tabList = [
-  {
-    key: 'Mint',
-    tab: 'Mint',
-  },
-  {
-    key: 'Revert',
-    tab: 'Revert',
-  },
-];
 
 const contentList = {
   Mint: function(account) {
@@ -33,54 +27,40 @@ const contentList = {
 };
 
 class Form extends React.Component {
+  state = {
+    exchangeBalance: 0,
+  };
   constructor(props) {
     super(props);
   }
-  tabListWrapper = () => {
-    const { formType } = this.props;
-    let newTabList = [];
-    for (const item of tabList) {
-      let newItem = {};
-      if (item['key'] !== formType) {
-        newItem = { ...item, disabled: true };
-      } else {
-        newItem = { ...item };
-      }
-      newTabList.push(newItem);
-    }
-    return newTabList;
-  };
 
-  onTabChange = (key, type) => {
+  async componentDidMount() {
+    await this.getExchangeBalance();
+  }
+
+  async getExchangeBalance() {
     const { formType } = this.props;
-    if (key == formType) {
-      return;
-    }
-    if (key == 'Mint') {
-      openNotificationWithIcon(
-        'Invalid operation',
-        `${key} is not allowed, please connect Metamask to ${EthChainNameMap[ETH_CHAIN_ID]}`,
-        'warning',
-        4.5,
-      );
-    } else {
-      openNotificationWithIcon(
-        'Invalid operation',
-        `${key} is not allowed, please connect Metamask to ${BscChainNameMap[BSC_CHAIN_ID]}`,
-        'warning',
-        4.5,
-      );
-    }
-  };
+    let bridgeInfo = BridgeInfo[formType];
+    const suterTokenContract = new Contract(
+      bridgeInfo.TOEKN_ABI,
+      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(window.ethereum);
+    let balance = await suterTokenContract.methods
+      .balanceOf(bridgeInfo.CONTRACT_ADDRESS)
+      .call();
+    this.setState({ exchangeBalance: balance / 10 ** 18 });
+  }
 
   render() {
     const { account, formType } = this.props;
+    let { exchangeBalance } = this.state;
     return (
       <div className="form">
         <div className="topCard">
           <div className="exchangeBalance">
             <p>Current Exchangable Balance:</p>
-            <h1>987765578888</h1>
+            <h1>{exchangeBalance}</h1>
           </div>
           <div>
             {formType === 'mint' ? (
