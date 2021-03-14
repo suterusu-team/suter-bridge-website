@@ -4,6 +4,8 @@ export default {
     Mint: {
       CHAIN_ID: '0x3',
       SCAN: 'https://ropsten.etherscan.io',
+      JSONRPC_URL:
+        'https://ropsten.infura.io/v3/d80602309b7c48e78b80a372a3f6c825',
       CONTRACT_ADDRESS: '0xEF98c0086bD9511E2901cd5307621AC587e306b0',
       ABI: [
         {
@@ -1018,6 +1020,7 @@ export default {
     Revert: {
       CHAIN_ID: '0x61',
       SCAN: 'https://testnet.bscscan.com',
+      JSONRPC_URL: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       CONTRACT_ADDRESS: '0xB17fEDa3253e0ba42f93dF0489A193929badBFAE',
       ABI: [
         {

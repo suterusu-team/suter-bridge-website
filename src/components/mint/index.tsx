@@ -16,6 +16,7 @@ class Mint extends React.Component {
     proccesing: false,
     suterBalance: 0,
     btnTxt: 'Confirm',
+    gasFee: 0,
   };
 
   constructor(props) {
@@ -26,8 +27,12 @@ class Mint extends React.Component {
     this.callApprove = this.callApprove.bind(this);
     this.callExchange = this.callExchange.bind(this);
     this.submit = this.submit.bind(this);
+    this.getGasFee = this.getGasFee.bind(this);
   }
-  componentDidMount() {}
+
+  async componentDidMount() {
+    await this.getGasFee();
+  }
 
   assignRef(c: HTMLElement) {
     this.inputRef = c;
@@ -39,6 +44,17 @@ class Mint extends React.Component {
       return true;
     }
     return false;
+  }
+  async getGasFee() {
+    let { formType } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
+    const bridgeContract = new Contract(
+      bridgeInfo.ABI,
+      bridgeInfo.CONTRACT_ADDRESS,
+    );
+    bridgeContract.setProvider(window.ethereum);
+    let gasFee = await bridgeContract.methods.Gasfee().call();
+    this.setState({ gasFee: gasFee });
   }
 
   handleSuterAmountChange(e) {
@@ -101,7 +117,7 @@ class Mint extends React.Component {
       .call();
 
     if (allowance - amount >= 0) {
-      this.callExchange();
+      await this.callExchange();
     } else {
       await this.callApprove();
       await this.callExchange();
@@ -156,7 +172,7 @@ class Mint extends React.Component {
     const { formType, account } = this.props;
     let bridgeInfo = BridgeInfo[formType];
 
-    const { suterAmount, destinationAddress } = this.state;
+    const { suterAmount, destinationAddress, gasFee } = this.state;
     let txHash;
     let transaction;
     const bridgeContract = new Contract(
@@ -169,7 +185,7 @@ class Mint extends React.Component {
       let amount = lastestWeb3.utils.toWei(suterAmount.toString());
       transaction = await bridgeContract.methods
         .exchange(amount, destinationAddress)
-        .send({ from: account, gas: '100000' });
+        .send({ value: gasFee, from: account, gas: '500000' });
     } catch (error) {
       console.log('callExchange error=', error);
       openNotificationWithIcon(

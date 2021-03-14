@@ -6,6 +6,7 @@ import Revert from '../revert';
 import Ethereum from '../../static/Ethereum-icon.svg';
 import BSC from '../../static/BSC-icon.svg';
 import Arrow from '../../static/arrow-icon.svg';
+import Web3 from 'web3';
 var Contract = require('web3-eth-contract');
 
 import './index.less';
@@ -43,14 +44,17 @@ class Form extends React.Component {
 
   async getExchangeBalance() {
     const { formType } = this.props;
-    let bridgeInfo = BridgeInfo[formType];
+    let exchangeBridgeInfo =
+      formType === 'Mint' ? BridgeInfo['Revert'] : BridgeInfo['Mint'];
     const suterTokenContract = new Contract(
-      bridgeInfo.TOEKN_ABI,
-      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
     );
-    suterTokenContract.setProvider(window.ethereum);
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
     let balance = await suterTokenContract.methods
-      .balanceOf(bridgeInfo.CONTRACT_ADDRESS)
+      .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
       .call();
     this.setState({ exchangeBalance: balance / 10 ** 18 });
   }
