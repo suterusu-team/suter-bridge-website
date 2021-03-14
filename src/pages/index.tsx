@@ -1,6 +1,5 @@
 import React from 'react';
-import { Layout, Dropdown, Menu } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
 import { Row, Col, Button } from 'antd';
 import {
@@ -206,9 +205,13 @@ class SuterBridge extends React.Component {
         </Header>
         <Content>
           {account === '' ? (
-            <Home chainId={chainId} connectMetaMask={this.connectMetaMask} />
+            <Home
+              chainId={chainId}
+              connectMetaMask={this.connectMetaMask}
+              intl={intl}
+            />
           ) : (
-            <Form account={account} formType={formType} />
+            <Form account={account} formType={formType} intl={intl} />
           )}
         </Content>
         <Footer></Footer>

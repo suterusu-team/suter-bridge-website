@@ -1,1 +1,17 @@
-{}
+{
+  "SuterBridgeAlpha": "Suter 跨链桥，",
+  "AGlanceofSuterVM": "Suter VM先行版",
+  "EthereumAssetstoBSCAssets": "将以太坊资产转化成币安智能链资产",
+  "BSCAssetstoEthereumAssets": "将币安智能链资产转化成以太坊资产",
+  "CurrentExchangableBalance": "当前可兑换余额",
+  "CurrentExchangableBalanceTips": "当前可兑换的余额是当前Suter Bridge中的余额，当余额不足时，管理人会更新余额。",
+  "Mint": "铸造",
+  "EnterYourBEP20Address": "输入你的BEP20地址",
+  "RecipientAddress": "收款账号",
+  "Youwillreceive": "你将会收到",
+  "Confirm": "确认",
+  "Amount": "数量",
+  "YourSUTERBalance": "您的SUTER余额",
+  "InsuffientBalance": "余额不足",
+  "InvalidDestinationAddress": "无效收款地址"
+}

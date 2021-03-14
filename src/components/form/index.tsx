@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import Mint from '../mint';
 import Revert from '../revert';
 import Ethereum from '../../static/Ethereum-icon.svg';
@@ -67,12 +68,13 @@ class Form extends React.Component {
   }
 
   whichFormType() {
-    const { account, formType } = this.props;
+    const { account, formType, intl } = this.props;
     let { exchangeBalance, accountSuterBalance, updateKey } = this.state;
     return (
       <>
         {formType === 'Mint' ? (
           <Mint
+            intl={intl}
             key={updateKey}
             formType={formType}
             account={account}
@@ -82,6 +84,7 @@ class Form extends React.Component {
           />
         ) : (
           <Revert
+            intl={intl}
             key={updateKey}
             formType={formType}
             account={account}
@@ -95,13 +98,23 @@ class Form extends React.Component {
   }
 
   render() {
-    const { formType } = this.props;
+    const { formType, intl } = this.props;
     let { exchangeBalance } = this.state;
     return (
       <div className="form">
         <div className="topCard">
           <div className="exchangeBalance">
-            <p>Current Exchangable Balance:</p>
+            <div className="titleContainer">
+              <p>{intl.get('CurrentExchangableBalance')}</p>
+              <Tooltip
+                placement="topLeft"
+                title={intl.get('CurrentExchangableBalanceTips')}
+                trigger={['hover', 'click']}
+              >
+                &nbsp;
+                <QuestionCircleOutlined className="i" style={{ zIndex: 100 }} />
+              </Tooltip>
+            </div>
             <h1>{exchangeBalance}</h1>
           </div>
           <div>

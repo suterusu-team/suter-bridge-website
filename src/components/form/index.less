@@ -39,9 +39,18 @@
         }
       }
       .exchangeBalance {
+        .titleContainer {
+          position: relative;
+          display: flex;
+          .anticon {
+            color: @suterColor !important;
+            position: absolute;
+            // right: 0;
+          }
+        }
         padding-top: 15px;
         p {
-          color: #b9aaff;
+          color: @suterColor;
           margin-bottom: 0;
           font-size: 14px;
         }

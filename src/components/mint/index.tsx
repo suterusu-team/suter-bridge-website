@@ -196,18 +196,18 @@ class Mint extends React.Component {
   }
   render() {
     const { suterAmount, destinationAddress, proccesing, btnTxt } = this.state;
-    const { suterBalance } = this.props;
+    const { suterBalance, intl } = this.props;
     const validDestination = WAValidator.validate(destinationAddress, 'eth');
     const canConfirm =
       validDestination && suterAmount > 0 && suterAmount <= suterBalance;
     return (
       <div className="mint">
         {proccesing ? <SpinModal /> : ''}
-        <h1 className="title">Mint</h1>
+        <h1 className="title">{intl.get('Mint')}</h1>
         <Row>
           <Col span={24}>
             <div className="inputContainer container">
-              <p className="inputDesc">Amount</p>
+              <p className="inputDesc">{intl.get('Amount')}</p>
               <input
                 className={`input ${
                   suterAmount > suterBalance ? 'invalid' : ''
@@ -227,7 +227,7 @@ class Mint extends React.Component {
                   suterAmount > suterBalance ? 'insuffientBalance' : ''
                 }`}
               >
-                Your SUTER Balance: {suterBalance.toLocaleString()}
+                {intl.get('YourSUTERBalance')}: {suterBalance.toLocaleString()}
               </p>
             </div>
           </Col>
@@ -235,14 +235,14 @@ class Mint extends React.Component {
         <Row>
           <Col span={24}>
             <div className="inputContainer container">
-              <p className="inputDesc">Recipient Address</p>
+              <p className="inputDesc">{intl.get('RecipientAddress')}</p>
               <input
                 className={`destinationInput ${
                   destinationAddress !== '' && !validDestination
                     ? 'invalid'
                     : ''
                 }`}
-                placeholder="Enter BEP20 SUTER Address"
+                placeholder={intl.get('EnterYourBEP20Address')}
                 value={destinationAddress}
                 type="text"
                 onChange={this.handleDestinationChange}
@@ -253,7 +253,7 @@ class Mint extends React.Component {
         <Row>
           <Col span={24}>
             <div className="assetContainer container">
-              <div className="title">You will receive</div>
+              <div className="title">{intl.get('Youwillreceive')}</div>
               <div className="assets">
                 <div>{suterAmount.toLocaleString()}</div>
                 <div className="assetsDesc">
@@ -275,7 +275,7 @@ class Mint extends React.Component {
                 disabled={!canConfirm}
                 onClick={this.submit}
               >
-                {btnTxt}
+                {intl.get(btnTxt)}
               </Button>
             </div>
           </Col>
