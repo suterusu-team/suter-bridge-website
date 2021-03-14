@@ -219,7 +219,7 @@ class Revert extends React.Component {
       validDestination && suterAmount > 0 && suterAmount <= suterBalance;
     return (
       <div className="mint">
-        {proccesing ? <SpinModal /> : ''}
+        {proccesing ? <SpinModal intl={intl} /> : ''}
         <h1 className="title">{intl.get('Revert')}</h1>
         <Row>
           <Col span={24}>

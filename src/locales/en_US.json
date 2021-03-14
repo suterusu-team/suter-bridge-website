@@ -15,5 +15,8 @@
   "YourSUTERBalance": "Your SUTER Balance",
   "InsuffientBalance": "Insuffient Balance",
   "InvalidDestinationAddress": "Invalid Destination Address",
-  "Revert": "Revert"
+  "Revert": "Revert",
+  "Processing": "Processing",
+  "YourRequest": "Your Request",
+  "SpinTips": "Don't refresh your page and it might take up to 2 to 3 minutes to complete your request."
 }

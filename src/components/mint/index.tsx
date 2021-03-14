@@ -218,7 +218,7 @@ class Mint extends React.Component {
       validDestination && suterAmount > 0 && suterAmount <= suterBalance;
     return (
       <div className="mint">
-        {proccesing ? <SpinModal /> : ''}
+        {proccesing ? <SpinModal intl={intl} /> : ''}
         <h1 className="title">{intl.get('Mint')}</h1>
         <Row>
           <Col span={24}>
