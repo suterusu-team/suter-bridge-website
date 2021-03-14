@@ -6,23 +6,16 @@ import WAValidator from 'multicoin-address-validator';
 import Web3 from 'web3';
 import SpinModal from '../spinModal';
 var Contract = require('web3-eth-contract');
-import {
-  openNotificationWithIcon,
-  MessageWithAlink,
-  suterValueForInputFunc,
-  suterAmountForInput,
-  getSuterValueNumber,
-  fetchSuterPrice,
-} from '../tools';
+import { openNotificationWithIcon, MessageWithAlink } from '../tools';
 import './index.less';
 
 class Mint extends React.Component {
   state = {
-    suterValue: '',
-    suterTxt: 'SUTER',
-    suterValueFontSize: 52,
+    suterAmount: '',
     destinationAddress: '',
-    proccesing: false,
+    proccesing: true,
+    suterBalance: 0,
+    btnTxt: 'Confirm',
   };
 
   constructor(props) {
@@ -32,110 +25,105 @@ class Mint extends React.Component {
     this.handleDestinationChange = this.handleDestinationChange.bind(this);
     this.callApprove = this.callApprove.bind(this);
     this.callExchange = this.callExchange.bind(this);
+    this.submit = this.submit.bind(this);
   }
   componentDidMount() {}
-
-  async setSuterPrice() {
-    let price = await fetchSuterPrice();
-    this.setState({ suterPrice: price });
-  }
 
   assignRef(c: HTMLElement) {
     this.inputRef = c;
   }
 
-  handleSuterAmountChange(e) {
-    let suterTxt = this.state.suterTxt;
-    let suterAmount = e.target.value
-      .replace(` ${suterTxt}`, '')
-      .replace(/,/gi, '');
-    if (isNaN(suterAmount) || suterAmount < 0 || suterAmount > 10000000000) {
-      if (suterAmount > 10000000000) {
-        openNotificationWithIcon(
-          'Invalid Suter Amount',
-          'Suter token total supply is 10,000,000,000',
-          'warning',
-          4.5,
-        );
-      }
-      suterAmount = this.state.suterValue;
+  checkNumber(theObj) {
+    var reg = /^[0-9]+.?[0-9]*$/;
+    if (reg.test(theObj)) {
+      return true;
     }
-    let suterValueFontSize = this.state.suterValueFontSize;
+    return false;
+  }
 
-    if (suterAmount.length > 6) {
-      suterValueFontSize = Math.max(
-        suterValueFontSize - (suterAmount.length - 6) * 5,
-        20,
-      );
-    } else {
-      suterValueFontSize = 52;
+  handleSuterAmountChange(e) {
+    let { suterBalance, exchangeBalance } = this.props;
+    let { destinationAddress } = this.state;
+    let suterAmount = e.target.value;
+    if (!this.checkNumber(suterAmount)) {
+      return;
     }
-    let dollarValue = this.state.suterPrice * suterAmount;
-    this.setState(
-      {
-        suterValue: suterAmount,
-        dollarValue: dollarValue,
-        suterValueFontSize: suterValueFontSize,
-      },
-      () => {
-        let pos = this.inputRef.value.length - this.state.suterTxt.length - 1;
-        this.inputRef.selectionStart = pos;
-        this.inputRef.selectionEnd = pos;
-      },
-    );
+    this.setState({ suterAmount: parseFloat(suterAmount) });
+    if (suterAmount > exchangeBalance) {
+      openNotificationWithIcon(
+        'Invalid Amount!',
+        'Suter Bridge Contract Insuffient Balance, Please Wait for a while',
+        'warning',
+        10,
+      );
+    }
+    let validDestination = WAValidator.validate(destinationAddress, 'eth');
+    if (suterAmount > suterBalance) {
+      this.setState({ btnTxt: 'InsuffientBalance' });
+    } else if (destinationAddress !== '' && !validDestination) {
+      this.setState({ btnTxt: 'InvalidDestinationAddress' });
+    } else {
+      this.setState({ btnTxt: 'Confirm' });
+    }
   }
 
   handleDestinationChange(e) {
     this.setState({ destinationAddress: e.target.value });
-    if (e.target.value != '' && !WAValidator.validate(e.target.value, 'eth')) {
-      openNotificationWithIcon(
-        'Invalid input',
-        `'${e.target.value}' is not a valid tron address`,
-        'warning',
-        1,
-      );
+    let validDestination = WAValidator.validate(e.target.value, 'eth');
+    let { suterAmount } = this.state;
+    let { suterBalance } = this.props;
+    if (e.target.value !== '' && !validDestination) {
+      this.setState({ btnTxt: 'InvalidDestinationAddress' });
+    } else if (suterAmount > suterBalance) {
+      this.setState({ btnTxt: 'InsuffientBalance' });
+    } else {
+      this.setState({ btnTxt: 'Confirm' });
     }
   }
 
   async submit() {
-    const suterValue = this.state.suterValue;
-    const suterAmount = getSuterValueNumber(suterValue);
+    const suterAmount = this.state.suterAmount;
     var lastestWeb3 = new Web3(window.ethereum);
     let amount = lastestWeb3.utils.toWei(suterAmount.toString());
     // check if allowance is enough
+    const { formType, account } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
+
     const suterContract = new Contract(
-      ETHSUTERUSUABI,
-      ETHSUTERUSUCONTRACTADDRESS,
+      bridgeInfo.TOEKN_ABI,
+      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
     );
     suterContract.setProvider(window.ethereum);
     let allowance = await suterContract.methods
-      .allowance(this.props.account, ETHBRIDGECONTRACTADDRESS)
+      .allowance(account, bridgeInfo.CONTRACT_ADDRESS)
       .call();
 
     if (allowance - amount >= 0) {
       this.callExchange();
     } else {
-      this.confirmToApprove();
+      await this.callApprove();
+      await this.callExchange();
     }
   }
 
   async callApprove() {
     this.setState({ proccesing: true });
-    const suterValue = this.state.suterValue;
-    const suterAmount = getSuterValueNumber(suterValue);
-    let txHash;
-    let transaction;
+    const suterAmount = this.state.suterAmount;
+    const { formType, account } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
     const suterContract = new Contract(
-      ETHSUTERUSUABI,
-      ETHSUTERUSUCONTRACTADDRESS,
+      bridgeInfo.TOEKN_ABI,
+      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
     );
     suterContract.setProvider(window.ethereum);
+    let txHash;
+    let transaction;
     try {
       var lastestWeb3 = new Web3(window.ethereum);
       let amount = lastestWeb3.utils.toWei(suterAmount.toString());
       transaction = await suterContract.methods
-        .increaseAllowance(ETHBRIDGECONTRACTADDRESS, amount)
-        .send({ from: this.props.account, gas: '60000' });
+        .increaseAllowance(bridgeInfo.CONTRACT_ADDRESS, amount)
+        .send({ from: account, gas: '60000' });
     } catch (error) {
       console.log('callApprove error=', error);
       openNotificationWithIcon(
@@ -144,12 +132,12 @@ class Mint extends React.Component {
         'warning',
         10,
       );
-      this.setState({ submitApprove: false, proccesing: false });
+      this.setState({ proccesing: false });
       return;
     }
     txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
-    const aLink = `${ETHERSCAN}/tx/${txHash}`;
+    const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
       'Approve transaction has success sent!',
       <MessageWithAlink message={message} aLink={aLink} />,
@@ -157,26 +145,27 @@ class Mint extends React.Component {
       10,
     );
     this.setState({ proccesing: false });
-    this.setState({ approveTxid: txHash });
   }
 
   async callExchange() {
     this.setState({ proccesing: true });
-    const { suterValue, destinationAddress } = this.state;
-    const suterAmount = getSuterValueNumber(suterValue);
+    const { formType, account } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
+
+    const { suterAmount, destinationAddress } = this.state;
     let txHash;
     let transaction;
-    const ethBridgeContract = new Contract(
-      ETHBRIDGEABI,
-      ETHBRIDGECONTRACTADDRESS,
+    const bridgeContract = new Contract(
+      bridgeInfo.ABI,
+      bridgeInfo.CONTRACT_ADDRESS,
     );
-    ethBridgeContract.setProvider(window.ethereum);
+    bridgeContract.setProvider(window.ethereum);
     try {
       var lastestWeb3 = new Web3(window.ethereum);
       let amount = lastestWeb3.utils.toWei(suterAmount.toString());
-      transaction = await ethBridgeContract.methods
+      transaction = await bridgeContract.methods
         .exchange(amount, destinationAddress)
-        .send({ from: this.props.account, gas: '100000' });
+        .send({ from: account, gas: '100000' });
     } catch (error) {
       console.log('callExchange error=', error);
       openNotificationWithIcon(
@@ -186,31 +175,27 @@ class Mint extends React.Component {
         10,
       );
       this.setState({
-        approveStatus: 0,
-        submitApprove: false,
         proccesing: false,
       });
       return;
     }
+    this.setState({ proccesing: false });
     txHash = transaction['transactionHash'];
     const message = `View in etherscan`;
-    const aLink = `${ETHERSCAN}/tx/${txHash}`;
+    const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
       'Exchange transaction has success sent!',
       <MessageWithAlink message={message} aLink={aLink} />,
       'success',
       10,
     );
-    this.setState({ exchangeTxid: txHash, proccesing: false });
-    this.updateExchangeTxid(txHash);
   }
   render() {
-    const { suterValue, suterTxt, destinationAddress, proccesing } = this.state;
-    const suterValueForInput = suterValueForInputFunc(suterValue);
-    const suterAmountValue = suterAmountForInput(suterValue, suterTxt);
-    const canNext =
-      WAValidator.validate(destinationAddress, 'eth') &&
-      getSuterValueNumber(suterValue) > 0;
+    const { suterAmount, destinationAddress, proccesing, btnTxt } = this.state;
+    const { suterBalance } = this.props;
+    const validDestination = WAValidator.validate(destinationAddress, 'eth');
+    const canConfirm =
+      validDestination && suterAmount > 0 && suterAmount <= suterBalance;
     return (
       <div className="mint">
         {proccesing ? <SpinModal /> : ''}
@@ -220,11 +205,12 @@ class Mint extends React.Component {
             <div className="inputContainer container">
               <p className="inputDesc">Amount</p>
               <input
-                inputMode="numeric"
-                className="input"
+                className={`input ${
+                  suterAmount > suterBalance ? 'invalid' : ''
+                }`}
                 ref={this.assignRef}
-                value={suterAmountValue}
-                placeholder="0.00 SUTER"
+                value={suterAmount}
+                placeholder="0 SUTER"
                 type="text"
                 onChange={this.handleSuterAmountChange}
               />
@@ -232,7 +218,13 @@ class Mint extends React.Component {
                 <img src={ERC20SuterCoin} />
                 <span>ERC20 SUTER</span>
               </div>
-              <p className="balance">Your SUTER Balance: 133,242.02</p>
+              <p
+                className={`balance ${
+                  suterAmount > suterBalance ? 'insuffientBalance' : ''
+                }`}
+              >
+                Your SUTER Balance: {suterBalance.toLocaleString()}
+              </p>
             </div>
           </Col>
         </Row>
@@ -241,7 +233,11 @@ class Mint extends React.Component {
             <div className="inputContainer container">
               <p className="inputDesc">Recipient Address</p>
               <input
-                className="destinationInput"
+                className={`destinationInput ${
+                  destinationAddress !== '' && !validDestination
+                    ? 'invalid'
+                    : ''
+                }`}
                 placeholder="Enter BEP20 SUTER Address"
                 value={destinationAddress}
                 type="text"
@@ -255,7 +251,7 @@ class Mint extends React.Component {
             <div className="assetContainer container">
               <div className="title">You will receive</div>
               <div className="assets">
-                <div>{suterValueForInput}</div>
+                <div>{suterAmount.toLocaleString()}</div>
                 <div className="assetsDesc">
                   <img src={BEP20SuterCoin} />
                   &nbsp;
@@ -272,10 +268,10 @@ class Mint extends React.Component {
               <Button
                 shape="round"
                 block
-                disabled={!canNext}
+                disabled={!canConfirm}
                 onClick={this.submit}
               >
-                Confirm
+                {btnTxt}
               </Button>
             </div>
           </Col>

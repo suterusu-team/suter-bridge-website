@@ -26,6 +26,9 @@
           color: #8e8e8e;
           margin-top: 10px;
         }
+        .insuffientBalance {
+          color: red;
+        }
         input {
           height: 50px;
           border-radius: 10px;
@@ -38,6 +41,9 @@
           &:focus {
             border: 1px solid @suterColor;
           }
+        }
+        input.invalid {
+          border: 1px solid red;
         }
         .inputAppend {
           display: flex;

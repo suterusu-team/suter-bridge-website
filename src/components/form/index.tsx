@@ -5,37 +5,23 @@ import Revert from '../revert';
 import Ethereum from '../../static/Ethereum-icon.svg';
 import BSC from '../../static/BSC-icon.svg';
 import Arrow from '../../static/arrow-icon.svg';
-
-import Web3 from 'web3';
-import SpinModal from '../spinModal';
 var Contract = require('web3-eth-contract');
 
-import {
-  openNotificationWithIcon,
-  EthChainNameMap,
-  BscChainNameMap,
-} from '../../components/tools';
 import './index.less';
-
-const contentList = {
-  Mint: function(account) {
-    return <Mint account={account} />;
-  },
-  Revert: function(account) {
-    return <Revert account={account} />;
-  },
-};
-
 class Form extends React.Component {
   state = {
     exchangeBalance: 0,
+    accountSuterBalance: 0,
   };
   constructor(props) {
     super(props);
+    this.whichFormType = this.whichFormType.bind(this);
+    this.getAccountSuterBalance = this.getAccountSuterBalance.bind(this);
   }
 
   async componentDidMount() {
     await this.getExchangeBalance();
+    await this.getAccountSuterBalance();
   }
 
   async getExchangeBalance() {
@@ -50,6 +36,42 @@ class Form extends React.Component {
       .balanceOf(bridgeInfo.CONTRACT_ADDRESS)
       .call();
     this.setState({ exchangeBalance: balance / 10 ** 18 });
+  }
+
+  async getAccountSuterBalance() {
+    const { formType, account } = this.props;
+    let bridgeInfo = BridgeInfo[formType];
+    const suterTokenContract = new Contract(
+      bridgeInfo.TOEKN_ABI,
+      bridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(window.ethereum);
+    let balance = await suterTokenContract.methods.balanceOf(account).call();
+    this.setState({ accountSuterBalance: balance / 10 ** 18 });
+  }
+
+  whichFormType() {
+    const { account, formType } = this.props;
+    let { exchangeBalance, accountSuterBalance } = this.state;
+    return (
+      <>
+        {formType === 'Mint' ? (
+          <Mint
+            formType={formType}
+            account={account}
+            exchangeBalance={exchangeBalance}
+            suterBalance={accountSuterBalance}
+          />
+        ) : (
+          <Revert
+            formType={formType}
+            account={account}
+            exchangeBalance={exchangeBalance}
+            suterBalance={accountSuterBalance}
+          />
+        )}
+      </>
+    );
   }
 
   render() {
@@ -78,7 +100,7 @@ class Form extends React.Component {
             )}
           </div>
         </div>
-        <Card>{contentList[formType](account)}</Card>
+        <Card>{this.whichFormType()}</Card>
       </div>
     );
   }
