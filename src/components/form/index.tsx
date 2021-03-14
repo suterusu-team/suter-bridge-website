@@ -12,16 +12,32 @@ class Form extends React.Component {
   state = {
     exchangeBalance: 0,
     accountSuterBalance: 0,
+    updateKey: '',
   };
   constructor(props) {
     super(props);
     this.whichFormType = this.whichFormType.bind(this);
     this.getAccountSuterBalance = this.getAccountSuterBalance.bind(this);
+    this.getExchangeBalance = this.getExchangeBalance.bind(this);
+    this.updateKeyFunc = this.updateKeyFunc.bind(this);
   }
 
   async componentDidMount() {
     await this.getExchangeBalance();
     await this.getAccountSuterBalance();
+  }
+
+  async updateData() {
+    await this.getExchangeBalance();
+    await this.getAccountSuterBalance();
+  }
+
+  async updateKeyFunc() {
+    await this.updateData();
+    let key = Math.random()
+      .toString(36)
+      .substr(2, 5);
+    this.setState({ updateKey: key });
   }
 
   async getExchangeBalance() {
@@ -52,22 +68,26 @@ class Form extends React.Component {
 
   whichFormType() {
     const { account, formType } = this.props;
-    let { exchangeBalance, accountSuterBalance } = this.state;
+    let { exchangeBalance, accountSuterBalance, updateKey } = this.state;
     return (
       <>
         {formType === 'Mint' ? (
           <Mint
+            key={updateKey}
             formType={formType}
             account={account}
             exchangeBalance={exchangeBalance}
             suterBalance={accountSuterBalance}
+            updateKeyFunc={this.updateKeyFunc}
           />
         ) : (
           <Revert
+            key={updateKey}
             formType={formType}
             account={account}
             exchangeBalance={exchangeBalance}
             suterBalance={accountSuterBalance}
+            updateKeyFunc={this.updateKeyFunc}
           />
         )}
       </>
@@ -75,7 +95,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const { account, formType } = this.props;
+    const { formType } = this.props;
     let { exchangeBalance } = this.state;
     return (
       <div className="form">

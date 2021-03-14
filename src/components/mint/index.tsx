@@ -83,6 +83,7 @@ class Mint extends React.Component {
   }
 
   async submit() {
+    let { updateKeyFunc } = this.props;
     const suterAmount = this.state.suterAmount;
     var lastestWeb3 = new Web3(window.ethereum);
     let amount = lastestWeb3.utils.toWei(suterAmount.toString());
@@ -105,6 +106,8 @@ class Mint extends React.Component {
       await this.callApprove();
       await this.callExchange();
     }
+    // this.setState({suterAmount: '', destinationAddress: ''})
+    updateKeyFunc();
   }
 
   async callApprove() {
