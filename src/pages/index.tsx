@@ -142,7 +142,7 @@ class SuterBridge extends React.Component {
       // this.connectMetaMask();
     } else {
       openNotificationWithIcon(
-        'Network error',
+        intl.get('NetworkError'),
         `${intl.get('PleaseChangeMetaMaskNetworkTo')} ${
           EthChainNameMap[BridgeInfo.Mint.CHAIN_ID]
         } ${intl.get('or')} ${BscChainNameMap[BridgeInfo.Revert.CHAIN_ID]}`,

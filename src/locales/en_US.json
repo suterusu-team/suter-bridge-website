@@ -35,5 +35,6 @@
   "TransactionHasSuccessSent": "transaction has success sent",
   "Approve": "Approve",
   "Exchange": "Exchange",
-  "Viewinetherscan": "View in etherscan"
+  "Viewinetherscan": "View in etherscan",
+  "NetworkError": "MetaMask network error"
 }

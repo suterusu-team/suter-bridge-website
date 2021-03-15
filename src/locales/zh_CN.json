@@ -35,5 +35,6 @@
   "TransactionHasSuccessSent": "交易已经成功发送",
   "Approve": "授权",
   "Exchange": "兑换",
-  "Viewinetherscan": "在etherscan中查看"
+  "Viewinetherscan": "在etherscan中查看",
+  "NetworkError": "MetaMask网络错误"
 }

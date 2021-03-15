@@ -5,7 +5,6 @@ import {
   BscChainNameMap,
   EthChainNameMap,
 } from '../tools';
-import { DownOutlined } from '@ant-design/icons';
 import Ethereum from '../../static/Ethereum-icon.svg';
 import BSC from '../../static/BSC-icon.svg';
 import Arrow from '../../static/arrow-icon.svg';
@@ -17,17 +16,17 @@ class Home extends React.Component {
   }
 
   wrongChainIdNotification(chainId, whichChain) {
+    let { intl } = this.props;
     let message =
       whichChain === 'eth'
-        ? `Please change metamask to ${EthChainNameMap[`${chainId}`]}`
-        : `Please change metamask to ${BscChainNameMap[`${chainId}`]}`;
+        ? `${intl.get('PleaseChangeMetaMaskNetworkTo')} ${
+            EthChainNameMap[`${chainId}`]
+          }`
+        : `${intl.get('PleaseChangeMetaMaskNetworkTo')} ${
+            BscChainNameMap[`${chainId}`]
+          }`;
 
-    openNotificationWithIcon(
-      'Block Chain Network Error',
-      message,
-      'warning',
-      4,
-    );
+    openNotificationWithIcon(intl.get('NetworkError'), message, 'warning', 4);
   }
 
   render() {
