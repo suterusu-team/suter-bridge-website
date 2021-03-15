@@ -107,8 +107,8 @@ class SuterBridge extends React.Component {
   accountChanged() {
     window.ethereum.on('accountsChanged', function(accounts) {
       openNotificationWithIcon(
-        'Metamask account changed',
-        'Page will refresh',
+        intl.get('MetaMaskAccountChanged'),
+        intl.get('PageWillRefresh'),
         'warning',
         4.5,
       );
@@ -121,8 +121,8 @@ class SuterBridge extends React.Component {
   chainChanged() {
     window.ethereum.on('chainChanged', chainId => {
       openNotificationWithIcon(
-        'Chain changed',
-        'Page will refresh after 2 seconds',
+        intl.get('ChainChanged'),
+        intl.get('PageWillRefresh'),
         'warning',
         4.5,
       );
@@ -143,9 +143,9 @@ class SuterBridge extends React.Component {
     } else {
       openNotificationWithIcon(
         'Network error',
-        `Please change Metamask network to ${
+        `${intl.get('PleaseChangeMetaMaskNetworkTo')} ${
           EthChainNameMap[BridgeInfo.Mint.CHAIN_ID]
-        } or ${BscChainNameMap[BridgeInfo.Revert.CHAIN_ID]}`,
+        } ${intl.get('or')} ${BscChainNameMap[BridgeInfo.Revert.CHAIN_ID]}`,
         'warning',
         4.5,
       );

@@ -124,9 +124,9 @@ class Form extends React.Component {
           <div>
             {formType === 'mint' ? (
               <div className="iconContainer">
-                <img src={Ethereum} alt="bsc" className="coin" />
-                <img src={Arrow} alt="arrow" />
                 <img src={BSC} alt="ethereum" className="coin" />
+                <img src={Arrow} alt="arrow" />
+                <img src={Ethereum} alt="bsc" className="coin" />
               </div>
             ) : (
               <div className="iconContainer">

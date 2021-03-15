@@ -68,8 +68,8 @@ class Mint extends React.Component {
     this.setState({ suterAmount: parseFloat(suterAmount) });
     if (suterAmount > exchangeBalance) {
       openNotificationWithIcon(
-        'Invalid Amount!',
-        'Suter Bridge Contract Insuffient Balance, Please Wait for a while',
+        intl.get('InvalidAmount'),
+        intl.get('SuterBridgeContractInsuffientBalance'),
         'warning',
         10,
       );
@@ -129,7 +129,7 @@ class Mint extends React.Component {
   async callApprove() {
     this.setState({ proccesing: true });
     const suterAmount = this.state.suterAmount;
-    const { formType, account } = this.props;
+    const { formType, account, intl } = this.props;
     let bridgeInfo = BridgeInfo[formType];
     const suterContract = new Contract(
       bridgeInfo.TOEKN_ABI,
@@ -147,8 +147,8 @@ class Mint extends React.Component {
     } catch (error) {
       console.log('callApprove error=', error);
       openNotificationWithIcon(
-        'Metamask deny!',
-        'User denied transaction signature',
+        intl.get('MetamaskDeny'),
+        intl.get('UserDeniedTransactionSignature'),
         'warning',
         10,
       );
@@ -156,10 +156,10 @@ class Mint extends React.Component {
       return;
     }
     txHash = transaction['transactionHash'];
-    const message = `View in etherscan`;
+    const message = intl.get('Viewinetherscan');
     const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
-      'Approve transaction has success sent!',
+      `${intl.get('Exchange')} ${intl.get('TransactionHasSuccessSent')}!`,
       <MessageWithAlink message={message} aLink={aLink} />,
       'success',
       10,
@@ -169,7 +169,7 @@ class Mint extends React.Component {
 
   async callExchange() {
     this.setState({ proccesing: true });
-    const { formType, account } = this.props;
+    const { formType, account, intl } = this.props;
     let bridgeInfo = BridgeInfo[formType];
 
     const { suterAmount, destinationAddress, gasFee } = this.state;
@@ -189,8 +189,8 @@ class Mint extends React.Component {
     } catch (error) {
       console.log('callExchange error=', error);
       openNotificationWithIcon(
-        'Metamask deny!',
-        'User denied transaction signature',
+        intl.get('MetamaskDeny'),
+        intl.get('UserDeniedTransactionSignature'),
         'warning',
         10,
       );
@@ -201,10 +201,10 @@ class Mint extends React.Component {
     }
     this.setState({ proccesing: false });
     txHash = transaction['transactionHash'];
-    const message = `View in etherscan`;
+    const message = intl.get('Viewinetherscan');
     const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
-      'Exchange transaction has success sent!',
+      `${intl.get('Exchange')} ${intl.get('TransactionHasSuccessSent')}!`,
       <MessageWithAlink message={message} aLink={aLink} />,
       'success',
       10,
