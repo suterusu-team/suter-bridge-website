@@ -237,7 +237,7 @@ class Revert extends React.Component {
                 onChange={this.handleSuterAmountChange}
               />
               <div className="inputAppend">
-                <img src={ERC20SuterCoin} />
+                <img src={BEP20SuterCoin} />
                 <span>BEP20 SUTER</span>
               </div>
               <p
@@ -275,7 +275,7 @@ class Revert extends React.Component {
               <div className="assets">
                 <div>{suterAmount.toLocaleString()}</div>
                 <div className="assetsDesc">
-                  <img src={BEP20SuterCoin} />
+                  <img src={ERC20SuterCoin} />
                   &nbsp;
                   <span style={{ fontWeight: 'bold' }}>ERC20</span>&nbsp;
                   <span>SUTER</span>
