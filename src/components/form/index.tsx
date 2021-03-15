@@ -122,11 +122,11 @@ class Form extends React.Component {
             <h1>{exchangeBalance.toLocaleString()}</h1>
           </div>
           <div>
-            {formType === 'mint' ? (
+            {formType === 'Mint' ? (
               <div className="iconContainer">
-                <img src={BSC} alt="ethereum" className="coin" />
+                <img src={Ethereum} alt="ethereum" className="coin" />
                 <img src={Arrow} alt="arrow" />
-                <img src={Ethereum} alt="bsc" className="coin" />
+                <img src={BSC} alt="bsc" className="coin" />
               </div>
             ) : (
               <div className="iconContainer">
