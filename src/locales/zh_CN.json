@@ -20,5 +20,21 @@
   "YourRequest": "您的请求",
   "SpinTips": "不要刷新您的页面，可能需要花费2到3分钟完成您的请求。",
   "RevertFeeTips": "归还将收取额外的0.1BNB来支付您的归还服务费",
-  "MintFeeTips": "铸造将收取额外的0.01ETH来支付您的铸造服务费"
+  "MintFeeTips": "铸造将收取额外的0.01ETH来支付您的铸造服务费",
+  "MetaMaskIsNotInstalled": "MetaMask未安装",
+  "MetaMaskAccountChanged": "MetaMask账户已经切换",
+  "PageWillRefresh": "页面即将刷新",
+  "ChainChanged": "MetaMask网络已改变",
+  "PleaseChangeMetaMaskNetworkTo": "请将MetaMask的网络切换到",
+  "or": "或者",
+  "InvalidAmount": "无效数量！",
+  "SuterBridgeContractInsuffientBalance": "Suter Bridge合约余额不足，请等待管理员充值后再兑换。",
+  "MetamaskDeny": "MetaMask已拒绝！",
+  "UserDeniedTransactionSignature": "用户拒绝了交易签名",
+  "ViewInBscscan": "在BSC SCAN上查看",
+  "TransactionHasSuccessSent": "交易已经成功发送",
+  "Approve": "授权",
+  "Exchange": "兑换",
+  "Viewinetherscan": "在etherscan中查看",
+  "NetworkError": "MetaMask网络错误"
 }
