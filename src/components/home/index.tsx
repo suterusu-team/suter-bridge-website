@@ -36,7 +36,14 @@ class Home extends React.Component {
         <Row>
           <Col span={24}>
             <div className="title">
-              <h1>{intl.get('SuterBridgeAlpha')}</h1>
+              <h1>
+                {intl.options.currentLocale === 'zh-CN' ? (
+                  <>&nbsp;&nbsp;&nbsp;</>
+                ) : (
+                  ''
+                )}
+                {intl.get('SuterBridgeAlpha')}
+              </h1>
               <h1>{intl.get('AGlanceofSuterVM')}</h1>
             </div>
           </Col>
@@ -63,7 +70,9 @@ class Home extends React.Component {
                 <img src={Arrow} alt="arrow" />
                 <img src={BSC} alt="bsc" />
               </div>
-              <h1>{intl.get('EthereumAssetstoBSCAssets')}</h1>
+              <h1 className={`${intl.options.currentLocale}`}>
+                {intl.get('EthereumAssetstoBSCAssets')}
+              </h1>
             </div>
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={12}>
@@ -89,7 +98,9 @@ class Home extends React.Component {
                 <img src={Arrow} alt="arrow" />
                 <img src={Ethereum} alt="ethereum" />
               </div>
-              <h1>{intl.get('BSCAssetstoEthereumAssets')}</h1>
+              <h1 className={`bsc ${intl.options.currentLocale}`}>
+                {intl.get('BSCAssetstoEthereumAssets')}
+              </h1>
             </div>
           </Col>
         </Row>
