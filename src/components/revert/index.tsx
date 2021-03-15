@@ -218,9 +218,10 @@ class Revert extends React.Component {
     const canConfirm =
       validDestination && suterAmount > 0 && suterAmount <= suterBalance;
     return (
-      <div className="mint">
+      <div className="revert">
         {proccesing ? <SpinModal intl={intl} /> : ''}
         <h1 className="title">{intl.get('Revert')}</h1>
+        <p className="RevertFeeTips">{intl.get('RevertFeeTips')}</p>
         <Row>
           <Col span={24}>
             <div className="inputContainer container">
@@ -236,8 +237,8 @@ class Revert extends React.Component {
                 onChange={this.handleSuterAmountChange}
               />
               <div className="inputAppend">
-                <img src={BEP20SuterCoin} />
-                <span>ERC20 SUTER</span>
+                <img src={ERC20SuterCoin} />
+                <span>BEP20 SUTER</span>
               </div>
               <p
                 className={`balance ${
@@ -274,9 +275,9 @@ class Revert extends React.Component {
               <div className="assets">
                 <div>{suterAmount.toLocaleString()}</div>
                 <div className="assetsDesc">
-                  <img src={ERC20SuterCoin} />
+                  <img src={BEP20SuterCoin} />
                   &nbsp;
-                  <span style={{ fontWeight: 'bold' }}>BEP20</span>&nbsp;
+                  <span style={{ fontWeight: 'bold' }}>ERC20</span>&nbsp;
                   <span>SUTER</span>
                 </div>
               </div>

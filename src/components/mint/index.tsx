@@ -220,6 +220,7 @@ class Mint extends React.Component {
       <div className="mint">
         {proccesing ? <SpinModal intl={intl} /> : ''}
         <h1 className="title">{intl.get('Mint')}</h1>
+        <p className="RevertFeeTips">{intl.get('MintFeeTips')}</p>
         <Row>
           <Col span={24}>
             <div className="inputContainer container">
