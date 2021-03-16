@@ -37,16 +37,6 @@ body {
 
 .ant-layout-header {
   background: transparent !important;
-  .ant-row {
-    .ant-col {
-      &:nth-of-type(2) {
-        text-align: right;
-        @media screen and (max-width: 1024px) {
-          display: none;
-        }
-      }
-    }
-  }
   .header-btn {
     display: flex;
     justify-content: flex-end;
@@ -95,11 +85,17 @@ body {
 .suterBridge {
   background: transparent !important;
 
-  img.logo {
-    width: 250px;
-
-    @media only screen and (max-width: 600px) {
-      width: 200px;
+  img.mobile {
+    display: none;
+  }
+  @media screen and (max-width: 1024px) {
+    img.mobile {
+      display: block;
+      margin-left: 10px;
+      margin-top: 10px;
+    }
+    img.pc {
+      display: none;
     }
   }
 
