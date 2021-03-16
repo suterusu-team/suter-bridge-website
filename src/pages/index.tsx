@@ -11,6 +11,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
 import Logo from '../static/suter_bridge_logo.svg';
+import MLogo from '../static/bridgeMLogo.svg';
 import Home from '../components/home';
 import Form from '../components/form';
 
@@ -170,7 +171,8 @@ class SuterBridge extends React.Component {
           <Row>
             <Col lg={12} xl={12} md={12} sm={12} xs={12}>
               <a href="/">
-                <img src={Logo} className="logo" />
+                <img src={Logo} className="logo pc" />
+                <img src={MLogo} className="logo mobile" width="45px" />
               </a>
             </Col>
             <Col lg={12} xl={12} md={12} sm={12} xs={12}>
