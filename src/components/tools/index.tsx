@@ -39,44 +39,6 @@ const openNotificationWithKey = (
   });
 };
 
-const getSuterValueInteger = (suterValue: string): number => {
-  if (suterValue.indexOf('.') !== -1) {
-    return parseInt(suterValue.split('.')[0]);
-  } else {
-    return parseInt(suterValue);
-  }
-};
-
-const getSuterValueDecimal = (suterValue: string): string => {
-  if (suterValue.indexOf('.') !== -1) {
-    return `.${suterValue.split('.')[1]}`;
-  } else {
-    return '';
-  }
-};
-
-const getSuterValueNumber = (suterValue: string): number => {
-  let suterValueProcess = suterValue.replace(/,/g, '');
-  if (suterValueProcess != '') {
-    return parseFloat(suterValueProcess);
-  }
-  return 0;
-};
-
-function suterValueForInputFunc(suterValue) {
-  const suterValueForInput = `${numeral(
-    getSuterValueInteger(suterValue),
-  ).format('0,0')}${getSuterValueDecimal(suterValue)}`;
-  return suterValueForInput;
-}
-
-function suterAmountForInput(suterValue, suterTxt) {
-  const suterValueForInput = suterValueForInputFunc(suterValue, suterTxt);
-  const suterAmountValue =
-    suterValue !== '' ? `${suterValueForInput} ${suterTxt}` : '';
-  return suterAmountValue;
-}
-
 const MessageWithAlink = props => {
   return (
     <a href={props.aLink} target="_blank">
@@ -91,11 +53,11 @@ const UncompleteTaskMessage = props => {
   const aLinkForApprove =
     network == 'eth'
       ? `${ETHERSCAN}/tx/${task['approveTxid']}`
-      : `${TRONSCAN}/#/transaction/${task['approveTxid']}`;
+      : `${BSCSCAN}/#/transaction/${task['approveTxid']}`;
   const aLinkForTransaction =
     network == 'eth'
       ? `${ETHERSCAN}/tx/${task['exchangeTxid']}`
-      : `${TRONSCAN}/#/transaction/${task['exchangeTxid']}`;
+      : `${BSCSCAN}/#/transaction/${task['exchangeTxid']}`;
 
   return (
     <Tooltip
@@ -164,12 +126,17 @@ const fetchSuterPrice = async () => {
   return suterPrice;
 };
 
-const ethChainNameMap = {
+const EthChainNameMap = {
   '0x1': 'Ethereum Main Network (MainNet)',
   '0x3': 'Ropsten Test Network',
   '0x4': 'Rinkeby Test Network',
   '0x5': 'Goerli Test Network',
   '0x2a': 'Kovan Test Network',
+};
+
+const BscChainNameMap = {
+  '0x61': 'BSC TestNet',
+  '0x38': 'BSC MainNet',
 };
 
 const tronChainNameMap = {
@@ -181,11 +148,8 @@ export {
   openNotificationWithIcon,
   openNotificationWithKey,
   MessageWithAlink,
-  suterValueForInputFunc,
-  suterAmountForInput,
-  getSuterValueNumber,
   UncompleteTaskMessage,
   fetchSuterPrice,
-  ethChainNameMap,
-  tronChainNameMap,
+  EthChainNameMap,
+  BscChainNameMap,
 };

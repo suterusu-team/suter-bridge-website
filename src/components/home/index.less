@@ -1,70 +1,95 @@
-.suterBridge{
-    .ant-layout-header {
-        @media only screen and (max-width: 600px) {
-            padding: 0 5px;
-        }
+@import '../../variables.less';
 
-        .connectWalletBtn {
-            text-transform: uppercase;
-            border-color: rgba(105, 85, 192, 1);
-            color: rgba(105, 85, 192, 1);
-        }
-
-        .successDot {
-            float: left;
-            width: 8px;
-            height: 8px;
-            margin-top: 6.85px;
-            margin-right: 6px;
-            border-radius: 4px;
-            background-color: #3CBC98;
-        }
+.suterBridge {
+  .ant-layout-header {
+    @media only screen and (max-width: 600px) {
+      padding: 0 5px;
     }
 
-    .ant-layout-content {
-        .title {
-            margin: 60px auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: PingFangSC-Thin, sans-serif;
-
-            h1 {
-                font-weight: 400;
-                font-size: 40px;
-                margin-bottom: 0rem;
-
-                @media only screen and (max-width: 600px) {
-                    font-size: 30px;
-                }
-            }
-        }
-
-        .metamaskContainer, .connectWalletButtonContainer, .tipTextContainer {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .tipTextContainer {
-            margin: 30px 30px 0 30px;
-        }
-
-        .connectWalletButtonContainer {
-            margin: 0 30px 0 30px;
-
-            .ant-btn-primary {
-                color: #fff;
-                background: rgba(105, 85, 192, 1);
-                border-color: rgba(105, 85, 192, 1);
-            }
-
-            .ant-btn-primary[disabled] {
-                background: rgba(105, 85, 192, 0.5);
-                border-color: rgba(105, 85, 192, 0.5);
-            }
-        }
+    .connectWalletBtn {
+      text-transform: uppercase;
+      border-color: @suterColor;
+      color: @suterColor;
+      background: transparent;
     }
+
+    .successDot {
+      float: left;
+      width: 8px;
+      height: 8px;
+      margin-top: 6.85px;
+      margin-right: 6px;
+      border-radius: 4px;
+      background-color: #3cbc98;
+    }
+  }
+
+  .ant-layout-content {
+    .home {
+      .title {
+        margin: 60px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: PingFangSC-Thin, sans-serif;
+
+        h1 {
+          font-weight: 400;
+          font-size: 40px;
+          margin-bottom: 0rem;
+          color: @suterColor;
+
+          @media only screen and (max-width: 600px) {
+            font-size: 30px;
+          }
+        }
+      }
+    }
+    .WhichOperationContainer {
+      max-width: 600px;
+      margin: 0 auto;
+      div.card {
+        margin-bottom: 20px;
+        color: #fff;
+        width: 280px;
+        border: 1px solid @cardBg;
+        background: @cardBg;
+        padding: 20px 0 10px 10px;
+        border-radius: 15px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 200px;
+        &:hover {
+          border: 1px solid @suterColor;
+          cursor: pointer;
+        }
+        .iconContainer {
+          img {
+            margin-right: 10px;
+          }
+        }
+        h1 {
+          color: #fff;
+          text-align: center;
+          margin-top: 20px;
+        }
+        .zh-CN {
+          font-size: 18px;
+          width: 65%;
+        }
+        .bsc.zh-CN {
+          width: 74%;
+        }
+      }
+      div.card.disabled {
+        &:hover {
+          border: none;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
 }
