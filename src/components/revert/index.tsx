@@ -80,6 +80,8 @@ class Revert extends React.Component {
       this.setState({ btnTxt: 'InsuffientBalance' });
     } else if (destinationAddress !== '' && !validDestination) {
       this.setState({ btnTxt: 'InvalidDestinationAddress' });
+    } else if (suterAmount > exchangeBalance) {
+      this.setState({ btnTxt: 'ExchangeInsuffientBalance' });
     } else {
       this.setState({ btnTxt: 'Confirm' });
     }
@@ -213,10 +215,13 @@ class Revert extends React.Component {
   }
   render() {
     const { suterAmount, destinationAddress, proccesing, btnTxt } = this.state;
-    const { suterBalance, intl } = this.props;
+    const { suterBalance, intl, exchangeBalance } = this.props;
     const validDestination = WAValidator.validate(destinationAddress, 'eth');
     const canConfirm =
-      validDestination && suterAmount > 0 && suterAmount <= suterBalance;
+      validDestination &&
+      suterAmount > 0 &&
+      suterAmount <= suterBalance &&
+      suterAmount <= exchangeBalance;
     return (
       <div className="revert">
         {proccesing ? <SpinModal intl={intl} /> : ''}

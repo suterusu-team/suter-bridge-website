@@ -36,5 +36,6 @@
   "Approve": "授权",
   "Exchange": "兑换",
   "Viewinetherscan": "在etherscan中查看",
-  "NetworkError": "MetaMask网络错误"
+  "NetworkError": "MetaMask网络错误",
+  "ExchangeInsuffientBalance": "Suter Bridge合约余额不足"
 }

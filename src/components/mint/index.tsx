@@ -58,7 +58,7 @@ class Mint extends React.Component {
   }
 
   handleSuterAmountChange(e) {
-    let { suterBalance, exchangeBalance } = this.props;
+    let { suterBalance, exchangeBalance, intl } = this.props;
     let { destinationAddress } = this.state;
     let suterAmount = e.target.value;
     if (!this.checkNumber(suterAmount)) {
@@ -79,6 +79,8 @@ class Mint extends React.Component {
       this.setState({ btnTxt: 'InsuffientBalance' });
     } else if (destinationAddress !== '' && !validDestination) {
       this.setState({ btnTxt: 'InvalidDestinationAddress' });
+    } else if (suterAmount > exchangeBalance) {
+      this.setState({ btnTxt: 'ExchangeInsuffientBalance' });
     } else {
       this.setState({ btnTxt: 'Confirm' });
     }
@@ -159,7 +161,7 @@ class Mint extends React.Component {
     const message = intl.get('Viewinetherscan');
     const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
-      `${intl.get('Exchange')} ${intl.get('TransactionHasSuccessSent')}!`,
+      `${intl.get('Approve')} ${intl.get('TransactionHasSuccessSent')}!`,
       <MessageWithAlink message={message} aLink={aLink} />,
       'success',
       10,
@@ -212,10 +214,13 @@ class Mint extends React.Component {
   }
   render() {
     const { suterAmount, destinationAddress, proccesing, btnTxt } = this.state;
-    const { suterBalance, intl } = this.props;
+    const { suterBalance, intl, exchangeBalance } = this.props;
     const validDestination = WAValidator.validate(destinationAddress, 'eth');
     const canConfirm =
-      validDestination && suterAmount > 0 && suterAmount <= suterBalance;
+      validDestination &&
+      suterAmount > 0 &&
+      suterAmount <= suterBalance &&
+      suterAmount <= exchangeBalance;
     return (
       <div className="mint">
         {proccesing ? <SpinModal intl={intl} /> : ''}
