@@ -159,7 +159,7 @@ class Mint extends React.Component {
     const message = intl.get('Viewinetherscan');
     const aLink = `${bridgeInfo.SCAN}/tx/${txHash}`;
     openNotificationWithIcon(
-      `${intl.get('Exchange')} ${intl.get('TransactionHasSuccessSent')}!`,
+      `${intl.get('Approve')} ${intl.get('TransactionHasSuccessSent')}!`,
       <MessageWithAlink message={message} aLink={aLink} />,
       'success',
       10,
