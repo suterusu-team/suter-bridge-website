@@ -1,6 +1,7 @@
-import { Tooltip, Menu, Dropdown } from 'antd';
 import Logo from '../../static/suter_bridge_logo.svg';
 import mLogo from '../../static/bridgeMLogo.svg';
+import { Menu } from 'antd';
+import './index.less';
 
 const DropMenu = (intl, currentNav) => {
   return (

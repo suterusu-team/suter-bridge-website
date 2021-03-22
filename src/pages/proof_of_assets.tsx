@@ -10,10 +10,6 @@ import {
 import detectEthereumProvider from '@metamask/detect-provider';
 import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
-import Logo from '../static/suter_bridge_logo.svg';
-import MLogo from '../static/bridgeMLogo.svg';
-import Home from '../components/home';
-import Form from '../components/form';
 import { Nav } from '../components/nav';
 
 const locales = {

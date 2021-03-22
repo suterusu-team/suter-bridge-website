@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
-import { Row, Col, Button } from 'antd';
+import { Button } from 'antd';
 import {
   openNotificationWithIcon,
   EthChainNameMap,
