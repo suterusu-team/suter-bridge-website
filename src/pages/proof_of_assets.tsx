@@ -182,7 +182,7 @@ class SuterBridge extends React.Component {
                           }}
                         />
                         <a
-                          href={`${BridgeInfo['Mint'].SCAN}/tx/${BridgeInfo['Mint'].CONTRACT_ADDRESS}`}
+                          href={`${BridgeInfo['Mint'].SCAN}/address/${BridgeInfo['Mint'].CONTRACT_ADDRESS}`}
                           target="_blank"
                         >
                           <img src={LinkIcon} alt="link" />
@@ -198,12 +198,23 @@ class SuterBridge extends React.Component {
                           {erc2oBrigeColdWalletBalance.toLocaleString()} SUTER
                         </h2>
                         <div className="address">
-                          {BridgeInfo['Revert'].CONTRACT_ADDRESS}
+                          {BridgeInfo['Mint'].COLD_WALLET}
                         </div>
                       </div>
                       <div>
-                        <img src={CopyIcon} alt="copy" />
-                        <img src={LinkIcon} alt="link" />
+                        <img
+                          src={CopyIcon}
+                          alt="copy"
+                          onClick={() => {
+                            this.copy(BridgeInfo['Mint'].COLD_WALLET);
+                          }}
+                        />
+                        <a
+                          href={`${BridgeInfo['Mint'].SCAN}/address/${BridgeInfo['Mint'].COLD_WALLET}`}
+                          target="_blank"
+                        >
+                          <img src={LinkIcon} alt="link" />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -225,8 +236,19 @@ class SuterBridge extends React.Component {
                         </div>
                       </div>
                       <div>
-                        <img src={CopyIcon} alt="copy" />
-                        <img src={LinkIcon} alt="link" />
+                        <img
+                          src={CopyIcon}
+                          alt="copy"
+                          onClick={() => {
+                            this.copy(BridgeInfo['Revert'].CONTRACT_ADDRESS);
+                          }}
+                        />
+                        <a
+                          href={`${BridgeInfo['Revert'].SCAN}/address/${BridgeInfo['Revert'].CONTRACT_ADDRESS}`}
+                          target="_blank"
+                        >
+                          <img src={LinkIcon} alt="link" />
+                        </a>
                       </div>
                     </div>
                   </div>
