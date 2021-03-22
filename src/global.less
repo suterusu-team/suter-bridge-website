@@ -74,4 +74,61 @@ body {
       display: none !important;
     }
   }
+  .proofOfAssets {
+    max-width: 1120px;
+    margin: 0 auto;
+    h1,
+    h2 {
+      color: #fff;
+      font-family: PingFangSC-Regular;
+    }
+    h1 {
+      font-size: 20px;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    p {
+      color: @suterColor;
+    }
+    div.card {
+      margin-bottom: 20px !important;
+      color: #fff;
+      border: 1px solid @cardBg;
+      background: @cardBg;
+      padding: 20px 10px;
+      border-radius: 15px;
+      margin: 0 auto;
+      display: flex;
+      align-items: stretch;
+      flex-direction: column;
+      height: 300px;
+      p {
+        margin-bottom: 10px;
+      }
+      .mb20 {
+        margin-bottom: 20px;
+      }
+      .item {
+        .block {
+          background: rgba(216, 216, 216, 0.1);
+          border-radius: 10px;
+          padding: 12px 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          &:hover {
+            border: 1px solid @suterColor;
+          }
+          img {
+            margin-right: 20px;
+            cursor: pointer;
+          }
+          .address {
+            color: rgba(255, 255, 255, 0.5);
+          }
+        }
+      }
+    }
+  }
 }

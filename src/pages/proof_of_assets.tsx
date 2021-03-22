@@ -2,16 +2,11 @@ import React from 'react';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
 import { Row, Col, Button } from 'antd';
-import {
-  openNotificationWithIcon,
-  EthChainNameMap,
-  BscChainNameMap,
-} from '../components/tools';
-import detectEthereumProvider from '@metamask/detect-provider';
 import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
 import { Nav } from '../components/nav';
-
+import CopyIcon from '../static/copy.svg';
+import LinkIcon from '../static/link.svg';
 const locales = {
   'en-US': require('../locales/en_US'),
   'zh-CN': require('../locales/zh_CN'),
@@ -19,22 +14,13 @@ const locales = {
 
 class SuterBridge extends React.Component {
   state = {
-    metamaskInstalled: false,
-    account: '',
     connectWalletTxt: 'Connect Wallet',
-    formType: '',
-    chainId: '',
   };
 
   constructor(props) {
     super(props);
-    this.checkMetaMaskStatus = this.checkMetaMaskStatus.bind(this);
-    this.setCurrentAccount = this.setCurrentAccount.bind(this);
-    this.connectMetaMask = this.connectMetaMask.bind(this);
-    this.checkEthNetworkType = this.checkEthNetworkType.bind(this);
   }
   componentDidMount() {
-    setTimeout(this.checkMetaMaskStatus, 1500);
     this.loadLocales();
   }
 
@@ -61,107 +47,13 @@ class SuterBridge extends React.Component {
         this.setState({ initDone: true });
       });
   };
-
-  componentWillUnmount() {}
-
-  setCurrentAccount = (account: string, formType: string) => {
-    const connectWalletTxt = account.slice(0, 7) + '...' + account.slice(-5);
-    this.setState({
-      account: account,
-      connectWalletTxt: connectWalletTxt,
-      formType: formType,
-    });
-  };
-
-  async connectMetaMask() {
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const account = accounts[0];
-    let { chainId } = this.state;
-    if (chainId === BridgeInfo.Mint.CHAIN_ID) {
-      this.setCurrentAccount(account, 'Mint');
-    } else {
-      this.setCurrentAccount(account, 'Revert');
-    }
-  }
-
-  async checkMetaMaskStatus() {
-    const provider = await detectEthereumProvider();
-    if (provider === window.ethereum) {
-      console.log('MetaMask is installed!');
-      this.setState({ metamaskInstalled: true });
-      this.checkEthNetworkType();
-      this.chainChanged();
-      this.accountChanged();
-    } else {
-      const message = intl.get('NeedMetaMaskTips');
-      openNotificationWithIcon(
-        intl.get('MetaMaskIsNotInstalled'),
-        message,
-        'warning',
-      );
-    }
-  }
-
-  accountChanged() {
-    window.ethereum.on('accountsChanged', function(accounts) {
-      openNotificationWithIcon(
-        intl.get('MetaMaskAccountChanged'),
-        intl.get('PageWillRefresh'),
-        'warning',
-        4.5,
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    });
-  }
-
-  chainChanged() {
-    window.ethereum.on('chainChanged', chainId => {
-      openNotificationWithIcon(
-        intl.get('ChainChanged'),
-        intl.get('PageWillRefresh'),
-        'warning',
-        4.5,
-      );
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    });
-  }
-
-  checkEthNetworkType() {
-    this.setState({ chainId: window.ethereum.chainId });
-    if (
-      window.ethereum &&
-      (window.ethereum.chainId == BridgeInfo.Mint.CHAIN_ID ||
-        window.ethereum.chainId == BridgeInfo.Revert.CHAIN_ID)
-    ) {
-      // this.connectMetaMask();
-    } else {
-      openNotificationWithIcon(
-        intl.get('NetworkError'),
-        `${intl.get('PleaseChangeMetaMaskNetworkTo')} ${
-          EthChainNameMap[BridgeInfo.Mint.CHAIN_ID]
-        } ${intl.get('or')} ${BscChainNameMap[BridgeInfo.Revert.CHAIN_ID]}`,
-        'warning',
-        4.5,
-      );
-    }
-  }
-
   langChangeTo = lang => {
     localStorage.setItem('lang', lang);
     this.loadLocales(lang);
   };
 
   render() {
-    const { connectWalletTxt, account, formType, chainId } = this.state;
     let lang = intl.options.currentLocale;
-    const scanLink =
-      formType == 'Mint'
-        ? `${BridgeInfo.Mint.SCAN}/address/${account}`
-        : `${BridgeInfo.Revert.SCAN}/address/${account}`;
     return (
       <Layout className="suterBridge">
         <Header>
@@ -169,16 +61,6 @@ class SuterBridge extends React.Component {
             <Nav intl={intl} indexURL="/" currentNav="proof_of_assets" />
           </div>
           <div className="header-btn">
-            {account !== '' ? (
-              <a href={scanLink} target="_blank">
-                <Button className="connectWalletBtn" shape="round">
-                  <div className="successDot"></div>
-                  {connectWalletTxt}
-                </Button>
-              </a>
-            ) : (
-              ''
-            )}
             <div className="top-btn">
               <i
                 onClick={() => this.langChangeTo('en-US')}
@@ -196,7 +78,66 @@ class SuterBridge extends React.Component {
           </div>
         </Header>
         <Content>
-          <h1>Proof of assets</h1>
+          <div className="proofOfAssets">
+            <Row>
+              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+                <h1>ERC20 Assets</h1>
+                <div className="card">
+                  <div className="item mb20">
+                    <p>ERC20 SUTER Bridge Contract</p>
+                    <div className="block">
+                      <div>
+                        <h2>1000 SUTER</h2>
+                        <div className="address">
+                          {BridgeInfo['Mint'].CONTRACT_ADDRESS}
+                        </div>
+                      </div>
+                      <div>
+                        <img src={CopyIcon} alt="copy" />
+                        <img src={LinkIcon} alt="link" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="item">
+                    <p>Suter Bridge Cold Wallet</p>
+                    <div className="block">
+                      <div>
+                        <h2>1000 SUTER</h2>
+                        <div className="address">
+                          {BridgeInfo['Revert'].CONTRACT_ADDRESS}
+                        </div>
+                      </div>
+                      <div>
+                        <img src={CopyIcon} alt="copy" />
+                        <img src={LinkIcon} alt="link" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col xs={0} sm={0} md={1} lg={1} xl={1}></Col>
+              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+                <h1>BEP20 Assets</h1>
+                <div className="card">
+                  <div className="item mb20">
+                    <p>BEP20 SUTER Bridge Contract</p>
+                    <div className="block">
+                      <div>
+                        <h2>1000 SUTER</h2>
+                        <div className="address">
+                          {BridgeInfo['Revert'].CONTRACT_ADDRESS}
+                        </div>
+                      </div>
+                      <div>
+                        <img src={CopyIcon} alt="copy" />
+                        <img src={LinkIcon} alt="link" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </Content>
         <Footer></Footer>
       </Layout>
