@@ -75,6 +75,9 @@ body {
     }
   }
   .proofOfAssets {
+    @media screen and (max-width: 1024px) {
+      padding: 0 8px;
+    }
     max-width: 1120px;
     margin: 0 auto;
     h1,
@@ -90,6 +93,12 @@ body {
     }
     p {
       color: @suterColor;
+    }
+    .linkLogo {
+      text-align: center;
+      @media screen and (max-width: 1024px) {
+        display: none;
+      }
     }
     div.card {
       margin-bottom: 20px !important;
@@ -117,6 +126,11 @@ body {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          .left {
+            @media screen and (max-width: 1024px) {
+              width: 70%;
+            }
+          }
           &:hover {
             border: 1px solid @suterColor;
           }
@@ -126,6 +140,11 @@ body {
           }
           .address {
             color: rgba(255, 255, 255, 0.5);
+            @media screen and (max-width: 1024px) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
           }
         }
       }

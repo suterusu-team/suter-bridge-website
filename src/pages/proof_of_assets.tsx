@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import { Nav } from '../components/nav';
 import CopyIcon from '../static/copy.svg';
 import LinkIcon from '../static/link.svg';
+import LinkLogoIcon from '../static/linkLogo.svg';
 const locales = {
   'en-US': require('../locales/en_US'),
   'zh-CN': require('../locales/zh_CN'),
@@ -79,14 +80,14 @@ class SuterBridge extends React.Component {
         </Header>
         <Content>
           <div className="proofOfAssets">
-            <Row>
+            <Row style={{ alignItems: 'center' }}>
               <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                 <h1>ERC20 Assets</h1>
                 <div className="card">
                   <div className="item mb20">
                     <p>ERC20 SUTER Bridge Contract</p>
                     <div className="block">
-                      <div>
+                      <div className="left">
                         <h2>1000 SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Mint'].CONTRACT_ADDRESS}
@@ -101,7 +102,7 @@ class SuterBridge extends React.Component {
                   <div className="item">
                     <p>Suter Bridge Cold Wallet</p>
                     <div className="block">
-                      <div>
+                      <div className="left">
                         <h2>1000 SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Revert'].CONTRACT_ADDRESS}
@@ -115,14 +116,16 @@ class SuterBridge extends React.Component {
                   </div>
                 </div>
               </Col>
-              <Col xs={0} sm={0} md={1} lg={1} xl={1}></Col>
+              <Col xs={0} sm={0} md={1} lg={1} xl={1} className="linkLogo">
+                <img src={LinkLogoIcon} alt="link icon" />
+              </Col>
               <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                 <h1>BEP20 Assets</h1>
                 <div className="card">
                   <div className="item mb20">
                     <p>BEP20 SUTER Bridge Contract</p>
                     <div className="block">
-                      <div>
+                      <div className="left">
                         <h2>1000 SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Revert'].CONTRACT_ADDRESS}
