@@ -15,7 +15,9 @@ const locales = {
 
 class SuterBridge extends React.Component {
   state = {
-    connectWalletTxt: 'Connect Wallet',
+    erc20BridgeBalance: 0,
+    erc2oBrigeColdWalletBalance: 0,
+    bep20BridgeBalance: 0,
   };
 
   constructor(props) {
@@ -55,6 +57,11 @@ class SuterBridge extends React.Component {
 
   render() {
     let lang = intl.options.currentLocale;
+    let {
+      erc20BridgeBalance,
+      erc2oBrigeColdWalletBalance,
+      bep20BridgeBalance,
+    } = this.state;
     return (
       <Layout className="suterBridge">
         <Header>
@@ -88,7 +95,7 @@ class SuterBridge extends React.Component {
                     <p>ERC20 SUTER Bridge Contract</p>
                     <div className="block">
                       <div className="left">
-                        <h2>1000 SUTER</h2>
+                        <h2>{erc20BridgeBalance.toLocaleString()} SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Mint'].CONTRACT_ADDRESS}
                         </div>
@@ -103,7 +110,9 @@ class SuterBridge extends React.Component {
                     <p>Suter Bridge Cold Wallet</p>
                     <div className="block">
                       <div className="left">
-                        <h2>1000 SUTER</h2>
+                        <h2>
+                          {erc2oBrigeColdWalletBalance.toLocaleString()} SUTER
+                        </h2>
                         <div className="address">
                           {BridgeInfo['Revert'].CONTRACT_ADDRESS}
                         </div>
@@ -126,7 +135,7 @@ class SuterBridge extends React.Component {
                     <p>BEP20 SUTER Bridge Contract</p>
                     <div className="block">
                       <div className="left">
-                        <h2>1000 SUTER</h2>
+                        <h2>{bep20BridgeBalance.toLocaleString()} SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Revert'].CONTRACT_ADDRESS}
                         </div>
