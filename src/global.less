@@ -35,45 +35,6 @@ body {
   }
 }
 
-.ant-layout-header {
-  background: transparent !important;
-  .header-btn {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    height: 100%;
-    .top-btn {
-      height: 32px;
-      width: 70px;
-      margin-left: 20px;
-      border: 1px solid @suterColor;
-      border-radius: 17.5px;
-      border-radius: 17.5px;
-      display: flex;
-      justify-content: space-between;
-      i {
-        position: relative;
-        top: -1px;
-        display: block;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 45%;
-        color: @suterColor;
-        font-style: normal;
-        font-size: 14px;
-        cursor: pointer;
-        &.active {
-          background: @suterColor;
-          color: #0b000e;
-        }
-      }
-    }
-  }
-}
-
 .ant-layout-footer {
   background: transparent !important;
 }
@@ -84,21 +45,6 @@ body {
 
 .suterBridge {
   background: transparent !important;
-
-  img.mobile {
-    display: none;
-  }
-  @media screen and (max-width: 1024px) {
-    img.mobile {
-      display: block;
-      margin-left: 10px;
-      margin-top: 10px;
-    }
-    img.pc {
-      display: none;
-    }
-  }
-
   .form {
     margin-top: 20px;
     display: flex;
@@ -126,6 +72,82 @@ body {
 
     .ant-tabs-nav-operations {
       display: none !important;
+    }
+  }
+  .proofOfAssets {
+    @media screen and (max-width: 1024px) {
+      padding: 0 8px;
+    }
+    max-width: 1120px;
+    margin: 0 auto;
+    h1,
+    h2 {
+      color: #fff;
+      font-family: PingFangSC-Regular;
+    }
+    h1 {
+      font-size: 20px;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    p {
+      color: @suterColor;
+    }
+    .linkLogo {
+      text-align: center;
+      @media screen and (max-width: 1024px) {
+        display: none;
+      }
+    }
+    div.card {
+      margin-bottom: 20px !important;
+      color: #fff;
+      border: 1px solid @cardBg;
+      background: @cardBg;
+      padding: 20px 10px;
+      border-radius: 15px;
+      margin: 0 auto;
+      display: flex;
+      align-items: stretch;
+      flex-direction: column;
+      height: 300px;
+      p {
+        margin-bottom: 10px;
+      }
+      .mb20 {
+        margin-bottom: 20px;
+      }
+      .item {
+        .block {
+          background: rgba(216, 216, 216, 0.1);
+          border-radius: 10px;
+          padding: 12px 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .left {
+            @media screen and (max-width: 1024px) {
+              width: 70%;
+            }
+          }
+          &:hover {
+            border: 1px solid @suterColor;
+          }
+          img {
+            margin-right: 20px;
+            cursor: pointer;
+          }
+          .address {
+            color: rgba(255, 255, 255, 0.5);
+            @media screen and (max-width: 1024px) {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
     }
   }
 }

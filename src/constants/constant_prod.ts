@@ -1016,6 +1016,7 @@ export default {
           type: 'function',
         },
       ],
+      COLD_WALLET: '0xC04852c3bFF0B9439B61FD3e87c147f4BF52f41B',
     },
     Revert: {
       CHAIN_ID: '0x38',
