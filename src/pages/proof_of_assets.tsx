@@ -162,7 +162,7 @@ class SuterBridge extends React.Component {
           <div className="proofOfAssets">
             <Row style={{ alignItems: 'center' }}>
               <Col xs={24} sm={24} md={11} lg={11} xl={11}>
-                <h1>ERC20 Assets</h1>
+                <h1>ERC20 {intl.get('Assets')}</h1>
                 <div className="card">
                   <div className="item mb20">
                     <p>ERC20 SUTER Bridge Contract</p>
@@ -224,7 +224,7 @@ class SuterBridge extends React.Component {
                 <img src={LinkLogoIcon} alt="link icon" />
               </Col>
               <Col xs={24} sm={24} md={11} lg={11} xl={11}>
-                <h1>BEP20 Assets</h1>
+                <h1>BEP20 {intl.get('Assets')}</h1>
                 <div className="card">
                   <div className="item mb20">
                     <p>BEP20 SUTER Bridge Contract</p>
