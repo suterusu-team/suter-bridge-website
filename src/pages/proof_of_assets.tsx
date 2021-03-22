@@ -8,6 +8,9 @@ import { Nav } from '../components/nav';
 import CopyIcon from '../static/copy.svg';
 import LinkIcon from '../static/link.svg';
 import LinkLogoIcon from '../static/linkLogo.svg';
+import { openNotificationWithIcon } from '../components/tools';
+import Web3 from 'web3';
+var Contract = require('web3-eth-contract');
 const locales = {
   'en-US': require('../locales/en_US'),
   'zh-CN': require('../locales/zh_CN'),
@@ -22,9 +25,79 @@ class SuterBridge extends React.Component {
 
   constructor(props) {
     super(props);
+    this.getErc20BridgeBalance = this.getErc20BridgeBalance.bind(this);
+    this.getERC20BridgeColdWalletBalance = this.getERC20BridgeColdWalletBalance.bind(
+      this,
+    );
+    this.getBep20BridgeBalance = this.getBep20BridgeBalance.bind(this);
+    this.copy = this.copy.bind(this);
   }
+
   componentDidMount() {
     this.loadLocales();
+    this.getErc20BridgeBalance();
+    this.getERC20BridgeColdWalletBalance();
+    this.getBep20BridgeBalance();
+  }
+
+  async getErc20BridgeBalance() {
+    let exchangeBridgeInfo = BridgeInfo['Mint'];
+    const suterTokenContract = new Contract(
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
+    let balance = await suterTokenContract.methods
+      .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
+      .call();
+    this.setState({ erc20BridgeBalance: balance / 10 ** 18 });
+  }
+
+  async getERC20BridgeColdWalletBalance() {
+    let exchangeBridgeInfo = BridgeInfo['Mint'];
+    const suterTokenContract = new Contract(
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
+    let balance = await suterTokenContract.methods
+      .balanceOf(exchangeBridgeInfo.COLD_WALLET)
+      .call();
+    this.setState({ erc2oBrigeColdWalletBalance: balance / 10 ** 18 });
+  }
+
+  async getBep20BridgeBalance() {
+    let exchangeBridgeInfo = BridgeInfo['Revert'];
+    const suterTokenContract = new Contract(
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
+    let balance = await suterTokenContract.methods
+      .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
+      .call();
+    this.setState({ bep20BridgeBalance: balance / 10 ** 18 });
+  }
+
+  copy(content) {
+    let input = document.createElement('input');
+    input.setAttribute('value', content);
+    document.body.appendChild(input);
+    input.select();
+    let result = document.execCommand('copy');
+    document.body.removeChild(input);
+    openNotificationWithIcon(
+      intl.get('Tips'),
+      intl.get('Copied'),
+      'success',
+      1,
+    );
   }
 
   loadLocales = (lang = 'en-US') => {
@@ -101,8 +174,19 @@ class SuterBridge extends React.Component {
                         </div>
                       </div>
                       <div>
-                        <img src={CopyIcon} alt="copy" />
-                        <img src={LinkIcon} alt="link" />
+                        <img
+                          src={CopyIcon}
+                          alt="copy"
+                          onClick={() => {
+                            this.copy(BridgeInfo['Mint'].CONTRACT_ADDRESS);
+                          }}
+                        />
+                        <a
+                          href={`${BridgeInfo['Mint'].SCAN}/tx/${BridgeInfo['Mint'].CONTRACT_ADDRESS}`}
+                          target="_blank"
+                        >
+                          <img src={LinkIcon} alt="link" />
+                        </a>
                       </div>
                     </div>
                   </div>

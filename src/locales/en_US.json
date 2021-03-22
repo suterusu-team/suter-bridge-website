@@ -39,5 +39,7 @@
   "NetworkError": "MetaMask network error",
   "ExchangeInsuffientBalance": "Exchange Insuffient Balance",
   "Tutorial": "Tutorial",
-  "ProofOfAssets": "Proof of Assets"
+  "ProofOfAssets": "Proof of Assets",
+  "Tips": "Tips",
+  "Copied": "Copied"
 }

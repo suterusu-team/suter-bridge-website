@@ -39,5 +39,7 @@
   "NetworkError": "MetaMask网络错误",
   "ExchangeInsuffientBalance": "Suter Bridge合约余额不足",
   "Tutorial": "教程",
-  "ProofOfAssets": "资产证明"
+  "ProofOfAssets": "资产证明",
+  "Tips": "提示",
+  "Copied": "已复制"
 }
