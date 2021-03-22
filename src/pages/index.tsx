@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 const { Header, Footer, Content } = Layout;
-import { Row, Col, Button } from 'antd';
+import { Button } from 'antd';
 import {
   openNotificationWithIcon,
   EthChainNameMap,
@@ -10,10 +10,10 @@ import {
 import detectEthereumProvider from '@metamask/detect-provider';
 import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
-import Logo from '../static/suter_bridge_logo.svg';
-import MLogo from '../static/bridgeMLogo.svg';
 import Home from '../components/home';
 import Form from '../components/form';
+import { Nav } from '../components/nav';
+import MobileNav from '../components/mobileNav';
 
 const locales = {
   'en-US': require('../locales/en_US'),
@@ -168,42 +168,38 @@ class SuterBridge extends React.Component {
     return (
       <Layout className="suterBridge">
         <Header>
-          <Row>
-            <Col lg={12} xl={12} md={12} sm={12} xs={12}>
-              <a href="/">
-                <img src={Logo} className="logo pc" />
-                <img src={MLogo} className="logo mobile" width="45px" />
+          <div className="head-top">
+            <Nav intl={intl} indexURL="/" currentNav="/" />
+          </div>
+          <div className="header-btn">
+            {account !== '' ? (
+              <a href={scanLink} target="_blank">
+                <Button className="connectWalletBtn" shape="round">
+                  <div className="successDot"></div>
+                  {connectWalletTxt}
+                </Button>
               </a>
-            </Col>
-            <Col lg={12} xl={12} md={12} sm={12} xs={12}>
-              <div className="header-btn">
-                {account !== '' ? (
-                  <a href={scanLink} target="_blank">
-                    <Button className="connectWalletBtn" shape="round">
-                      <div className="successDot"></div>
-                      {connectWalletTxt}
-                    </Button>
-                  </a>
-                ) : (
-                  ''
-                )}
-                <div className="top-btn">
-                  <i
-                    onClick={() => this.langChangeTo('en-US')}
-                    className={`${lang === 'en-US' ? 'active' : ''}`}
-                  >
-                    EN
-                  </i>
-                  <i
-                    className={`${lang === 'zh-CN' ? 'active' : ''}`}
-                    onClick={() => this.langChangeTo('zh-CN')}
-                  >
-                    中
-                  </i>
-                </div>
-              </div>
-            </Col>
-          </Row>
+            ) : (
+              ''
+            )}
+            <div className="top-btn">
+              <i
+                onClick={() => this.langChangeTo('en-US')}
+                className={`${lang === 'en-US' ? 'active' : ''}`}
+              >
+                EN
+              </i>
+              <i
+                className={`${lang === 'zh-CN' ? 'active' : ''}`}
+                onClick={() => this.langChangeTo('zh-CN')}
+              >
+                中
+              </i>
+            </div>
+            <div className="mobileNavContainer">
+              <MobileNav intl={intl} currentNav="/" />
+            </div>
+          </div>
         </Header>
         <Content>
           {account === '' ? (
