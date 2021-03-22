@@ -3,6 +3,26 @@ body {
   background: @bodyBg;
   overflow-y: scroll;
 
+  .mobileNavContainer {
+    display: none;
+    .mobbile-MenuOutlined {
+      display: none;
+      .MenuOutlined {
+        color: #fff;
+        font-size: 30px;
+        margin-left: 10px;
+        position: relative;
+        top: 6px;
+      }
+    }
+    @media screen and (max-width: 1024px) {
+      display: block;
+      .mobbile-MenuOutlined {
+        display: block;
+      }
+    }
+  }
+
   .ant-notification-notice-message {
     color: #ffffff !important;
   }
@@ -33,41 +53,106 @@ body {
     background: #113028 !important;
     border: 2px solid #39bc9a !important;
   }
-}
 
-.ant-layout-header {
-  background: transparent !important;
-  .header-btn {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    height: 100%;
-    .top-btn {
-      height: 32px;
-      width: 70px;
-      margin-left: 20px;
-      border: 1px solid @suterColor;
-      border-radius: 17.5px;
-      border-radius: 17.5px;
-      display: flex;
-      justify-content: space-between;
-      i {
-        position: relative;
-        top: -1px;
-        display: block;
-        width: 32px;
-        height: 32px;
+  #website__entrypoint {
+    .suterBridge {
+      .ant-layout-header {
+        background: transparent !important;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 45%;
-        color: @suterColor;
-        font-style: normal;
-        font-size: 14px;
-        cursor: pointer;
-        &.active {
-          background: @suterColor;
-          color: #0b000e;
+        flex-direction: row;
+        justify-content: space-between;
+        .head-top {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .left {
+            display: flex;
+            .menuContainer {
+              margin-left: 30px;
+            }
+            .item-ul {
+              display: flex;
+              margin: 0;
+              li {
+                list-style: none;
+                color: #fff;
+                margin-right: 30px;
+                cursor: pointer;
+                font-size: 18px;
+                &:hover {
+                  color: @suterColor;
+                }
+                a {
+                  color: #fff;
+                  &:hover {
+                    color: @suterColor;
+                  }
+                }
+              }
+            }
+          }
+        }
+        img.mobbile {
+          display: none;
+        }
+        .header-btn {
+          display: flex;
+          align-items: center;
+          .launchAppBtn {
+            border-color: @suterColor;
+            color: @suterColor;
+            background-color: #0b000e;
+            &:hover {
+              background-color: @suterColor !important;
+            }
+          }
+          .top-btn {
+            width: 70px;
+            height: 32px;
+            margin-left: 20px;
+            border: 1px solid @suterColor;
+            border-radius: 17.5px;
+            border-radius: 17.5px;
+            display: flex;
+            justify-content: space-between;
+            i {
+              position: relative;
+              top: -1px;
+              display: block;
+              width: 32px;
+              height: 32px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 45%;
+              color: @suterColor;
+              font-style: normal;
+              font-size: 14px;
+              cursor: pointer;
+              // color: #0B000E;
+              &.active {
+                background: @suterColor;
+                color: #0b000e;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    #website__entrypoint .suterBridge .ant-layout-header {
+      img.mobbile {
+        display: block;
+      }
+      img.pc {
+        display: none;
+      }
+      .head-top {
+        .left {
+          .item-ul {
+            display: none;
+          }
         }
       }
     }
@@ -84,21 +169,6 @@ body {
 
 .suterBridge {
   background: transparent !important;
-
-  img.mobile {
-    display: none;
-  }
-  @media screen and (max-width: 1024px) {
-    img.mobile {
-      display: block;
-      margin-left: 10px;
-      margin-top: 10px;
-    }
-    img.pc {
-      display: none;
-    }
-  }
-
   .form {
     margin-top: 20px;
     display: flex;

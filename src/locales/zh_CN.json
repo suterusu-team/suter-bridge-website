@@ -37,5 +37,7 @@
   "Exchange": "兑换",
   "Viewinetherscan": "在etherscan中查看",
   "NetworkError": "MetaMask网络错误",
-  "ExchangeInsuffientBalance": "Suter Bridge合约余额不足"
+  "ExchangeInsuffientBalance": "Suter Bridge合约余额不足",
+  "Tutorial": "教程",
+  "ProofOfAssets": "资产证明"
 }

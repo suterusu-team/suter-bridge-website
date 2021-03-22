@@ -10,10 +10,11 @@ import {
 import detectEthereumProvider from '@metamask/detect-provider';
 import intl from 'react-intl-universal';
 import 'antd/dist/antd.css';
+import Logo from '../static/suter_bridge_logo.svg';
+import MLogo from '../static/bridgeMLogo.svg';
 import Home from '../components/home';
 import Form from '../components/form';
 import { Nav } from '../components/nav';
-import MobileNav from '../components/mobileNav';
 
 const locales = {
   'en-US': require('../locales/en_US'),
@@ -169,7 +170,7 @@ class SuterBridge extends React.Component {
       <Layout className="suterBridge">
         <Header>
           <div className="head-top">
-            <Nav intl={intl} indexURL="/" currentNav="/" />
+            <Nav intl={intl} indexURL="/" currentNav="proof_of_assets" />
           </div>
           <div className="header-btn">
             {account !== '' ? (
@@ -196,21 +197,10 @@ class SuterBridge extends React.Component {
                 中
               </i>
             </div>
-            <div className="mobileNavContainer">
-              <MobileNav intl={intl} currentNav="/" />
-            </div>
           </div>
         </Header>
         <Content>
-          {account === '' ? (
-            <Home
-              chainId={chainId}
-              connectMetaMask={this.connectMetaMask}
-              intl={intl}
-            />
-          ) : (
-            <Form account={account} formType={formType} intl={intl} />
-          )}
+          <h1>Proof of assets</h1>
         </Content>
         <Footer></Footer>
       </Layout>
