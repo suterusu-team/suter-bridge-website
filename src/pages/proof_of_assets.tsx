@@ -21,6 +21,7 @@ class SuterBridge extends React.Component {
     erc20BridgeBalance: 0,
     erc2oBrigeColdWalletBalance: 0,
     bep20BridgeBalance: 0,
+    bep20SuterTotalSupply: 0,
   };
 
   constructor(props) {
@@ -33,11 +34,14 @@ class SuterBridge extends React.Component {
     this.copy = this.copy.bind(this);
   }
 
+  newWeb3 = new Web3();
+
   componentDidMount() {
     this.loadLocales();
     this.getErc20BridgeBalance();
     this.getERC20BridgeColdWalletBalance();
     this.getBep20BridgeBalance();
+    this.getBep20TotalSupply();
   }
 
   async getErc20BridgeBalance() {
@@ -52,7 +56,9 @@ class SuterBridge extends React.Component {
     let balance = await suterTokenContract.methods
       .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
       .call();
-    this.setState({ erc20BridgeBalance: balance / 10 ** 18 });
+    this.setState({
+      erc20BridgeBalance: this.newWeb3.utils.fromWei(balance, 'ether'),
+    });
   }
 
   async getERC20BridgeColdWalletBalance() {
@@ -67,7 +73,9 @@ class SuterBridge extends React.Component {
     let balance = await suterTokenContract.methods
       .balanceOf(exchangeBridgeInfo.COLD_WALLET)
       .call();
-    this.setState({ erc2oBrigeColdWalletBalance: balance / 10 ** 18 });
+    this.setState({
+      erc2oBrigeColdWalletBalance: this.newWeb3.utils.fromWei(balance),
+    });
   }
 
   async getBep20BridgeBalance() {
@@ -82,7 +90,34 @@ class SuterBridge extends React.Component {
     let balance = await suterTokenContract.methods
       .balanceOf(exchangeBridgeInfo.CONTRACT_ADDRESS)
       .call();
-    this.setState({ bep20BridgeBalance: balance / 10 ** 18 });
+    this.setState({ bep20BridgeBalance: this.newWeb3.utils.fromWei(balance) });
+  }
+
+  async getBep20TotalSupply() {
+    let exchangeBridgeInfo = BridgeInfo['Revert'];
+    const suterTokenContract = new Contract(
+      exchangeBridgeInfo.TOEKN_ABI,
+      exchangeBridgeInfo.TOEKN_CONTRACT_ADDRESS,
+    );
+    suterTokenContract.setProvider(
+      new Web3.providers.HttpProvider(exchangeBridgeInfo.JSONRPC_URL),
+    );
+    let totalSupply = await suterTokenContract.methods.totalSupply().call();
+    this.setState({
+      bep20SuterTotalSupply: this.newWeb3.utils.fromWei(totalSupply),
+    });
+  }
+
+  numberFormat(amount) {
+    let ramount = amount;
+    if (typeof amount === 'string') {
+      ramount = parseFloat(amount);
+    }
+    let formatted = ramount.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+    return formatted;
   }
 
   copy(content) {
@@ -134,6 +169,7 @@ class SuterBridge extends React.Component {
       erc20BridgeBalance,
       erc2oBrigeColdWalletBalance,
       bep20BridgeBalance,
+      bep20SuterTotalSupply,
     } = this.state;
     return (
       <Layout className="suterBridge">
@@ -168,7 +204,7 @@ class SuterBridge extends React.Component {
                     <p>ERC20 SUTER Bridge Contract</p>
                     <div className="block">
                       <div className="left">
-                        <h2>{erc20BridgeBalance.toLocaleString()} SUTER</h2>
+                        <h2>{this.numberFormat(erc20BridgeBalance)} SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Mint'].CONTRACT_ADDRESS}
                         </div>
@@ -195,7 +231,7 @@ class SuterBridge extends React.Component {
                     <div className="block">
                       <div className="left">
                         <h2>
-                          {erc2oBrigeColdWalletBalance.toLocaleString()} SUTER
+                          {this.numberFormat(erc2oBrigeColdWalletBalance)} SUTER
                         </h2>
                         <div className="address">
                           {BridgeInfo['Mint'].COLD_WALLET}
@@ -230,7 +266,7 @@ class SuterBridge extends React.Component {
                     <p>BEP20 SUTER Bridge Contract</p>
                     <div className="block">
                       <div className="left">
-                        <h2>{bep20BridgeBalance.toLocaleString()} SUTER</h2>
+                        <h2>{this.numberFormat(bep20BridgeBalance)} SUTER</h2>
                         <div className="address">
                           {BridgeInfo['Revert'].CONTRACT_ADDRESS}
                         </div>
@@ -245,6 +281,36 @@ class SuterBridge extends React.Component {
                         />
                         <a
                           href={`${BridgeInfo['Revert'].SCAN}/address/${BridgeInfo['Revert'].CONTRACT_ADDRESS}`}
+                          target="_blank"
+                        >
+                          <img src={LinkIcon} alt="link" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="item">
+                    <p>BEP20 SUTER Total Supply</p>
+                    <div className="block">
+                      <div className="left">
+                        <h2>
+                          {this.numberFormat(bep20SuterTotalSupply)} SUTER
+                        </h2>
+                        <div className="address">
+                          {BridgeInfo['Revert'].TOEKN_CONTRACT_ADDRESS}
+                        </div>
+                      </div>
+                      <div>
+                        <img
+                          src={CopyIcon}
+                          alt="copy"
+                          onClick={() => {
+                            this.copy(
+                              BridgeInfo['Revert'].TOEKN_CONTRACT_ADDRESS,
+                            );
+                          }}
+                        />
+                        <a
+                          href={`${BridgeInfo['Revert'].SCAN}/address/${BridgeInfo['Revert'].TOEKN_CONTRACT_ADDRESS}#readContract`}
                           target="_blank"
                         >
                           <img src={LinkIcon} alt="link" />
